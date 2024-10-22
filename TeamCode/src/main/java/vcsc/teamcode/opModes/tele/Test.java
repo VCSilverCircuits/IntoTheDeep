@@ -16,7 +16,8 @@ public class Test extends OpMode {
     public void init() {
         claw =  new Claw(hardwareMap.get(ServoImplEx.class, "claw"));
         arm = new Arm(hardwareMap.get(DcMotorEx.class, "rotation"));
-        // Creates a PIDController with gains kP, kI, and kD
+        arm = new Arm(hardwareMap.get(DcMotorEx.class, "extension"));
+
     }
 
     @Override
@@ -26,5 +27,7 @@ public class Test extends OpMode {
         } else {
             claw.close();
         }
+        arm.extention.setPower(-gamepad1.right_stick_y);
+        arm.setExtensionLength(42);
     }
 }
