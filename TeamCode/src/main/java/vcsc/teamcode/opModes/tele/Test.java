@@ -16,6 +16,7 @@ public class Test extends OpMode {
     public void init() {
         claw =  new Claw(hardwareMap.get(ServoImplEx.class, "claw"));
         arm = new Arm(hardwareMap.get(DcMotorEx.class, "rotation"));
+        // Creates a PIDController with gains kP, kI, and kD
     }
 
     @Override
