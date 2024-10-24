@@ -9,14 +9,15 @@ public class Arm {
    private final double maxPosition = 42;
    private final double decelerationStart = 37;
    final double minPosition = 0;
-   private double targetPosition = 0;
+   private double extentionLength = 0;
+    private double targetPosition = 0;
    private double currentPosition = 0;
    private final double kP = 0.1;
    private final double kI = 0.01;
    private final double kD = 0.1;
    private double previousError = 0;
    private double integral = 0;
-    DcMotorEx rotation;
+    public DcMotorEx rotation;
     public DcMotorEx extention;
     public Arm(DcMotorEx rotation) {
         this.rotation = rotation;

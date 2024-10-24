@@ -22,6 +22,12 @@ public class Test extends OpMode {
 
     @Override
     public void loop() {
+        //top basket
+        if(gamepad1.a) {
+            arm.setExtensionLength(42);
+            arm.moveToAngle(-90);
+
+        }
         if (gamepad1.left_bumper) {
             claw.open();
         } else {
@@ -29,5 +35,6 @@ public class Test extends OpMode {
         }
         arm.extention.setPower(-gamepad1.right_stick_y);
         arm.setExtensionLength(42);
+
     }
 }
