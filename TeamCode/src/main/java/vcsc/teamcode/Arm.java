@@ -9,23 +9,22 @@ public class Arm {
    private final double maxPosition = 42;
    private final double decelerationStart = 37;
    final double minPosition = 0;
-   private double extentionLength = 0;
-    private double targetPosition = 0;
+   private double targetPosition = 0;
    private double currentPosition = 0;
    private final double kP = 0.1;
    private final double kI = 0.01;
    private final double kD = 0.1;
    private double previousError = 0;
    private double integral = 0;
-    public DcMotorEx rotation;
+    DcMotorEx rotation;
     public DcMotorEx extention;
     public Arm(DcMotorEx rotation) {
         this.rotation = rotation;
         this.rotation.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.rotation.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        this.extention = extention;
-        this.extention.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        this.extention.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.extension = hardwareMap.get(DcMotorEx.class, "armExtension");
+        this.extension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.extension.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
     public void setExtensionLength(double length ) { // Length in CM
        double currentPositionInches = extention.getCurrentPosition() / TPI;

@@ -1,21 +1,30 @@
 package vcsc.teamcode;
 
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 public class Wrist {
-    ServoImplEx servo;
-    static double upPosition = 0.5;
-    static double downPosition = 0.1;
-    public void setAngle(double angle) {
+    ServoImplEx wristX;
+    ServoImplEx wristY;
 
+    public Wrist(HardwareMap hardwareMap) {
+        wristX = hardwareMap.get(ServoImplEx.class, "wristX");
+        wristY = hardwareMap.get(ServoImplEx.class, "wristY");
     }
-    public Wrist(ServoImplEx servo) {
-        this.servo = servo;
+    public void setAngleX(double angle) {
+        wristX.setPosition(angle);
     }
-    public void open() {
-        servo.setPosition(upPosition);
+    public void setAngleY(double angle) {
+        wristY.setPosition(angle);
     }
-    public void close() {
-        servo.setPosition(downPosition);
+
+    public void setAngle(double angleX, double angleY) {
+        wristX.setPosition(angleX);
+        wristY.setPosition(angleY);
+    }
+
+    public void setPose(WristPose pose) {
+        wristX.setPosition(pose.x);
+        wristY.setPosition(pose.y);
     }
 }
