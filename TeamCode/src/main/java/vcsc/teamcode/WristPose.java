@@ -1,9 +1,10 @@
 package vcsc.teamcode;
 
 public enum WristPose {
-    STOW(0, 0),
     INTAKE(1, 0),
-    SCORING(0.32, 0);
+    PULL_OUT(0.65, 0),
+    SCORE_HOOK(0.65, 0),
+    SCORE_BASKET(0.5, 0);
 
     public final double x;
     public final double y;
