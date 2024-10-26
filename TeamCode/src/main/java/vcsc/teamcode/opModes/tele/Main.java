@@ -127,9 +127,9 @@ public class Main extends OpMode {
             if (!xDebounce) {
                 hooks.toggle();
             }
-            bumperDebounce = true;
+            xDebounce = true;
         } else {
-            bumperDebounce = false;
+            xDebounce = false;
         }
 
         drive.setDrivePowers(new PoseVelocity2d(
