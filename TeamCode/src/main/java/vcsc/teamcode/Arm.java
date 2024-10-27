@@ -16,7 +16,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Arm {
     public static double kP_rot = 0.001, kI_rot = 0, kD_rot = 0, kF_rot = 0;
     public static double kP_ext = 0.001, kI_ext = 0, kD_ext = 0, kF_ext = 0;
-
     // 28 Ticks/rev * 1 rev /(Pi * 0.787 in)
     /*static double TICKS_PER_REV = 28;
     static double TICKS_PER_INCH = TICKS_PER_REV / (Math.PI * 0.787);
@@ -27,6 +26,7 @@ public class Arm {
     public static PIDFCoefficients rotCoeffs = new PIDFCoefficients(0.005, 0, 0.00035, 0);
     public static PIDFController rotationController = new PIDFController(rotCoeffs.p, rotCoeffs.i, rotCoeffs.d, rotCoeffs.f);
     public static PIDFController extensionController = new PIDFController(extCoeffs.p, extCoeffs.i, extCoeffs.d, extCoeffs.f);
+    double extensionPower = 0;
     double extensionTarget, rotationTarget;
     DcMotorEx extension1, extension2, rotation1, rotation2;
 
@@ -66,6 +66,10 @@ public class Arm {
         setRotation(pose.rotation);
     }
 
+    public void setExtensionPower(double power) {
+        this.extensionPower = power;
+    }
+
     public double getRotation() {
         return rotation1.getCurrentPosition();
     }
@@ -99,11 +103,20 @@ public class Arm {
         mt.addData("Power", newExt);
         mt.update();
 
+        if (extension1.getCurrentPosition() < 1600 || extension1.getCurrentPosition() > 3300) {
+            this.extensionPower = 0;
+        }
 
         rotation1.setPower(newRot);
         rotation2.setPower(newRot);
+        if (this.extensionPower != 0) {
+            extension1.setPower(-this.extensionPower);
+            extension2.setPower(-this.extensionPower);
+            extensionTarget = extension1.getCurrentPosition();
 
-        extension1.setPower(-newExt);
-        extension2.setPower(-newExt);
+        } else {
+            extension1.setPower(-newExt);
+            extension2.setPower(-newExt);
+        }
     }
 }

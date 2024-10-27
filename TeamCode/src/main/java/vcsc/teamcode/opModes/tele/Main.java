@@ -27,8 +27,8 @@ public class Main extends OpMode {
     MecanumDrive drive;
     ArrayList<Double> wristPosList = new ArrayList<Double>() {
         {
-            add(0.6);
-            add(0.05);
+            add(0.3);
+            add(0.87);
         }
     };
     int wristPosNum = 0;
@@ -120,8 +120,10 @@ public class Main extends OpMode {
         rot = Math.min(rot, 0);
         rot = Math.max(rot, -870);
 
-        arm.setPosition(ext, rot);
+//        arm.setPosition(ext, rot);
+        arm.setRotation(rot);
         arm.update(telemetry);
+        arm.setExtensionPower(-gamepad1.right_stick_y);
 
         if (gamepad1.a) {
             if (!xDebounce) {
