@@ -6,6 +6,8 @@ import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import java.util.ArrayList;
 
@@ -38,7 +40,7 @@ public class Main extends OpMode {
 
     @Override
     public void init() {
-        arm = new Arm(hardwareMap);
+        arm = new Arm((HardwareMap) hardwareMap);
         wrist = new Wrist(hardwareMap);
         claw = new Claw(hardwareMap);
         drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
