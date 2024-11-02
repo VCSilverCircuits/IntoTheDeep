@@ -18,17 +18,18 @@ public class Arm {
     public static double kP_ext = 0.001, kI_ext = 0, kD_ext = 0, kF_ext = 0;
 
     // 28 Ticks/rev * 1 rev /(Pi * 0.787 in)
-    /*static double TICKS_PER_REV = 28;
+    static double TICKS_PER_REV = 28;
     static double TICKS_PER_INCH = TICKS_PER_REV / (Math.PI * 0.787);
     static double INCHES_PER_TICK = 1 / TICKS_PER_INCH;
-    static double TICKS_PER_DEGREE = TICKS_PER_REV * 360;
-    static double DEGREES_PER_TICK = 1 / TICKS_PER_DEGREE;*/
+    static double TICKS_PER_DEGREE = TICKS_PER_REV / 360;
+    static double DEGREES_PER_TICK = 1 / TICKS_PER_DEGREE;
     public static PIDFCoefficients extCoeffs = new PIDFCoefficients(0.01, 0, 0.0001, 0);
     public static PIDFCoefficients rotCoeffs = new PIDFCoefficients(0.005, 0, 0.00035, 0);
     public static PIDFController rotationController = new PIDFController(rotCoeffs.p, rotCoeffs.i, rotCoeffs.d, rotCoeffs.f);
     public static PIDFController extensionController = new PIDFController(extCoeffs.p, extCoeffs.i, extCoeffs.d, extCoeffs.f);
     double extensionTarget, rotationTarget;
     DcMotorEx extension1, extension2, rotation1, rotation2;
+    double outputPower;
 
     public Arm(HardwareMap hardwareMap) {
         extension1 = hardwareMap.get(DcMotorEx.class, "extension1");
@@ -67,7 +68,7 @@ public class Arm {
     }
 
     public double getRotation() {
-        return rotation1.getCurrentPosition();
+        return rotation1.getCurrentPosition() * DEGREES_PER_TICK;
     }
 
     public void setRotation(double position) {
@@ -75,12 +76,16 @@ public class Arm {
     }
 
     public double getExtension() {
-        return extension1.getCurrentPosition();
+        return extension1.getCurrentPosition() * INCHES_PER_TICK;
     }
 
     public void setExtension(double position) {
         extensionTarget = position;
     }
+    public void setOutputPower(double power) {
+        this.outputPower = power;
+    }
+
 
     public void update(Telemetry telem) {
         extensionController.setP(extCoeffs.p);
@@ -98,13 +103,22 @@ public class Arm {
         mt.addData("Current", getExtension());
         mt.addData("Power", newExt);
         mt.update();
+        if (Math.abs(outputPower) <= 0.05) {
+            rotation1.setPower(newRot);
+            rotation2.setPower(newRot);
 
+            extension1.setPower(-newExt);
+            extension2.setPower(-newExt);
+        }
+        else {
+            rotation1.setPower(newRot);
+            rotation2.setPower(newRot);
 
-        rotation1.setPower(newRot);
-        rotation2.setPower(newRot);
-
-        extension1.setPower(-newExt);
-        extension2.setPower(-newExt);
+            extension1.setPower(-outputPower);
+            extension2.setPower(-outputPower);
+            setExtension(getExtension());
+            setRotation(getRotation());
+        }
     }
 }
 

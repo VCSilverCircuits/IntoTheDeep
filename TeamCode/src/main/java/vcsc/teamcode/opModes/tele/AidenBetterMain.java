@@ -1,12 +1,10 @@
 package vcsc.teamcode.opModes.tele;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import java.util.ArrayList;
@@ -17,9 +15,10 @@ import vcsc.teamcode.Claw;
 import vcsc.teamcode.Hooks;
 import vcsc.teamcode.Wrist;
 
-@Config
-@TeleOp(name = "Main", group = "Competition")
-public class Main extends OpMode {
+//Aiden better main bc aiden's better than dallin
+
+@TeleOp(name = "AidenBetterMain",group = "Competition")
+public class AidenBetterMain extends OpMode {
     public static double bottom = -60;
     public static double top = -780;
     Arm arm;
@@ -36,8 +35,6 @@ public class Main extends OpMode {
     int wristPosNum = 0;
     double ext = 0, rot = -350;
     boolean rightDebounce = false, leftDebounce = false, bumperDebounce = false, xDebounce = false;
-    boolean up = false;
-
     @Override
     public void init() {
         arm = new Arm((HardwareMap) hardwareMap);
@@ -46,19 +43,11 @@ public class Main extends OpMode {
         drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         hooks = new Hooks(hardwareMap);
         hooks.raise();
-        arm.setPosition(ext, rot);
-    }
-
-    @Override
-    public void init_loop() {
-        arm.update(telemetry);
+        arm.setPosition(0, 45);
     }
 
     @Override
     public void loop() {
-        claw.setPosition(gamepad1.right_trigger);
-
-
         if (gamepad1.dpad_down) { // INTAKE
             wrist.setAngleY(0.6);
             wrist.setAngleX(1);
@@ -68,7 +57,7 @@ public class Main extends OpMode {
         }
         if (gamepad1.dpad_up) { // SCORE_BASKET
             wrist.setAngleX(0.5);
-            arm.setPosition(0.5,0.25);
+            arm.setPosition(21, 90);
         }
         if (gamepad1.dpad_left) { // SCORE_HOOK
             wrist.setAngleX(0.45);
@@ -81,50 +70,6 @@ public class Main extends OpMode {
         } else {
             rightDebounce = false;
         }
-
-        /*if (gamepad1.left_stick_button) {
-            if (!leftDebounce) {
-                if (wristPosNum > 0) {
-                    wristPosNum--;
-                }
-            }
-            leftDebounce = true;
-        } else {
-            leftDebounce = false;
-        }*/
-
-        if (gamepad1.left_bumper) {
-            if (!bumperDebounce) {
-                up = !up;
-            }
-            bumperDebounce = true;
-        } else {
-            bumperDebounce = false;
-        }
-
-        if (up) {
-            rot = top;
-        } else {
-            rot = bottom;
-        }
-
-        wrist.setAngleY(wristPosList.get(wristPosNum));
-
-        //rot += gamepad1.right_stick_x * 5;
-        ext -= gamepad1.right_stick_y * 50;
-
-        if (up) {
-            ext = Math.min(ext, 3300);
-        } else {
-            ext = Math.min(ext, 1600);
-        }
-        ext = Math.max(ext, 0);
-        rot = Math.min(rot, 0);
-        rot = Math.max(rot, -870);
-
-        arm.setPosition(ext, rot);
-        arm.update(telemetry);
-
         if (gamepad1.a) {
             if (!xDebounce) {
                 hooks.toggle();
@@ -133,7 +78,6 @@ public class Main extends OpMode {
         } else {
             bumperDebounce = false;
         }
-
         drive.setDrivePowers(new PoseVelocity2d(
                 new Vector2d(
                         -gamepad1.left_stick_y,
@@ -143,5 +87,10 @@ public class Main extends OpMode {
         ));
 
         drive.updatePoseEstimate();
+        wrist.setAngleY(wristPosList.get(wristPosNum));
+        arm.setOutputPower(-gamepad1.right_stick_y);
+        arm.update(telemetry);
     }
+
+
 }

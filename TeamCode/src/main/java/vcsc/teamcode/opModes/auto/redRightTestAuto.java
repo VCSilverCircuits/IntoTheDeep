@@ -23,7 +23,7 @@ public class redRightTestAuto extends LinearOpMode {
         // Define the starting position of the robot
         // Set the initial pose estimate for the drive
         Action TrajectoryAction1 = drive.actionBuilder(new Pose2d(0,0,0))
-                .lineToX(50)
+                .strafeTo(new Vector2d(0,-50))
                 .build();
         // Wait for the start command
         waitForStart();
