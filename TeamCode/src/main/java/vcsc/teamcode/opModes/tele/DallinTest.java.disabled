@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import roadrunner.MecanumDrive;
-import vcsc.teamcode.Arm;
-import vcsc.teamcode.Claw;
-import vcsc.teamcode.Wrist;
+import vcsc.teamcode.arm.Arm;
+import vcsc.teamcode.arm.Claw;
+import vcsc.teamcode.arm.Wrist;
 
 @Disabled
 @TeleOp(name = "DallinTest")
@@ -52,7 +52,7 @@ public class DallinTest extends OpMode {
         telemetry.addData("Rotation", rot);
 
         arm.setPosition(ext, rot);
-        arm.update(telemetry);
+        arm.loop(telemetry);
 
         /*pos = clawServo.getPosition();
         pos += gamepad1.right_stick_x / 300;

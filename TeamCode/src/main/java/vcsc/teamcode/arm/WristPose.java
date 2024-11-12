@@ -1,4 +1,4 @@
-package vcsc.teamcode;
+package vcsc.teamcode.arm;
 
 public enum WristPose {
     INTAKE(1, 0),

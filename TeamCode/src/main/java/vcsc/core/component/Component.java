@@ -2,9 +2,11 @@ package vcsc.core.component;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public interface Component {
+public abstract class Component {
 
-    void init(final HardwareMap hMap);
+    public Component(final HardwareMap hMap) {
 
-    void update();
+    }
+
+    abstract public void loop();
 }

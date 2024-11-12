@@ -1,4 +1,4 @@
-package vcsc.teamcode;
+package vcsc.teamcode.arm;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
