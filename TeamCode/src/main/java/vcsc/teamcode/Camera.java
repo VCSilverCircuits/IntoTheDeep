@@ -6,14 +6,24 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.LLStatus;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-public class Camera {
+import java.util.List;
+
+@TeleOp(name="Camera", group = "Testing")
+public class Camera extends OpMode {
 
     Limelight3A limelight;
+
     public void init() {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
         limelight.start(); // This tells Limelight to start looking!
+    }
+
+    @Override
+    public void loop() {
         LLResult result = limelight.getLatestResult();
         if (result != null && result.isValid()) {
             double tx = result.getTx(); // How far left or right the target is (degrees)
@@ -25,6 +35,11 @@ public class Camera {
             telemetry.addData("Target Area", ta);
         } else {
             telemetry.addData("Limelight", "No Targets");
+        }
+        List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
+        for (LLResultTypes.ColorResult cr : colorResults) {
+            limelight.start();
+            limelight.pipelineSwitch(0);
         }
     }
 }
