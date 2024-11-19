@@ -1,4 +1,7 @@
-package vcsc.teamcode.arm;
+package vcsc.teamcode.armOld;
+
+import vcsc.teamcode.armOld.cmp.ArmExtensionPose;
+import vcsc.teamcode.armOld.cmp.ArmRotationPose;
 
 public enum ArmPose {
     INTAKE(ArmExtensionPose.INTAKE, ArmRotationPose.INTAKE),

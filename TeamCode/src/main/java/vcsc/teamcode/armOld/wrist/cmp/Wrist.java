@@ -1,4 +1,4 @@
-package vcsc.teamcode.arm;
+package vcsc.teamcode.armOld.wrist.cmp;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.ServoImplEx;

@@ -1,19 +1,16 @@
 package vcsc.teamcode.arm;
 
-import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import vcsc.core.assembly.Assembly;
+import vcsc.teamcode.armOld.cmp.ArmExtension;
+import vcsc.teamcode.armOld.cmp.ArmRotation;
 
-@Config
-public class Arm extends Assembly {
+public class ArmActuator extends Assembly {
     ArmRotation rotation;
     ArmExtension extension;
 
-    public Arm(HardwareMap hardwareMap) {
-        super(hardwareMap);
-        rotation = new ArmRotation(hardwareMap);
-        extension = new ArmExtension(hardwareMap);
+    public ArmActuator(ArmRotation rotation, ArmExtension extension) {
+        this.rotation = rotation;
+        this.extension = extension;
         registerComponent(rotation);
         registerComponent(extension);
     }
@@ -22,11 +19,6 @@ public class Arm extends Assembly {
         setExtension(extension);
         setRotation(angle);
     }
-
-    /*public void setPose(ArmPose pose) {
-        setExtension(pose.extension);
-        setRotation(pose.rotation);
-    }*/
 
     public void setExtensionPower(double power) {
         extension.setPower(power);

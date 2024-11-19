@@ -16,7 +16,7 @@ apply from: '../build.common.gradle'
 apply from: '../build.dependencies.gradle'
 
 android {
-    namespace = 'roadrunner'
+    namespace = 'vcsc'
 
     packagingOptions {
         jniLibs.useLegacyPackaging true

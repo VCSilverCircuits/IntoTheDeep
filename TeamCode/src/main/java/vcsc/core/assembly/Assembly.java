@@ -5,19 +5,20 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import java.util.ArrayList;
 
 import vcsc.core.component.Component;
+import vcsc.core.component.Composable;
 
-public class Assembly extends Component {
-    protected ArrayList<Component> components = new ArrayList<>();
+public class Assembly implements Composable {
+    protected ArrayList<Composable> components = new ArrayList<>();
 
-    public Assembly(HardwareMap hMap) {
-        super(hMap);
+    public Assembly() {
+        super();
     }
 
-    protected void registerComponent(Component component) {
+    protected void registerComponent(Composable component) {
         components.add(component);
     }
-
-    protected void unregisterComponent(Component component) {
+x`
+    protected void unregisterComponent(Composable component) {
         components.remove(component);
     }
 
@@ -29,15 +30,43 @@ public class Assembly extends Component {
         components.clear();
     }
 
-    protected ArrayList<Component> getComponents() {
+    protected ArrayList<Composable> getComponents() {
         return components;
+    }
+
+    @Override
+    public void init() {
+        for (Composable component : components) {
+            component.init();
+        }
+    }
+
+    @Override
+    public void init_loop() {
+        for (Composable component : components) {
+            component.init_loop();
+        }
+    }
+
+    @Override
+    public void start() {
+        for (Composable component : components) {
+            component.start();
+        }
     }
 
     @Override
     public void loop() {
         // Update all components
-        for (Component component : components) {
+        for (Composable component : components) {
             component.loop();
+        }
+    }
+
+    @Override
+    public void stop() {
+        for (Composable component : components) {
+            component.stop();
         }
     }
 }
