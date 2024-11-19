@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import vcsc.core.GlobalTelemetry;
 import vcsc.core.component.PoweredPID;
-import vcsc.core.hardware.DcMotorGroup;
+import vcsc.redesign.DcMotorGroup;
 
 public class ArmExtension extends PoweredPID {
     public static final double TPR = 28;

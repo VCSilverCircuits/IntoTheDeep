@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import vcsc.core.component.PoweredPID;
-import vcsc.core.hardware.DcMotorGroup;
+import vcsc.redesign.DcMotorGroup;
 
 public class ArmRotation extends PoweredPID {
     public static final double TPR = 28;

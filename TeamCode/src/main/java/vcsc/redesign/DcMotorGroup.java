@@ -1,4 +1,4 @@
-package vcsc.core.hardware;
+package vcsc.redesign;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorImplEx;

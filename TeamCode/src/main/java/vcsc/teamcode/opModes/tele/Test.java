@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import roadrunner.MecanumDrive;
 import vcsc.core.GlobalTelemetry;
-import vcsc.core.hardware.DcMotorGroup;
+import vcsc.redesign.DcMotorGroup;
 
 @TeleOp(name = "Test", group = "Test")
 public class Test extends LinearOpMode {
