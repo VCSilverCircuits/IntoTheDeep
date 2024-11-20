@@ -1,16 +1,15 @@
 package vcsc.redesign.actuators;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.ServoImplEx;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import vcsc.redesign.states.ClawState;
 
 public class ClawActuator extends Actuator<ClawState> {
-    ServoImplEx servo;
+    Servo servo;
     double targetPosition;
 
-    public ClawActuator(HardwareMap hardwareMap) {
-        servo = hardwareMap.get(ServoImplEx.class, "claw");
+    public ClawActuator(Servo clawServo) {
+        servo = clawServo;
     }
 
     @Override

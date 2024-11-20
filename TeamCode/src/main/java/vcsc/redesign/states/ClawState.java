@@ -2,7 +2,7 @@ package vcsc.redesign.states;
 
 
 public class ClawState extends State {
-    double position;
+    double position = 0;
     public ClawState() {
         super();
     }
