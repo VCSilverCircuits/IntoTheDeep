@@ -1,21 +1,23 @@
 package vcsc.redesign.actions;
 
-import vcsc.redesign.states.ClawState;
+import com.qualcomm.robotcore.hardware.Servo;
 
-public abstract class ClawAction extends ClawState {
+import vcsc.redesign.actuators.ClawActuator;
+
+public class ClawAction extends ClawActuator {
     double targetPosition = 0;
     double position = 0;
     double min = 0;
     double max = 0;
     double speed = 0.5;
 
-
-    @Override
-    public void setPosition(double position) { targetPosition = position;
+    public ClawAction(Servo clawServo) {
+        super(clawServo);
     }
 
-    @Override
-    public double getPosition() { return position; }
+    public void setSpeed(double speed){
+        // I dont know what im putting here yet lol
+    }
 
     public void forcePosition(double position){
         this.position = position;
@@ -28,9 +30,9 @@ public abstract class ClawAction extends ClawState {
     }
 
     public void close() {
-        setPosition(0);
+        double minPosition = Servo.MIN_POSITION;
     }
-    public void  open() {
-        setPosition(1);
+    public void open() {
+        double maxPosition = Servo.MAX_POSITION;
     }
 }
