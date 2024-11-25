@@ -5,23 +5,17 @@ import com.qualcomm.robotcore.hardware.Servo;
 import vcsc.redesign.actuators.ClawActuator;
 
 public class ClawAction extends ClawActuator {
-    double targetPosition = 0;
-    double position = 0;
+    //placeholder values
     double min = 0;
-    double max = 0;
-    double speed = 0.5;
+    double max = 1;
+    double speedIncrements = 0.5;
 
     public ClawAction(Servo clawServo) {
         super(clawServo);
     }
 
     public void setSpeed(double speed){
-        // I dont know what im putting here yet lol
-    }
-
-    public void forcePosition(double position){
-        this.position = position;
-        targetPosition = position;
+        // I don't know what im putting here yet lol
     }
 
     public void scaleRange(double min, double max) {

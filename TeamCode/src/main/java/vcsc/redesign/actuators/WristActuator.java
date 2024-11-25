@@ -1,6 +1,6 @@
 package vcsc.redesign.actuators;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import vcsc.redesign.states.ClawState;
@@ -10,7 +10,7 @@ public class WristActuator extends Actuator<ClawState> {
     ServoImplEx wristPivot;
     double targetPosition;
 
-    public WristActuator(HardwareMap hardwareMap) {
+    public WristActuator(Servo hardwareMap) {
         wristRot = hardwareMap.get(ServoImplEx.class, "wristX");
         wristPivot = hardwareMap.get(ServoImplEx.class, "wristY");
     }
