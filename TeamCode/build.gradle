@@ -21,7 +21,6 @@ android {
     packagingOptions {
         jniLibs.useLegacyPackaging true
     }
-
 }
 
 repositories {
@@ -40,4 +39,3 @@ dependencies {
 
     implementation 'org.ftclib.ftclib:core:2.1.1'
 }
-
