@@ -6,8 +6,8 @@ public enum ClawPose {
 
     final double pos;
 
-    ClawPose(double pos) {
-        this.pos = pos;
+    ClawPose(double position) {
+        pos = position;
     }
 
     public double getPos() {

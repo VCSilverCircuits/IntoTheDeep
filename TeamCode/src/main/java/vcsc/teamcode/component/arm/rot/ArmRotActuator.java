@@ -15,7 +15,7 @@ import vcsc.core.util.DcMotorGroup;
 
 public class ArmRotActuator extends PoweredPIDFActuator {
     // Three 4:1 ultraplanetary gearboxes
-    public static final double MOTOR_GEAR_RATIO = 4.0 * 4.0 * 4.0;
+    public static final double MOTOR_GEAR_RATIO = 3.61 * 3.61 * 3.61;
     // Gear ratio of driven gears
     public static final double DRIVE_GEAR_RATIO = 52.0 / 24.0;
     public static final double DEGREES_PER_TICK = 360.0 / (TPR * MOTOR_GEAR_RATIO * DRIVE_GEAR_RATIO);
@@ -48,6 +48,7 @@ public class ArmRotActuator extends PoweredPIDFActuator {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
         double outputPower = controller.calculate(getPosition());
         telemetry.addData("Run Position", controller.getSetPoint());
+        telemetry.addData("At Position", controller.atSetPoint());
         telemetry.addData("Output Power", outputPower);
         telemetry.addData("Current position", getPosition());
         motors.setPower(outputPower);

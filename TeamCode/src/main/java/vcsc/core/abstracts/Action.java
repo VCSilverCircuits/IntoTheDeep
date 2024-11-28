@@ -8,7 +8,7 @@ public interface Action {
     void start();
 
     // Perform updates if needed
-    void loop();
+    boolean loop();
 
     // Check if finished
     boolean isFinished();

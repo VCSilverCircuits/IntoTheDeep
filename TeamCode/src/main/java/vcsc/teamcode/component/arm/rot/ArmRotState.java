@@ -18,7 +18,7 @@ public class ArmRotState extends PoweredPIDFState {
     }
 
     public void setPose(ArmRotPose pose) {
-        setTargetPosition(pose.getAngle());
+        setAngle(pose.getAngle());
 
     }
 }

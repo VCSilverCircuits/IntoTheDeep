@@ -9,7 +9,8 @@ public abstract class Actuator {
 
     public abstract void loop();
 
-    public boolean inAction() {
+    public boolean
+    inAction() {
         return _inAction;
     }
 

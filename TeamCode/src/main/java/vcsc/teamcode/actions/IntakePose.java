@@ -32,12 +32,13 @@ public class IntakePose implements Action {
     }
 
     @Override
-    public void loop() {
+    public boolean loop() {
         if (finished)
-            return;
+            return false;
         if (!rotState.actuatorsInAction() && !clawState.actuatorsInAction()) {
             stop();
         }
+        return false;
     }
 
     @Override

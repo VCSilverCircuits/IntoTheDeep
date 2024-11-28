@@ -17,6 +17,7 @@ public abstract class PoweredPIDFActuator extends Actuator {
                 coefficients.d,
                 coefficients.f
         );
+        controller.setTolerance(5);
     }
 
     public void setPIDFCoefficients(PIDFCoefficients coefficients) {
@@ -59,5 +60,6 @@ public abstract class PoweredPIDFActuator extends Actuator {
         }
 
         power = poweredPIDFState.getPower();
+        setInAction(!controller.atSetPoint() || power != 0);
     }
 }

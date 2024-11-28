@@ -21,10 +21,11 @@ public class OpenClawAction extends ClawAction {
     }
 
     @Override
-    public void loop() {
+    public boolean loop() {
         if (!clawState.actuatorsInAction()) {
             // move to the next thing
         }
+        return false;
     }
 
     @Override
