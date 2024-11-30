@@ -1,7 +1,7 @@
 package vcsc.teamcode.component.claw;
 
 
-import vcsc.core.abstracts.State;
+import vcsc.core.abstracts.state.State;
 
 public class ClawState extends State {
     double position = 0;

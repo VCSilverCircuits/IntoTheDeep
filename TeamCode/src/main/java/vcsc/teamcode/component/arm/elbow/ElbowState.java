@@ -1,11 +1,13 @@
 package vcsc.teamcode.component.arm.elbow;
 
-import vcsc.core.abstracts.State;
+import vcsc.core.abstracts.state.State;
 
 public class ElbowState extends State {
-    double position = 0;
+    double position;
 
-    public ElbowState() {super();
+    public ElbowState() {
+        super();
+        setPose(ElbowPose.STOW);
     }
 
     public double getPosition() {

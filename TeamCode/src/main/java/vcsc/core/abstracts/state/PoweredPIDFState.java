@@ -1,4 +1,4 @@
-package vcsc.core.abstracts;
+package vcsc.core.abstracts.state;
 
 public class PoweredPIDFState extends State {
     private double power;

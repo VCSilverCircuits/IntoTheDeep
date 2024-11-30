@@ -2,8 +2,7 @@ package vcsc.teamcode.component.arm.ext;
 
 import static vcsc.teamcode.component.arm.ext.ArmExtActuator.CM_PER_TICK;
 
-import vcsc.core.abstracts.PoweredPIDFState;
-import vcsc.teamcode.component.arm.rot.ArmRotPose;
+import vcsc.core.abstracts.state.PoweredPIDFState;
 
 public class ArmExtState extends PoweredPIDFState {
     public double getExtensionLength() {

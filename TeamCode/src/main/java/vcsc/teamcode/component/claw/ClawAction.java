@@ -1,6 +1,6 @@
 package vcsc.teamcode.component.claw;
 
-import vcsc.core.abstracts.Action;
+import vcsc.core.abstracts.action.Action;
 
 public abstract class ClawAction implements Action {
     protected ClawState clawState;

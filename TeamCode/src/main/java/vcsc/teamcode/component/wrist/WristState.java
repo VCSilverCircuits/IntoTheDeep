@@ -1,28 +1,45 @@
 package vcsc.teamcode.component.wrist;
 
-import vcsc.core.abstracts.State;
+import vcsc.core.abstracts.state.State;
 
 public class WristState extends State {
-    private double wristRotPosition;
-    private double wristPivotPosition;
+    private double rotPosition;
+    private double pivotPosition;
 
     public WristState() {
         super();
+        setPose(WristPose.DEFAULT);
     }
 
-    public double getWristRotPosition() {
-        return wristRotPosition;
+    public double getRot() {
+        return rotPosition;
     }
 
-    public void setWristRotPosition(double wristRotPosition) {
-        this.wristRotPosition = wristRotPosition;
+    public void setRot(double wristRotPosition) {
+        this.rotPosition = wristRotPosition;
+        notifyActuators();
     }
 
-    public double getWristPivotPosition() {
-        return wristPivotPosition;
+    public double getPivot() {
+        return pivotPosition;
     }
 
-    public void setWristPivotPosition(double wristPivotPosition) {
-        this.wristPivotPosition = wristPivotPosition;
+    public void setPivot(double wristPivotPosition) {
+        this.pivotPosition = wristPivotPosition;
+        notifyActuators();
     }
+
+    public void setRotPose(WristRotPose wristRotPose) {
+        setRot(wristRotPose.getPosition());
+    }
+
+    public void setPivotPose(WristPivotPose wristPivotPose) {
+        setPivot(wristPivotPose.getPosition());
+    }
+
+    public void setPose(WristPose wristPose) {
+        setPivot(wristPose.getPivot());
+        setRot(wristPose.getRot());
+    }
+
 }

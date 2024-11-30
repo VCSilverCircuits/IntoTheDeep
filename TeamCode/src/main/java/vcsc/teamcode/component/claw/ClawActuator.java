@@ -2,8 +2,8 @@ package vcsc.teamcode.component.claw;
 
 import com.qualcomm.robotcore.hardware.Servo;
 
-import vcsc.core.abstracts.Actuator;
-import vcsc.core.abstracts.State;
+import vcsc.core.abstracts.actuator.Actuator;
+import vcsc.core.abstracts.state.State;
 
 public class ClawActuator extends Actuator {
     Servo servo;
@@ -15,12 +15,7 @@ public class ClawActuator extends Actuator {
 
     @Override
     public void loop() {
-        if (servo.getPosition() != targetPosition) {
-            setInAction(true);
-            servo.setPosition(targetPosition);
-        } else {
-            setInAction(false);
-        }
+        servo.setPosition(ClawPose.MIN + (targetPosition * (ClawPose.MAX - ClawPose.MIN)));
     }
 
     @Override

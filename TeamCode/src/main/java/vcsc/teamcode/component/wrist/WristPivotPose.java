@@ -1,18 +1,16 @@
-package vcsc.teamcode.component.arm.elbow;
+package vcsc.teamcode.component.wrist;
 
 import com.acmerobotics.dashboard.config.Config;
 
 @Config
-public enum ElbowPose {
-    BASKET(0.5),
-    PREGRAB(0.45),
-    GRAB(0.57),
-    STOW(0.2);
-
+public enum WristPivotPose {
+    FORWARD(0),
+    TILT(0.42),
+    REVERSE(0.56);
 
     final double position;
 
-    ElbowPose(double position) {
+    WristPivotPose(double position) {
         this.position = position;
     }
 
@@ -20,4 +18,3 @@ public enum ElbowPose {
         return position;
     }
 }
-

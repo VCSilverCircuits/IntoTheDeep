@@ -1,6 +1,6 @@
 package vcsc.teamcode.actions;
 
-import vcsc.core.abstracts.Action;
+import vcsc.core.abstracts.action.Action;
 import vcsc.teamcode.component.arm.ext.ArmExtState;
 import vcsc.teamcode.component.arm.rot.ArmRotPose;
 import vcsc.teamcode.component.arm.rot.ArmRotState;

@@ -1,6 +1,8 @@
-package vcsc.core.abstracts;
+package vcsc.core.abstracts.state;
 
 import java.util.ArrayList;
+
+import vcsc.core.abstracts.actuator.Actuator;
 
 public abstract class State {
     ArrayList<Actuator> actuators = new ArrayList<>();

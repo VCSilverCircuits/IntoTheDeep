@@ -1,7 +1,10 @@
-package vcsc.core.abstracts;
+package vcsc.core.abstracts.actuator;
 
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+
+import vcsc.core.abstracts.state.PoweredPIDFState;
+import vcsc.core.abstracts.state.State;
 
 public abstract class PoweredPIDFActuator extends Actuator {
     protected PIDFController controller;

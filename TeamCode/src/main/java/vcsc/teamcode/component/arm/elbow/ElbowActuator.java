@@ -2,9 +2,8 @@ package vcsc.teamcode.component.arm.elbow;
 
 import com.qualcomm.robotcore.hardware.Servo;
 
-import vcsc.core.abstracts.Actuator;
-import vcsc.core.abstracts.State;
-import vcsc.teamcode.component.claw.ClawState;
+import vcsc.core.abstracts.actuator.Actuator;
+import vcsc.core.abstracts.state.State;
 
 public class ElbowActuator extends Actuator {
     Servo servo;
@@ -16,12 +15,7 @@ public class ElbowActuator extends Actuator {
 
     @Override
     public void loop() {
-        if (servo.getPosition() != targetPosition) {
-            setInAction(true);
-            servo.setPosition(targetPosition);
-        } else {
-            setInAction(false);
-        }
+        servo.setPosition(targetPosition);
     }
 
     @Override

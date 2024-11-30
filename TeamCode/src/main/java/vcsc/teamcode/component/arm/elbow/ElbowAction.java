@@ -1,7 +1,6 @@
 package vcsc.teamcode.component.arm.elbow;
 
-import vcsc.core.abstracts.Action;
-import vcsc.teamcode.component.claw.ClawState;
+import vcsc.core.abstracts.action.Action;
 
 public abstract class ElbowAction implements Action {
     protected ElbowState elbowState;

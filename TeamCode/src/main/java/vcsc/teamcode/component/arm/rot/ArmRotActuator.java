@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import vcsc.core.GlobalTelemetry;
-import vcsc.core.abstracts.PoweredPIDFActuator;
+import vcsc.core.abstracts.actuator.PoweredPIDFActuator;
 import vcsc.core.util.DcMotorGroup;
 
 public class ArmRotActuator extends PoweredPIDFActuator {

@@ -1,4 +1,4 @@
-package vcsc.core.abstracts;
+package vcsc.core.abstracts.action;
 
 public interface Action {
     // Get ready

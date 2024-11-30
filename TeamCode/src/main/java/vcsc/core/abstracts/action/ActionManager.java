@@ -1,4 +1,4 @@
-package vcsc.core.abstracts;
+package vcsc.core.abstracts.action;
 
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.qualcomm.robotcore.hardware.Gamepad;

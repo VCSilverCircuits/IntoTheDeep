@@ -2,7 +2,7 @@ package vcsc.teamcode.component.arm.rot;
 
 import static vcsc.teamcode.component.arm.rot.ArmRotActuator.DEGREES_PER_TICK;
 
-import vcsc.core.abstracts.PoweredPIDFState;
+import vcsc.core.abstracts.state.PoweredPIDFState;
 
 public class ArmRotState extends PoweredPIDFState {
     public ArmRotState() {
