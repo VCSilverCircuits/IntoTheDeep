@@ -6,7 +6,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import roadrunner.MecanumDrive;
 import vcsc.core.GlobalTelemetry;
+import vcsc.core.util.GamepadWrapper;
 import vcsc.teamcode.DebugConstants;
+import vcsc.teamcode.actions.IntakePose;
 import vcsc.teamcode.component.arm.elbow.ElbowActuator;
 import vcsc.teamcode.component.arm.elbow.ElbowState;
 import vcsc.teamcode.component.arm.ext.ArmExtActuator;
@@ -34,6 +36,10 @@ public class BaseOpMode extends OpMode {
     ElbowActuator elbowActuator;
     WristActuator wristActuator;
 
+    GamepadWrapper gw1, gw2;
+
+    IntakePose ip;
+
     @Override
     public void init() {
         GlobalTelemetry.init(telemetry);
@@ -58,6 +64,9 @@ public class BaseOpMode extends OpMode {
         wristState.registerActuator(wristActuator);
 
         matchTimer = new ElapsedTime();
+
+        gw1 = new GamepadWrapper();
+        gw2 = new GamepadWrapper();
     }
 
     @Override
@@ -67,6 +76,10 @@ public class BaseOpMode extends OpMode {
 
     @Override
     public void loop() {
+        gw1.loop(gamepad1);
+        gw2.loop(gamepad2);
+
+
         rotActuator.loop();
         extActuator.loop();
         clawActuator.loop();

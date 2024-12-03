@@ -17,5 +17,4 @@ public enum GamepadButton {
     RIGHT_STICK_BUTTON,
     START,
     BACK
-
 }
