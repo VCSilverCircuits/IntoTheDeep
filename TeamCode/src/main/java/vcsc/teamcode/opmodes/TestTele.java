@@ -79,6 +79,13 @@ public class TestTele extends OpMode {
         } else {
             wristState.setPivotPose(WristPivotPose.REVERSE);
         }
+        // just testing if this will be useful
+        if (gamepad1.right_bumper) {
+            clawState.close();
+        }
+        if (gamepad1.left_bumper) {
+            clawState.open();
+        }
 
         clawState.setPosition(gamepad1.right_trigger);
 

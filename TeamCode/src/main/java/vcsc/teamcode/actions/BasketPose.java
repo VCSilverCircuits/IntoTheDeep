@@ -75,7 +75,7 @@ public class BasketPose implements Action {
         finished = true;
     }
 
-    private enum STAGE {
+    enum STAGE {
         ROTATING,
         EXTENDING,
         ELBOWING
