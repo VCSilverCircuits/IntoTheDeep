@@ -22,11 +22,6 @@ public class PreHang implements Action {
     }
 
     @Override
-    public void init() {
-
-    }
-
-    @Override
     public void start() {
         extState.setPose(ArmExtPose.HANG);
         rotState.setPose(ArmRotPose.HANG);
@@ -34,8 +29,8 @@ public class PreHang implements Action {
     }
 
     @Override
-    public boolean loop() {
-        return false;
+    public void loop() {
+
     }
 
     @Override
@@ -44,7 +39,8 @@ public class PreHang implements Action {
     }
 
     @Override
-    public void stop() {
-
+    public void cancel() {
+        
     }
+
 }

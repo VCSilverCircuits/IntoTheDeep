@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import vcsc.core.util.GamepadButton;
+import vcsc.teamcode.DebugConstants;
 import vcsc.teamcode.actions.BasketPose;
 import vcsc.teamcode.actions.IntakePose;
 import vcsc.teamcode.opmodes.base.BaseOpMode;
@@ -20,17 +21,20 @@ public class MainTele extends BaseOpMode {
     public void init() {
         super.init();
         // ===== Actions =====
-        basketPose = new BasketPose(rotState,extState,elbowState,wristState);
-        intakePose = new IntakePose(rotState,extState,clawState);
+        basketPose = new BasketPose(rotState, extState, elbowState, wristState);
+        intakePose = new IntakePose(rotState, extState, clawState);
 
         // ===== Button Bindings =====
-        gw1.bindButton(GamepadButton.LEFT_TRIGGER,basketPose);
-        gw1.bindButton(GamepadButton.RIGHT_TRIGGER,intakePose);
+        gw1.bindButton(GamepadButton.LEFT_TRIGGER, basketPose);
+        gw1.bindButton(GamepadButton.RIGHT_TRIGGER, intakePose);
     }
 
     @Override
     public void loop() {
         super.loop();
+
+        extState.setSpeed(DebugConstants.extSpeed);
+        rotState.setSpeed(DebugConstants.rotSpeed);
 
         // ===== Drivetrain =====
         drive.setDrivePowers(new PoseVelocity2d(
@@ -45,8 +49,10 @@ public class MainTele extends BaseOpMode {
 
         if (matchTimer.seconds() >= 90 && !rumbledEndGame) {
             gamepad1.rumble(500);
+            rumbledEndGame = true;
         } else if (matchTimer.seconds() >= 120 && !rumbledMatchEnd) {
             gamepad1.rumbleBlips(3);
+            rumbledMatchEnd = true;
         }
     }
 }

@@ -15,19 +15,13 @@ public class NeutralAction implements Action {
     ElbowState elbowState;
     WristState wristState;
     private boolean finished = false;
-    private BasketPose.STAGE currentStage;
 
-    public NeutralAction(ArmRotState rotState, ArmExtState extState, ElbowState elbowState,WristState wristState) {
+    public NeutralAction(ArmRotState rotState, ArmExtState extState, ElbowState elbowState, WristState wristState) {
         this.rotState = rotState;
         this.extState = extState;
 
         this.elbowState = elbowState;
         this.wristState = wristState;
-    }
-
-    @Override
-    public void init() {
-
     }
 
     @Override
@@ -41,13 +35,12 @@ public class NeutralAction implements Action {
     }
 
     @Override
-    public boolean loop() {
+    public void loop() {
         if (finished)
-            return false;
+            return;
         if (!rotState.actuatorsInAction() && !extState.actuatorsInAction()) {
-            stop();
+            finished = true;
         }
-        return false;
     }
 
     @Override
@@ -56,13 +49,15 @@ public class NeutralAction implements Action {
     }
 
     @Override
-    public void stop() { finished = true;}
+    public void cancel() {
+
+    }
 
     private enum STAGE {
         RETRACT,
         ROTATE,
         ELBOW,
-        CLAW;
+        CLAW
 
     }
 }

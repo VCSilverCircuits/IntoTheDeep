@@ -1,6 +1,11 @@
 package vcsc.teamcode.actions;
 
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+
+import vcsc.core.GlobalTelemetry;
 import vcsc.core.abstracts.action.Action;
+import vcsc.core.abstracts.action.ActionBuilder;
+import vcsc.teamcode.component.arm.ext.ArmExtPose;
 import vcsc.teamcode.component.arm.ext.ArmExtState;
 import vcsc.teamcode.component.arm.rot.ArmRotPose;
 import vcsc.teamcode.component.arm.rot.ArmRotState;
@@ -11,43 +16,43 @@ public class IntakePose implements Action {
     ArmExtState extState;
     ClawState clawState;
 
+    ActionBuilder seq;
+
     private boolean finished = false;
 
     public IntakePose(ArmRotState rotState, ArmExtState extState, ClawState clawState) {
         this.rotState = rotState;
         this.extState = extState;
         this.clawState = clawState;
-    }
 
-    @Override
-    public void init() {
-
+        MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
+        telemetry.addLine("Going to basket pose.");
+        finished = false;
     }
 
     @Override
     public void start() {
-        finished = false;
-        rotState.setPose(ArmRotPose.INTAKE);
-        clawState.open();
+        SetExtPose slidesIn = new SetExtPose(extState, ArmExtPose.MAX_ROTATE);
+        SetExtPose slidesOut = new SetExtPose(extState, ArmExtPose.INTAKE);
+        SetRotPose rotateDown = new SetRotPose(rotState, ArmRotPose.INTAKE);
+        seq = new ActionBuilder(slidesIn)
+                .then(rotateDown)
+                .then(slidesOut);
+        seq.start();
     }
 
     @Override
-    public boolean loop() {
-        if (finished)
-            return false;
-        if (!rotState.actuatorsInAction() && !clawState.actuatorsInAction()) {
-            stop();
-        }
-        return false;
+    public void loop() {
+        seq.loop();
     }
 
     @Override
     public boolean isFinished() {
-        return finished;
+        return seq.isFinished();
     }
 
     @Override
-    public void stop() {
-        finished = true;
+    public void cancel() {
+        seq.cancel();
     }
 }

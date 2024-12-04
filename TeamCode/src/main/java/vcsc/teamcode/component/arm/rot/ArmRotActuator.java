@@ -33,7 +33,7 @@ public class ArmRotActuator extends PoweredPIDFActuator {
     }
 
     @Override
-    protected double getPosition() {
+    public double getPosition() {
         return -motors.getCurrentPosition();
     }
 

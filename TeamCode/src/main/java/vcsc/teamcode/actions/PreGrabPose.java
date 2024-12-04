@@ -12,18 +12,12 @@ public class PreGrabPose extends ArmAction {
     }
 
     @Override
-    public void init() {
-
-    }
-
-    @Override
     public void start() {
 
     }
 
     @Override
-    public boolean loop() {
-        return false;
+    public void loop() {
     }
 
     @Override
@@ -32,7 +26,7 @@ public class PreGrabPose extends ArmAction {
     }
 
     @Override
-    public void stop() {
+    public void cancel() {
 
     }
 }

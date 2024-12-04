@@ -6,30 +6,25 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
-import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import roadrunner.MecanumDrive;
 import vcsc.core.GlobalTelemetry;
-import vcsc.teamcode.component.LeftHook.LHActuator;
-import vcsc.teamcode.component.LeftHook.LHState;
 import vcsc.teamcode.component.arm.rot.ArmRotActuator;
 import vcsc.teamcode.component.arm.rot.ArmRotState;
-import vcsc.teamcode.component.claw.ClawActuator;
-import vcsc.teamcode.component.claw.ClawState;
 
 @Autonomous(group = "Testing", name = "HangTest")
 class HangTestRevised extends OpMode {
     MecanumDrive drive;
     ArmRotState armRotState;
     ArmRotActuator armRotActuator;
-    LHActuator lhActuator;
-    LHState lhState;
+    //    LHActuator lhActuator;
+//    LHState lhState;
     boolean debounceA = false;
     boolean debounceB = false;
     boolean hang = false;
     boolean rotate = false;
-    private LHState LHState;
-    private LHActuator LHActuator;
+//    private LHState LHState;
+//    private LHActuator LHActuator;
 
     @Override
     public void init() {
@@ -39,9 +34,9 @@ class HangTestRevised extends OpMode {
         armRotState = new ArmRotState();
         armRotActuator = new ArmRotActuator(hardwareMap, new PIDFCoefficients(0.01, 0, 0, 0));
         armRotState.registerActuator(armRotActuator);
-        LHState = new LHState();
-        LHActuator = new LHActuator(hardwareMap.get(ServoImplEx.class, "leftHook"));
-        LHState.registerActuator(LHActuator);
+//        LHState = new LHState();
+//        LHActuator = new LHActuator(hardwareMap.get(ServoImplEx.class, "leftHook"));
+//        LHState.registerActuator(LHActuator);
 
 
     }
@@ -73,11 +68,11 @@ class HangTestRevised extends OpMode {
         }
 
         if (hang) {
-            hookRight.setPosition(0.55);
-            hookLeft.setPosition(0.5);
+//            hookRight.setPosition(0.55);
+//            hookLeft.setPosition(0.5);
         } else {
-            hookRight.setPosition(0);
-            hookLeft.setPosition(1);
+//            hookRight.setPosition(0);
+//            hookLeft.setPosition(1);
         }
 
         drive.setDrivePowers(new PoseVelocity2d(

@@ -4,13 +4,12 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
 import vcsc.core.GlobalTelemetry;
 import vcsc.core.abstracts.action.Action;
-import vcsc.teamcode.component.arm.elbow.ElbowPose;
+import vcsc.core.abstracts.action.ActionBuilder;
 import vcsc.teamcode.component.arm.elbow.ElbowState;
 import vcsc.teamcode.component.arm.ext.ArmExtPose;
 import vcsc.teamcode.component.arm.ext.ArmExtState;
 import vcsc.teamcode.component.arm.rot.ArmRotPose;
 import vcsc.teamcode.component.arm.rot.ArmRotState;
-import vcsc.teamcode.component.wrist.WristPose;
 import vcsc.teamcode.component.wrist.WristState;
 
 public class BasketPose implements Action {
@@ -18,8 +17,7 @@ public class BasketPose implements Action {
     ArmExtState extState;
     ElbowState elbowState;
     WristState wristState;
-    private boolean finished = false;
-    private STAGE currentStage;
+    ActionBuilder seq;
 
     public BasketPose(ArmRotState rotState, ArmExtState extState, ElbowState elbowState, WristState wristState) {
         this.rotState = rotState;
@@ -29,56 +27,53 @@ public class BasketPose implements Action {
     }
 
     @Override
-    public void init() {
-
-    }
-
-    @Override
     public void start() {
-        finished = false;
-        rotState.setPose(ArmRotPose.BASKET);
-        currentStage = STAGE.ROTATING;
-
+        MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
+        telemetry.addLine("Going to basket pose.");
+        SetExtPose slidesIn = new SetExtPose(extState, ArmExtPose.MAX_ROTATE);
+        SetExtPose slidesOut = new SetExtPose(extState, ArmExtPose.BASKET);
+        SetRotPose rotateUp = new SetRotPose(rotState, ArmRotPose.BASKET);
+        WristBasketPose wristBasketPose = new WristBasketPose(elbowState, wristState);
+        seq = new ActionBuilder(slidesIn)
+                .then(rotateUp)
+                .then(slidesOut)
+                .then(wristBasketPose);
+        seq.start();
     }
 
     @Override
-    public boolean loop() {
-        MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
-        telemetry.addData("Stage", currentStage);
-        telemetry.addData("RotInAction", rotState.actuatorsInAction());
-        telemetry.addData("ExtInAction", extState.actuatorsInAction());
-        if (finished)
-            return false;
-        if (!rotState.actuatorsInAction() && !extState.actuatorsInAction()) {
-            if (currentStage == STAGE.ROTATING) {
-                extState.setPose(ArmExtPose.BASKET);
-                currentStage = STAGE.EXTENDING;
-            } else if (currentStage == STAGE.EXTENDING) {
-                elbowState.setPose(ElbowPose.BASKET);
-                wristState.setPose(WristPose.BASKET);
-                currentStage = STAGE.ELBOWING;
-            } else if (currentStage == STAGE.ELBOWING) {
-                stop();
-            }
-        }
-        return false;
+    public void cancel() {
+        seq.cancel();
+    }
+
+    @Override
+    public void loop() {
+        seq.loop();
+//        MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
+//        telemetry.addData("Stage", currentStage);
+//        telemetry.addData("RotInAction", rotState.actuatorsInAction());
+//        telemetry.addData("ExtInAction", extState.actuatorsInAction());
+//        if (finished)
+//            return false;
+//        if (!rotState.actuatorsInAction() && !extState.actuatorsInAction()) {
+//            if (currentStage == STAGE.ROTATING) {
+//                extState.setPose(ArmExtPose.BASKET);
+//                currentStage = STAGE.EXTENDING;
+//            } else if (currentStage == STAGE.EXTENDING) {
+//                elbowState.setPose(ElbowPose.BASKET);
+//                wristState.setPose(WristPose.BASKET);
+//                currentStage = STAGE.ELBOWING;
+//            } else if (currentStage == STAGE.ELBOWING) {
+//                finished = true;
+//            }
+//        }
+//        return false;
 
     }
 
     @Override
     public boolean isFinished() {
-        return finished;
-    }
-
-    @Override
-    public void stop() {
-        finished = true;
-    }
-
-    enum STAGE {
-        ROTATING,
-        EXTENDING,
-        ELBOWING
+        return seq.isFinished();
     }
 }
 

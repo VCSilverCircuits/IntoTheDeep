@@ -1,8 +1,23 @@
 package vcsc.core.abstracts.state;
 
+import vcsc.core.abstracts.actuator.Actuator;
+import vcsc.core.abstracts.actuator.PoweredPIDFActuator;
+
 public class PoweredPIDFState extends State {
+    private PoweredPIDFActuator primaryActuator;
     private double power;
     private double targetPosition;
+    private double speed;
+
+    public PoweredPIDFState() {
+        super();
+    }
+
+    @Override
+    public void registerActuator(Actuator actuator) {
+        super.registerActuator(actuator);
+        primaryActuator = (PoweredPIDFActuator) actuators.get(0);
+    }
 
     public double getPower() {
         return power;
@@ -11,6 +26,10 @@ public class PoweredPIDFState extends State {
     public void setPower(double power) {
         this.power = power;
         notifyActuators();
+    }
+
+    public double getRealPosition() {
+        return primaryActuator.getPosition();
     }
 
     public double getTargetPosition() {
@@ -27,4 +46,13 @@ public class PoweredPIDFState extends State {
             notifyActuators();
         }
     }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
 }
