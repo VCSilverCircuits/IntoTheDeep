@@ -37,6 +37,13 @@ public class MainTele extends BaseOpMode {
     public void loop() {
         super.loop();
 
+        // Make basket and intake poses mutually exclusive
+        if (!basketPose.isFinished()) {
+            intakePose.cancel();
+        } else if (!intakePose.isFinished()) {
+            basketPose.cancel();
+        }
+
         extState.setSpeed(DebugConstants.extSpeed);
         rotState.setSpeed(DebugConstants.rotSpeed);
 

@@ -18,7 +18,6 @@ public class IntakePose implements Action {
 
     ActionBuilder seq;
 
-    private boolean finished = false;
 
     public IntakePose(ArmRotState rotState, ArmExtState extState, ClawState clawState) {
         this.rotState = rotState;
@@ -27,7 +26,6 @@ public class IntakePose implements Action {
 
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
         telemetry.addLine("Going to basket pose.");
-        finished = false;
     }
 
     @Override

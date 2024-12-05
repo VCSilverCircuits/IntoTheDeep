@@ -3,7 +3,7 @@ package vcsc.teamcode.component.arm.rot;
 public enum ArmRotPose {
     INTAKE(0),
     BASKET(95),
-    HANG(85);
+    PRE_HANG(85);
 
     final double angle;
 
