@@ -9,6 +9,11 @@ public class ArmRotState extends PoweredPIDFState {
         setPower(0);
     }
 
+    @Override
+    public double getRealPosition() {
+        return super.getRealPosition() * DEGREES_PER_TICK;
+    }
+
     public double getAngle() {
         return getTargetPosition() * DEGREES_PER_TICK;
     }

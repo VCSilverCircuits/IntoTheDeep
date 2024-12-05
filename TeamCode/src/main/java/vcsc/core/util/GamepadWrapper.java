@@ -16,6 +16,7 @@ public class GamepadWrapper {
     public GamepadWrapper() {
         runningActions = new ArrayList<>();
         actionMap = new HashMap<>();
+        actionDebounce = new HashMap<>();
         for (GamepadButton btn : GamepadButton.values()) {
             actionDebounce.put(btn, false);
         }
@@ -75,7 +76,9 @@ public class GamepadWrapper {
         linkButton(gamepad.start, GamepadButton.START);
         linkButton(gamepad.back, GamepadButton.BACK);
 
-        for (Action act : runningActions) {
+        ArrayList<Action> actionsCopy = new ArrayList<>(runningActions);
+
+        for (Action act : actionsCopy) {
             act.loop();
             if (act.isFinished()) {
                 runningActions.remove(act);

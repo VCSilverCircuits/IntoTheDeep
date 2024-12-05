@@ -5,6 +5,12 @@ import static vcsc.teamcode.component.arm.ext.ArmExtActuator.CM_PER_TICK;
 import vcsc.core.abstracts.state.PoweredPIDFState;
 
 public class ArmExtState extends PoweredPIDFState {
+
+    @Override
+    public double getRealPosition() {
+        return super.getRealPosition() * CM_PER_TICK;
+    }
+
     public double getExtensionLength() {
         return getTargetPosition() * CM_PER_TICK;
     }

@@ -10,10 +10,6 @@ public class OpenClawAction extends ClawAction {
         super(state);
     }
 
-    @Override
-    public void init() {
-
-    }
 
     @Override
     public void start() {
@@ -21,11 +17,10 @@ public class OpenClawAction extends ClawAction {
     }
 
     @Override
-    public boolean loop() {
+    public void loop() {
         if (!clawState.actuatorsInAction()) {
             // move to the next thing
         }
-        return false;
     }
 
     @Override
@@ -34,7 +29,8 @@ public class OpenClawAction extends ClawAction {
     }
 
     @Override
-    public void stop() {
-
+    public void cancel() {
+        
     }
+
 }
