@@ -20,6 +20,7 @@ public class NeutralAction implements Action {
 
     ElbowState elbowState;
     WristState wristState;
+
     ActionBuilder seq;
     private boolean finished = false;
 
@@ -38,17 +39,12 @@ public class NeutralAction implements Action {
     public void start() {
         SetExtPose slidesIn = new SetExtPose(extState, ArmExtPose.RETRACT);
         SetRotPose rotateDown = new SetRotPose(rotState, ArmRotPose.INTAKE);
-
+        SetElbowPose elbowDown = new SetElbowPose(elbowState,ElbowPose.STOW);
+        SetWristPose wristDown = new SetWristPose(wristState,WristPose.DEFAULT);
         seq = new ActionBuilder(slidesIn)
-                .then(rotateDown);
-
-
-        // I have like no faith in these but idk
-       /* rotState.setAngle(0);
-        extState.setExtensionLength(0);
-        wristState.setPose(WristPose.DEFAULT);
-        elbowState.setPose(ElbowPose.STOW);
-        finished = false; */
+                .then(rotateDown)
+                .then(elbowDown)
+                .then(wristDown);
         seq.start();
     }
 
@@ -63,13 +59,5 @@ public class NeutralAction implements Action {
     @Override
     public void cancel() {
         seq.cancel();
-    }
-
-    private enum STAGE {
-        RETRACT,
-        ROTATE,
-        ELBOW,
-        CLAW
-
     }
 }
