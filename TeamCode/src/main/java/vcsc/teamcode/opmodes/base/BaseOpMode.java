@@ -17,6 +17,8 @@ import vcsc.teamcode.component.arm.rot.ArmRotActuator;
 import vcsc.teamcode.component.arm.rot.ArmRotState;
 import vcsc.teamcode.component.claw.ClawActuator;
 import vcsc.teamcode.component.claw.ClawState;
+import vcsc.teamcode.component.hooks.HookActuator;
+import vcsc.teamcode.component.hooks.HookState;
 import vcsc.teamcode.component.wrist.WristActuator;
 import vcsc.teamcode.component.wrist.WristState;
 
@@ -31,12 +33,14 @@ public class BaseOpMode extends OpMode {
     protected GamepadWrapper gw1, gw2;
 
     protected ElapsedTime matchTimer;
-
+    protected HookState hookState;
     ArmRotActuator rotActuator;
     ArmExtActuator extActuator;
     ClawActuator clawActuator;
     ElbowActuator elbowActuator;
     WristActuator wristActuator;
+    HookActuator hookActuator;
+
 
     @Override
     public void init() {
@@ -61,6 +65,13 @@ public class BaseOpMode extends OpMode {
         wristActuator = new WristActuator(hardwareMap);
         wristState.registerActuator(wristActuator);
 
+        hookState = new HookState();
+        hookActuator = new HookActuator(
+                hardwareMap.get(ServoImplEx.class, "hookLeft"),
+                hardwareMap.get(ServoImplEx.class, "hookRight")
+        );
+        hookState.registerActuator(hookActuator);
+
         drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
 
         gw1 = new GamepadWrapper();
@@ -81,6 +92,7 @@ public class BaseOpMode extends OpMode {
         clawActuator.loop();
         elbowActuator.loop();
         wristActuator.loop();
+        hookActuator.loop();
 
         gw1.loop(gamepad1);
         gw2.loop(gamepad2);

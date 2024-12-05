@@ -35,6 +35,14 @@ public class HookState extends State {
         setPositions(pose.getLeft(), pose.getRight());
     }
 
+    public boolean isOpen() {
+        return getPositionLeft() == HookPose.OPEN.getLeft() && getPositionRight() == HookPose.OPEN.getRight();
+    }
+
+    public boolean isHang() {
+        return getPositionLeft() == HookPose.HANG.getLeft() && getPositionRight() == HookPose.HANG.getRight();
+    }
+
     public void open() {
         setPose(HookPose.OPEN);
     }

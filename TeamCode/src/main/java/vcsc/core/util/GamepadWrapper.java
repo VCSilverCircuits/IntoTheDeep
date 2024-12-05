@@ -4,12 +4,14 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import vcsc.core.abstracts.action.Action;
 
 public class GamepadWrapper {
     HashMap<GamepadButton, Action> actionMap;
     HashMap<GamepadButton, Boolean> actionDebounce;
+    HashMap<GamepadButton, ArrayList<Runnable>> runnableMap;
     ArrayList<Action> runningActions;
 
 
@@ -17,6 +19,7 @@ public class GamepadWrapper {
         runningActions = new ArrayList<>();
         actionMap = new HashMap<>();
         actionDebounce = new HashMap<>();
+        runnableMap = new HashMap<>();
         for (GamepadButton btn : GamepadButton.values()) {
             actionDebounce.put(btn, false);
         }
@@ -27,14 +30,20 @@ public class GamepadWrapper {
     }
 
     private void callActions(GamepadButton btn) {
-        if (isDebounced(btn)) {
-            return;
-        }
         Action act = actionMap.get(btn);
         if (act != null) {
             act.start();
             runningActions.add(act);
-            debounce(btn);
+
+        }
+    }
+
+    public void callRunnables(GamepadButton btn) {
+        ArrayList<Runnable> runnables = runnableMap.get(btn);
+        if (runnables != null) {
+            for (Runnable runnable : runnables) {
+                runnable.run();
+            }
         }
     }
 
@@ -51,11 +60,20 @@ public class GamepadWrapper {
     }
 
     private void linkButton(boolean boolBtn, GamepadButton btn) {
-        if (boolBtn) {
+        if (boolBtn && !isDebounced(btn)) {
             callActions(btn);
+            callRunnables(btn);
+            debounce(btn);
         } else {
             resetActions(btn);
         }
+    }
+
+    public void bindRunnable(GamepadButton btn, Runnable runnable) {
+        if (!runnableMap.containsKey(btn)) {
+            runnableMap.put(btn, new ArrayList<>());
+        }
+        Objects.requireNonNull(runnableMap.get(btn)).add(runnable);
     }
 
     public void loop(Gamepad gamepad) {

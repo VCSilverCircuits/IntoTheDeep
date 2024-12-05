@@ -9,6 +9,7 @@ import vcsc.teamcode.DebugConstants;
 import vcsc.teamcode.actions.BasketPose;
 import vcsc.teamcode.actions.IntakePose;
 import vcsc.teamcode.actions.NeutralAction;
+import vcsc.teamcode.actions.ToggleHooks;
 import vcsc.teamcode.opmodes.base.BaseOpMode;
 
 @TeleOp(name = "MainTele", group = "Main")
@@ -18,6 +19,7 @@ public class MainTele extends BaseOpMode {
     BasketPose basketPose;
     IntakePose intakePose;
     NeutralAction neutralAction;
+    ToggleHooks toggleHooks;
 
     @Override
     public void init() {
@@ -25,12 +27,14 @@ public class MainTele extends BaseOpMode {
         // ===== Actions =====
         basketPose = new BasketPose(rotState, extState, elbowState, wristState);
         intakePose = new IntakePose(rotState, extState, clawState);
-        neutralAction = new NeutralAction(rotState,extState,elbowState,wristState);
+        neutralAction = new NeutralAction(rotState, extState, elbowState, wristState);
+        toggleHooks = new ToggleHooks(hookState);
 
         // ===== Button Bindings =====
         gw1.bindButton(GamepadButton.LEFT_TRIGGER, basketPose);
         gw1.bindButton(GamepadButton.RIGHT_TRIGGER, intakePose);
         gw1.bindButton(GamepadButton.B, neutralAction);
+        gw1.bindButton(GamepadButton.X, toggleHooks);
     }
 
     @Override
