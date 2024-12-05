@@ -7,12 +7,12 @@ import vcsc.teamcode.component.arm.rot.ArmRotPose;
 import vcsc.teamcode.component.arm.rot.ArmRotState;
 import vcsc.teamcode.component.hooks.HookState;
 
-public class PreHang implements Action {
+public class HangRotate implements Action {
     ArmExtState extState;
     ArmRotState rotState;
     HookState hookState;
 
-    public PreHang(
+    public HangRotate(
             ArmExtState extState,
             ArmRotState rotState,
             HookState hookState) {
@@ -23,9 +23,9 @@ public class PreHang implements Action {
 
     @Override
     public void start() {
-        extState.setPose(ArmExtPose.HANG);
         rotState.setPose(ArmRotPose.PRE_HANG);
-        hookState.open();
+        hookState.hang();
+        extState.setPose(ArmExtPose.INTAKE);
     }
 
     @Override
