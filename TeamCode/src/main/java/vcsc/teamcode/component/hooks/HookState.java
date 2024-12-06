@@ -7,7 +7,7 @@ public class HookState extends State {
     double positionRight = HookPose.OPEN.getRight();
 
     public HookState() {
-        super();
+        open();
     }
 
     public void setPositions(double positionLeft, double positionRight) {
@@ -21,6 +21,7 @@ public class HookState extends State {
 
     public void setPositionLeft(double positionLeft) {
         this.positionLeft = positionLeft;
+        notifyActuators();
     }
 
     public double getPositionRight() {
@@ -28,7 +29,8 @@ public class HookState extends State {
     }
 
     public void setPositionRight(double positionRight) {
-        this.positionLeft = positionRight;
+        this.positionRight = positionRight;
+        notifyActuators();
     }
 
     public void setPose(HookPose pose) {

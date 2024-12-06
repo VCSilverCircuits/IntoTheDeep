@@ -1,5 +1,6 @@
 package vcsc.teamcode.opmodes.base;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -58,6 +59,7 @@ public class BaseLinearOpMode extends LinearOpMode {
         wristState.registerActuator(wristActuator);
 
         matchTimer = new ElapsedTime();
+        drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
     }
 
     protected void updateComponents() {

@@ -8,7 +8,7 @@ public class WristState extends State {
 
     public WristState() {
         super();
-        setPose(WristPose.DEFAULT);
+        setPose(WristPose.STOW);
     }
 
     public double getRot() {

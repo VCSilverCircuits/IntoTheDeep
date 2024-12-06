@@ -1,5 +1,6 @@
 package vcsc.teamcode.actions;
 
+
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
 import vcsc.core.GlobalTelemetry;
@@ -14,7 +15,7 @@ import vcsc.teamcode.component.arm.rot.ArmRotState;
 import vcsc.teamcode.component.wrist.WristPose;
 import vcsc.teamcode.component.wrist.WristState;
 
-public class NeutralAction implements Action {
+public class DownFromBasket implements Action {
     ArmRotState rotState;
     ArmExtState extState;
 
@@ -25,9 +26,10 @@ public class NeutralAction implements Action {
     SetExtPose slidesIn;
     SetRotPose rotateDown;
     SetElbowPose elbowDown;
+    SetElbowPose elbowUp;
     SetWristPose wristDown;
 
-    public NeutralAction(ArmRotState rotState, ArmExtState extState, ElbowState elbowState, WristState wristState) {
+    public DownFromBasket(ArmRotState rotState, ArmExtState extState, ElbowState elbowState, WristState wristState) {
         this.rotState = rotState;
         this.extState = extState;
 
@@ -37,6 +39,7 @@ public class NeutralAction implements Action {
         slidesIn = new SetExtPose(extState, ArmExtPose.RETRACT);
         rotateDown = new SetRotPose(rotState, ArmRotPose.INTAKE);
         elbowDown = new SetElbowPose(elbowState, ElbowPose.STOW);
+        elbowUp = new SetElbowPose(elbowState, ElbowPose.STRAIGHT);
         wristDown = new SetWristPose(wristState, WristPose.STOW);
 
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
@@ -50,11 +53,12 @@ public class NeutralAction implements Action {
 
     @Override
     public void start() {
-        seq = new ActionBuilder(elbowDown)
+
+        seq = new ActionBuilder(elbowUp)
                 .then(wristDown)
                 .then(slidesIn)
-                .then(rotateDown)
-                .then(elbowDown);
+                .then(elbowDown)
+                .then(rotateDown);
         seq.start();
     }
 

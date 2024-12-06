@@ -55,7 +55,7 @@ public class GamepadWrapper {
         actionDebounce.put(btn, true);
     }
 
-    private void resetActions(GamepadButton btn) {
+    private void undebounce(GamepadButton btn) {
         actionDebounce.put(btn, false);
     }
 
@@ -64,8 +64,8 @@ public class GamepadWrapper {
             callActions(btn);
             callRunnables(btn);
             debounce(btn);
-        } else {
-            resetActions(btn);
+        } else if (!boolBtn) {
+            undebounce(btn);
         }
     }
 

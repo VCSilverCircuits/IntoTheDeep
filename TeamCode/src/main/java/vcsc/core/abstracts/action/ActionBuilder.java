@@ -9,6 +9,10 @@ import vcsc.core.GlobalTelemetry;
 public class ActionBuilder implements Action {
     ArrayDeque<Action> actionQueue = new ArrayDeque<>();
 
+    public ActionBuilder() {
+
+    }
+
     public ActionBuilder(Action action) {
         actionQueue.add(action);
     }

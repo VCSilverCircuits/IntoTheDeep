@@ -15,7 +15,7 @@ import vcsc.core.util.DcMotorGroup;
 
 public class ArmExtActuator extends PoweredPIDFActuator {
     // Three 5:1 ultraplanetary gearbox
-    public static final double MOTOR_GEAR_RATIO = 5.23;
+    public static final double MOTOR_GEAR_RATIO = 2.89 * 2.89;
     // Gear ratio of driven gears
     public static final double DRIVE_GEAR_RATIO = 60.0 / 56.0;
 
@@ -49,7 +49,7 @@ public class ArmExtActuator extends PoweredPIDFActuator {
         telemetry.addData("At Position", controller.atSetPoint());
         telemetry.addData("Output Power", outputPower);
         telemetry.addData("Current position", getPosition());
-        motors.setPower(outputPower);
+        motors.setPower(Math.min(Math.abs(outputPower), 0.75) * Math.signum(outputPower));
     }
 
     @Override

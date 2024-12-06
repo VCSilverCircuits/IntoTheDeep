@@ -18,24 +18,38 @@ public class BasketPose implements Action {
     ElbowState elbowState;
     WristState wristState;
     ActionBuilder seq;
+    SetExtPose slidesIn;
+    SetExtPose slidesOut;
+    SetRotPose rotateUp;
+    WristBasketPose wristBasketPose;
 
     public BasketPose(ArmRotState rotState, ArmExtState extState, ElbowState elbowState, WristState wristState) {
         this.rotState = rotState;
         this.extState = extState;
         this.elbowState = elbowState;
         this.wristState = wristState;
+        slidesIn = new SetExtPose(extState, ArmExtPose.RETRACT);
+        slidesOut = new SetExtPose(extState, ArmExtPose.BASKET);
+        rotateUp = new SetRotPose(rotState, ArmRotPose.BASKET);
+        wristBasketPose = new WristBasketPose(elbowState, wristState);
+        seq = new ActionBuilder(slidesIn)
+                .then(rotateUp)
+                .then(slidesOut)
+                .then(wristBasketPose);
     }
 
     @Override
     public void start() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
         telemetry.addLine("Going to basket pose.");
-        SetExtPose slidesIn = new SetExtPose(extState, ArmExtPose.MAX_ROTATE);
-        SetExtPose slidesOut = new SetExtPose(extState, ArmExtPose.BASKET);
-        SetRotPose rotateUp = new SetRotPose(rotState, ArmRotPose.BASKET);
-        WristBasketPose wristBasketPose = new WristBasketPose(elbowState, wristState);
-        seq = new ActionBuilder(slidesIn)
-                .then(rotateUp)
+
+        seq = new ActionBuilder();
+
+        if (rotState.getPose() != ArmRotPose.BASKET) {
+            seq.then(slidesIn);
+        }
+
+        seq.then(rotateUp)
                 .then(slidesOut)
                 .then(wristBasketPose);
         seq.start();

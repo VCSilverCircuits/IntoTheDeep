@@ -12,7 +12,7 @@ public class SetRotPose implements Action {
     ArmRotState rotState;
     ArmRotPose targetPose;
 
-    boolean finished = false;
+    boolean finished = true;
 
     DIRECTION direction;
 
@@ -20,17 +20,19 @@ public class SetRotPose implements Action {
         super();
         this.rotState = rotState;
         this.targetPose = targetPose;
-        if (targetPose.getAngle() > rotState.getRealPosition()) {
-            direction = DIRECTION.UP;
-        } else {
-            direction = DIRECTION.DOWN;
-        }
+        finished = true;
     }
 
     @Override
     public void start() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
         telemetry.addData("Rotating slides to position", targetPose.getAngle());
+        if (targetPose.getAngle() > rotState.getRealPosition()) {
+            direction = DIRECTION.UP;
+        } else {
+            direction = DIRECTION.DOWN;
+        }
+        finished = false;
         rotState.setPose(targetPose);
     }
 

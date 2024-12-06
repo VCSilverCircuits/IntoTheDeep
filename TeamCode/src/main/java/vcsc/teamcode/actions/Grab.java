@@ -1,5 +1,8 @@
 package vcsc.teamcode.actions;
 
+
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import vcsc.core.abstracts.action.Action;
 import vcsc.teamcode.component.arm.elbow.ElbowPose;
 import vcsc.teamcode.component.arm.elbow.ElbowState;
@@ -7,32 +10,40 @@ import vcsc.teamcode.component.claw.ClawState;
 import vcsc.teamcode.component.wrist.WristRotPose;
 import vcsc.teamcode.component.wrist.WristState;
 
-public class PreGrabPose implements Action {
+public class Grab implements Action {
     ElbowState elbowState;
     WristState wristState;
     ClawState clawState;
+    ElapsedTime timer;
+    boolean finished = true;
 
-    public PreGrabPose(ElbowState elbowState, WristState wristState, ClawState clawState) {
+    public Grab(ElbowState elbowState, WristState wristState, ClawState clawState) {
         super();
         this.elbowState = elbowState;
         this.wristState = wristState;
         this.clawState = clawState;
+        timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     }
 
     @Override
     public void start() {
-        clawState.open();
-        elbowState.setPose(ElbowPose.PREGRAB);
-        wristState.setRotPose(WristRotPose.PREGRAB);
+        elbowState.setPose(ElbowPose.GRAB);
+        wristState.setRotPose(WristRotPose.GRABBING);
+        timer.reset();
+        finished = false;
     }
 
     @Override
     public void loop() {
+        if (timer.time() > 100 && !finished) {
+            clawState.close();
+            finished = true;
+        }
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return finished;
     }
 
     @Override

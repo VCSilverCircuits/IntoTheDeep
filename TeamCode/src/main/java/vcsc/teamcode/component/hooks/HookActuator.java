@@ -8,8 +8,8 @@ import vcsc.core.abstracts.state.State;
 public class HookActuator extends Actuator {
     Servo hookLeft;
     Servo hookRight;
-    double targetPositionLeft;
-    double targetPositionRight;
+    double targetPositionLeft = HookPose.OPEN.getLeft();
+    double targetPositionRight = HookPose.OPEN.getRight();
 
     public HookActuator(Servo hookLeft, Servo hookRight) {
         this.hookLeft = hookLeft;

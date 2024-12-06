@@ -12,7 +12,7 @@ public class SetExtPose implements Action {
     ArmExtState extState;
     ArmExtPose targetPose;
 
-    boolean finished = false;
+    boolean finished = true;
 
     DIRECTION direction;
 
@@ -20,17 +20,18 @@ public class SetExtPose implements Action {
         super();
         this.extState = extState;
         this.targetPose = targetPose;
-        if (targetPose.getLength() > extState.getRealPosition()) {
-            direction = DIRECTION.UP;
-        } else {
-            direction = DIRECTION.DOWN;
-        }
     }
 
     @Override
     public void start() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
         telemetry.addData("Extending slides to position", targetPose.getLength());
+        if (targetPose.getLength() > extState.getRealPosition()) {
+            direction = DIRECTION.UP;
+        } else {
+            direction = DIRECTION.DOWN;
+        }
+        finished = false;
         extState.setPose(targetPose);
     }
 

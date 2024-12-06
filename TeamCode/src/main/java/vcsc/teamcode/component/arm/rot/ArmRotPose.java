@@ -2,6 +2,7 @@ package vcsc.teamcode.component.arm.rot;
 
 public enum ArmRotPose {
     INTAKE(0),
+    HANG(0),
     BASKET(95),
     PRE_HANG(85);
 

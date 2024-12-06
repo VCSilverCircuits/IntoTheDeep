@@ -6,7 +6,7 @@ import com.acmerobotics.dashboard.config.Config;
 public enum WristPivotPose {
     FORWARD(0),
     TILT(0.42),
-    REVERSE(0.56);
+    REVERSE(0.6);
 
     final double position;
 

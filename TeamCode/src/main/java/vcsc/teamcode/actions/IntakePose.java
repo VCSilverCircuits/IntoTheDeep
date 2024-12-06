@@ -17,12 +17,27 @@ public class IntakePose implements Action {
     ClawState clawState;
 
     ActionBuilder seq;
+    SetExtPose slidesIn;
+    SetExtPose slidesOut;
+    SetRotPose rotateDown;
+
+    PreGrabPose preGrabPose;
 
 
-    public IntakePose(ArmRotState rotState, ArmExtState extState, ClawState clawState) {
+    public IntakePose(ArmRotState rotState, ArmExtState extState, ClawState clawState, PreGrabPose preGrabPose) {
         this.rotState = rotState;
         this.extState = extState;
         this.clawState = clawState;
+        this.preGrabPose = preGrabPose;
+
+        slidesIn = new SetExtPose(extState, ArmExtPose.RETRACT);
+        slidesOut = new SetExtPose(extState, ArmExtPose.INTAKE);
+        rotateDown = new SetRotPose(rotState, ArmRotPose.INTAKE);
+
+        seq = new ActionBuilder(slidesIn)
+                .then(rotateDown)
+                .then(slidesOut)
+                .then(preGrabPose);
 
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
         telemetry.addLine("Going to basket pose.");
@@ -30,12 +45,15 @@ public class IntakePose implements Action {
 
     @Override
     public void start() {
-        SetExtPose slidesIn = new SetExtPose(extState, ArmExtPose.MAX_ROTATE);
-        SetExtPose slidesOut = new SetExtPose(extState, ArmExtPose.INTAKE);
-        SetRotPose rotateDown = new SetRotPose(rotState, ArmRotPose.INTAKE);
-        seq = new ActionBuilder(slidesIn)
-                .then(rotateDown)
-                .then(slidesOut);
+        seq = new ActionBuilder();
+
+        if (rotState.getPose() != ArmRotPose.INTAKE) {
+            seq.then(slidesIn);
+        }
+
+        seq.then(rotateDown)
+                .then(slidesOut)
+                .then(preGrabPose);
         seq.start();
     }
 
