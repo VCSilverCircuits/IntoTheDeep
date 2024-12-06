@@ -1,4 +1,4 @@
-package vcsc.teamcode.opModes.test;
+package vcsc.teamcode.opmodes.test;
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -7,38 +7,38 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import vcsc.core.GlobalTelemetry;
-import vcsc.teamcode.component.arm.ext.ArmExtActuator;
-import vcsc.teamcode.component.arm.ext.ArmExtState;
+import vcsc.teamcode.component.arm.rot.ArmRotActuator;
+import vcsc.teamcode.component.arm.rot.ArmRotState;
 
-@Autonomous(group = "Testing", name = "Extension Test")
-public class ExtTest extends OpMode {
+@Autonomous(group = "Testing", name = "IndividualTest")
+public class IndividualTest extends OpMode {
     double position = 0.0;
-    double speed = 0.3;//1.0 / 5000.0;
+    double speed = 1.0 / 5000.0;
     ServoImplEx servo;
     ServoImplEx hookRight;
     ServoImplEx hookLeft;
     ServoImplEx claw;
-    ArmExtState armRotState;
-    ArmExtActuator armRotActuator;
+    ArmRotState armRotState;
+    ArmRotActuator armRotActuator;
     boolean debounce = false;
     boolean hang = false;
 
     @Override
     public void init() {
         GlobalTelemetry.init(telemetry);
-//        servo = hardwareMap.get(ServoImplEx.class, "hookRight");
+        servo = hardwareMap.get(ServoImplEx.class, "wristPivot");
         hookRight = hardwareMap.get(ServoImplEx.class, "hookRight");
         hookLeft = hardwareMap.get(ServoImplEx.class, "hookLeft");
         claw = hardwareMap.get(ServoImplEx.class, "claw");
-        armRotState = new ArmExtState();
-        armRotActuator = new ArmExtActuator(hardwareMap, new PIDFCoefficients(0.001, 0, 0, 0));
+        armRotState = new ArmRotState();
+        armRotActuator = new ArmRotActuator(hardwareMap, new PIDFCoefficients(0.01, 0, 0, 0));
         armRotState.registerActuator(armRotActuator);
     }
 
     @Override
     public void loop() {
         MultipleTelemetry tele = GlobalTelemetry.getInstance();
-        speed -= gamepad1.left_stick_y / 1000.0;// 100000.0;
+        speed -= gamepad1.left_stick_y / 100000.0;
         position -= gamepad1.right_stick_y * speed;
         position = Math.min(position, 1.0);
         position = Math.max(position, 0.0);
@@ -64,14 +64,14 @@ public class ExtTest extends OpMode {
             hookLeft.setPosition(1);
         }
 
-//        servo.setPosition(position);
+        servo.setPosition(position);
 //        armRotState.setAngle(180 * position);
-        armRotState.setPower(-gamepad1.right_stick_y * speed);
-        armRotActuator.loop();
+//        armRotState.setPower(-gamepad1.right_stick_y * speed);
+//        armRotActuator.loop();
 //        tele.addData("Set angle", 180 * position);
-//        tele.addData("Position", position);
+        tele.addData("Position", position);
         tele.addData("Speed", speed);
-        tele.addData("Length", armRotState.getExtensionLength());
+        tele.addData("Angle", armRotState.getAngle());
         telemetry.update();
     }
 }
