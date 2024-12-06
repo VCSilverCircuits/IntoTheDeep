@@ -1,4 +1,4 @@
-package vcsc.teamcode.opmodes;
+package vcsc.teamcode.opModes.test;
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;

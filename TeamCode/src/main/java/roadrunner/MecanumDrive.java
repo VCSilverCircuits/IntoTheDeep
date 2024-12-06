@@ -1,10 +1,7 @@
 package roadrunner;
 
-import android.os.DropBoxManager;
-
 import androidx.annotation.NonNull;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -52,7 +49,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
@@ -90,12 +86,8 @@ public final class MecanumDrive {
     private final DownsampledWriter driveCommandWriter = new DownsampledWriter("DRIVE_COMMAND", 50_000_000);
     private final DownsampledWriter mecanumCommandWriter = new DownsampledWriter("MECANUM_COMMAND", 50_000_000);
     public Pose2d pose;
-<<<<<<< HEAD
     public MultipleTelemetry mt;
 
-=======
-    public DropBoxManager telemetry;
->>>>>>> main
 
     public MecanumDrive(HardwareMap hardwareMap, Pose2d pose) {
         this.pose = pose;
@@ -130,11 +122,7 @@ public final class MecanumDrive {
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
-<<<<<<< HEAD
         localizer = new ThreeDeadWheelLocalizer(hardwareMap, PARAMS.inPerTick);
-=======
-        localizer = new ThreeDeadWheelLocalizer(hardwareMap, 0.001);
->>>>>>> main
 
         FlightRecorder.write("MECANUM_PARAMS", PARAMS);
     }
@@ -222,13 +210,8 @@ public final class MecanumDrive {
         public double trackWidthTicks = 0;
 
         // feedforward parameters (in tick units)
-<<<<<<< HEAD
         public double kS = 1;
         public double kV = 1;
-=======
-        public double kS = 5;
-        public double kV = 0;
->>>>>>> main
         public double kA = 0;
 
         // path profile parameters (in inches)
@@ -403,14 +386,6 @@ public final class MecanumDrive {
             rightBack.setPower(rightBackPower);
             rightFront.setPower(rightFrontPower);
 
-            FtcDashboard dash = FtcDashboard.getInstance();
-            Telemetry dt = dash.getTelemetry();
-            dt.addData("leftFront", leftFrontPower);
-            dt.addData("leftBack", leftBackPower);
-            dt.addData("rightFront", rightFrontPower);
-            dt.addData("rightBack", rightBackPower);
-            dt.update();
-
             p.put("x", pose.position.x);
             p.put("y", pose.position.y);
             p.put("heading (deg)", Math.toDegrees(pose.heading.toDouble()));
@@ -501,8 +476,6 @@ public final class MecanumDrive {
             leftBack.setPower(feedforward.compute(wheelVels.leftBack) / voltage);
             rightBack.setPower(feedforward.compute(wheelVels.rightBack) / voltage);
             rightFront.setPower(feedforward.compute(wheelVels.rightFront) / voltage);
-
-
 
             Canvas c = p.fieldOverlay();
             drawPoseHistory(c);

@@ -1,4 +1,4 @@
-package vcsc.teamcode.opmodes;
+package vcsc.teamcode.opModes.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;

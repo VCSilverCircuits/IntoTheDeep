@@ -1,4 +1,4 @@
-package vcsc.teamcode.opmodes;
+package vcsc.teamcode.opModes.test;
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -10,10 +10,10 @@ import vcsc.core.GlobalTelemetry;
 import vcsc.teamcode.component.arm.rot.ArmRotActuator;
 import vcsc.teamcode.component.arm.rot.ArmRotState;
 
-@Autonomous(group = "Testing", name = "IndividualTest")
-public class IndividualTest extends OpMode {
+@Autonomous(group = "Testing", name = "RotTest")
+public class RotTest extends OpMode {
     double position = 0.0;
-    double speed = 1.0 / 5000.0;
+    double speed = 0.3;//1.0 / 5000.0;
     ServoImplEx servo;
     ServoImplEx hookRight;
     ServoImplEx hookLeft;
@@ -26,7 +26,7 @@ public class IndividualTest extends OpMode {
     @Override
     public void init() {
         GlobalTelemetry.init(telemetry);
-        servo = hardwareMap.get(ServoImplEx.class, "wristPivot");
+//        servo = hardwareMap.get(ServoImplEx.class, "hookRight");
         hookRight = hardwareMap.get(ServoImplEx.class, "hookRight");
         hookLeft = hardwareMap.get(ServoImplEx.class, "hookLeft");
         claw = hardwareMap.get(ServoImplEx.class, "claw");
@@ -38,7 +38,7 @@ public class IndividualTest extends OpMode {
     @Override
     public void loop() {
         MultipleTelemetry tele = GlobalTelemetry.getInstance();
-        speed -= gamepad1.left_stick_y / 100000.0;
+        speed -= gamepad1.left_stick_y / 1000.0;// 100000.0;
         position -= gamepad1.right_stick_y * speed;
         position = Math.min(position, 1.0);
         position = Math.max(position, 0.0);
@@ -64,12 +64,12 @@ public class IndividualTest extends OpMode {
             hookLeft.setPosition(1);
         }
 
-        servo.setPosition(position);
+//        servo.setPosition(position);
 //        armRotState.setAngle(180 * position);
-//        armRotState.setPower(-gamepad1.right_stick_y * speed);
-//        armRotActuator.loop();
+        armRotState.setPower(-gamepad1.right_stick_y * speed);
+        armRotActuator.loop();
 //        tele.addData("Set angle", 180 * position);
-        tele.addData("Position", position);
+//        tele.addData("Position", position);
         tele.addData("Speed", speed);
         tele.addData("Angle", armRotState.getAngle());
         telemetry.update();

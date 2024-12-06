@@ -1,4 +1,4 @@
-package vcsc.teamcode.opmodes;
+package vcsc.teamcode.opModes.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;

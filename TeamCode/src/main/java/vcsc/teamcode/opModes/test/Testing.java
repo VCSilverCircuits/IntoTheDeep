@@ -1,10 +1,10 @@
-package vcsc.teamcode.opmodes;
+package vcsc.teamcode.opModes.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import vcsc.teamcode.component.claw.ClawActuator;
 import vcsc.core.mock.MockServo;
+import vcsc.teamcode.component.claw.ClawActuator;
 import vcsc.teamcode.component.claw.ClawState;
 
 @TeleOp(name = "Testing", group = "Testing")
