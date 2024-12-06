@@ -1,0 +1,24 @@
+package vcsc.teamcode.component.wrist.actions;
+
+import com.qualcomm.robotcore.hardware.ServoImplEx;
+
+import vcsc.teamcode.component.wrist.WristActuator;
+
+public class WristAction extends WristActuator {
+
+
+    public WristAction(ServoImplEx wristRot, ServoImplEx wristPivot) {
+        super(wristRot);
+        /* I don't know why this doesn't work but yeah
+        super(wristPivot);
+         */
+    }
+
+    public void setRot(double Rotation) {
+
+    }
+
+    public void setPivot(double Pivot) {
+
+    }
+}

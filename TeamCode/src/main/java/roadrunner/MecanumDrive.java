@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.AccelConstraint;
 import com.acmerobotics.roadrunner.Action;
@@ -63,6 +64,7 @@ import roadrunner.messages.DriveCommandMessage;
 import roadrunner.messages.MecanumCommandMessage;
 import roadrunner.messages.MecanumLocalizerInputsMessage;
 import roadrunner.messages.PoseMessage;
+import vcsc.core.GlobalTelemetry;
 
 @Config
 public final class MecanumDrive {
@@ -88,10 +90,16 @@ public final class MecanumDrive {
     private final DownsampledWriter driveCommandWriter = new DownsampledWriter("DRIVE_COMMAND", 50_000_000);
     private final DownsampledWriter mecanumCommandWriter = new DownsampledWriter("MECANUM_COMMAND", 50_000_000);
     public Pose2d pose;
+<<<<<<< HEAD
+    public MultipleTelemetry mt;
+
+=======
     public DropBoxManager telemetry;
+>>>>>>> main
 
     public MecanumDrive(HardwareMap hardwareMap, Pose2d pose) {
         this.pose = pose;
+
 
         LynxFirmware.throwIfModulesAreOutdated(hardwareMap);
 
@@ -122,7 +130,11 @@ public final class MecanumDrive {
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
+<<<<<<< HEAD
+        localizer = new ThreeDeadWheelLocalizer(hardwareMap, PARAMS.inPerTick);
+=======
         localizer = new ThreeDeadWheelLocalizer(hardwareMap, 0.001);
+>>>>>>> main
 
         FlightRecorder.write("MECANUM_PARAMS", PARAMS);
     }
@@ -135,6 +147,12 @@ public final class MecanumDrive {
         for (DualNum<Time> power : wheelVels.all()) {
             maxPowerMag = Math.max(maxPowerMag, power.value());
         }
+
+        mt = GlobalTelemetry.getInstance();
+
+        mt.addData("DrivePowers", powers);
+        mt.addData("leftFront", wheelVels.leftFront.get(0));
+        mt.update();
 
         leftFront.setPower(wheelVels.leftFront.get(0) / maxPowerMag);
         leftBack.setPower(wheelVels.leftBack.get(0) / maxPowerMag);
@@ -204,8 +222,13 @@ public final class MecanumDrive {
         public double trackWidthTicks = 0;
 
         // feedforward parameters (in tick units)
+<<<<<<< HEAD
+        public double kS = 1;
+        public double kV = 1;
+=======
         public double kS = 5;
         public double kV = 0;
+>>>>>>> main
         public double kA = 0;
 
         // path profile parameters (in inches)
