@@ -18,6 +18,7 @@ import vcsc.teamcode.actions.ToggleBasket;
 import vcsc.teamcode.actions.ToggleHooks;
 import vcsc.teamcode.actions.hang.PreHang;
 import vcsc.teamcode.component.arm.elbow.ElbowPose;
+import vcsc.teamcode.component.arm.ext.ArmExtPose;
 import vcsc.teamcode.component.arm.rot.ArmRotPose;
 import vcsc.teamcode.component.wrist.WristPivotPose;
 import vcsc.teamcode.component.wrist.WristPose;
@@ -143,8 +144,16 @@ public class MainTele extends BaseOpMode {
             newPivot = Math.min(Math.max(newPivot, WristPivotPose.FORWARD.getPosition()), WristPivotPose.REVERSE.getPosition());
             wristState.setPivot(newPivot);
 
-            // Extension of slides
-            extState.setPower(-gamepad2.left_stick_y);
+            //if the slides are within the max, and you're not trying to exceed it, then let you adjust length
+            if (!(extState.getRealPosition() >= ArmExtPose.INTAKE.getLength() && gamepad2.left_stick_y > 0)) {
+                // Extension of slides
+                extState.setPower(-gamepad2.left_stick_y);
+            }
+            //if the slides are within min, and you're not trying to exceed it, then let you adjust length
+            else if (!(extState.getRealPosition() <= 0 && gamepad2.left_stick_y < 0)) {
+                // Extension of slides
+                extState.setPower(-gamepad2.left_stick_y);
+            }
 
         }
 

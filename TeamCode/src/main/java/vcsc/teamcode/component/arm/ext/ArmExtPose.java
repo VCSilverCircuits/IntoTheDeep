@@ -4,7 +4,7 @@ public enum ArmExtPose {
     RETRACT(0),
     BASKET(55),
     MAX_ROTATE(5),
-    INTAKE(40),
+    INTAKE(22),
     HANG(10);
 
 
