@@ -4,7 +4,7 @@ public enum ArmRotPose {
     INTAKE(0),
     HANG(0),
     BASKET(92),
-    PRE_HANG(85);
+    PRE_HANG(100);
 
     final double angle;
 

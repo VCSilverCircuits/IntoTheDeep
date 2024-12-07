@@ -17,7 +17,7 @@ public class DebugConstants {
     public static double wristRot = WristRotPose.BASKET.getPosition();
     public static double wristPivot = WristPivotPose.REVERSE.getPosition();
     public static PIDFCoefficients rotCoeffs = new PIDFCoefficients(0.01, 0, 0, 0);
-    public static PIDFCoefficients extCoeffs = new PIDFCoefficients(0.02, 0, 0, 0);
+    public static PIDFCoefficients extCoeffs = new PIDFCoefficients(0.015, 0, 0, 0);
     public static double rotSpeed = 10000;
     public static double extSpeed = 10000;
 }
