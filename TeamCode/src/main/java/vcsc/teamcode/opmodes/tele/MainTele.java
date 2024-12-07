@@ -144,16 +144,27 @@ public class MainTele extends BaseOpMode {
             newPivot = Math.min(Math.max(newPivot, WristPivotPose.FORWARD.getPosition()), WristPivotPose.REVERSE.getPosition());
             wristState.setPivot(newPivot);
 
-            //if the slides are within the max, and you're not trying to exceed it, then let you adjust length
-            if (!(extState.getRealPosition() >= ArmExtPose.INTAKE.getLength() && gamepad2.left_stick_y > 0)) {
-                // Extension of slides
-                extState.setPower(-gamepad2.left_stick_y);
+            // Extension of slides (with max and min limits)
+
+            double extPower = -gamepad2.left_stick_y;
+            // If slides exceed the max and you're trying to go further then prevent adjusting length
+            if (extPower > 0 && extState.getRealPosition() >= ArmExtPose.INTAKE.getLength()) {
+                extPower = 0;
+
             }
-            //if the slides are within min, and you're not trying to exceed it, then let you adjust length
-            else if (!(extState.getRealPosition() <= 0 && gamepad2.left_stick_y < 0)) {
-                // Extension of slides
-                extState.setPower(-gamepad2.left_stick_y);
+            // If slides exceed the min and you're trying to go further then prevent adjusting length
+            else if (extPower < 0 && extState.getRealPosition() <= 0) {
+                extPower = 0;
             }
+            extState.setPower(extPower);
+
+
+            /* --- Alternative Solution */
+            // If slides exceed the max or min and you're trying to go further then prevent adjusting length
+            /*if (!(-gamepad2.left_stick_y > 0 && extState.getRealPosition() >= ArmExtPose.INTAKE.getLength())
+                    && !(-gamepad2.left_stick_y < 0 && extState.getRealPosition() <= 0)) {
+                extState.setPower(-gamepad2.left_stick_y);*/
+
 
         }
 
