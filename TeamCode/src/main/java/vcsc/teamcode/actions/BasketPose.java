@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import vcsc.core.GlobalTelemetry;
 import vcsc.core.abstracts.action.Action;
 import vcsc.core.abstracts.action.ActionBuilder;
+import vcsc.teamcode.component.arm.elbow.ElbowPose;
 import vcsc.teamcode.component.arm.elbow.ElbowState;
 import vcsc.teamcode.component.arm.ext.ArmExtPose;
 import vcsc.teamcode.component.arm.ext.ArmExtState;
@@ -22,6 +23,7 @@ public class BasketPose implements Action {
     SetExtPose slidesOut;
     SetRotPose rotateUp;
     WristBasketPose wristBasketPose;
+    SetElbowPose elbowOut;
 
     public BasketPose(ArmRotState rotState, ArmExtState extState, ElbowState elbowState, WristState wristState) {
         this.rotState = rotState;
@@ -32,6 +34,8 @@ public class BasketPose implements Action {
         slidesOut = new SetExtPose(extState, ArmExtPose.BASKET);
         rotateUp = new SetRotPose(rotState, ArmRotPose.BASKET);
         wristBasketPose = new WristBasketPose(elbowState, wristState);
+        elbowOut = new SetElbowPose(elbowState, ElbowPose.STRAIGHT);
+
         seq = new ActionBuilder(slidesIn)
                 .then(rotateUp)
                 .then(slidesOut)
@@ -46,7 +50,8 @@ public class BasketPose implements Action {
         seq = new ActionBuilder();
 
         if (rotState.getPose() != ArmRotPose.BASKET) {
-            seq.then(slidesIn);
+            seq.then(slidesIn)
+                    .then(elbowOut);
         }
 
         seq.then(rotateUp)
