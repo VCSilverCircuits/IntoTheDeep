@@ -150,7 +150,7 @@ public class MainTele extends BaseOpMode {
             // If slides exceed the max and you're trying to go further then prevent adjusting length
             if (extPower > 0 && extState.getRealPosition() >= ArmExtPose.INTAKE.getLength()) {
                 extPower = 0;
-
+                // TODO: Add optional override
             }
             // If slides exceed the min and you're trying to go further then prevent adjusting length
             else if (extPower < 0 && extState.getRealPosition() <= 0) {

@@ -38,7 +38,7 @@ public class BasketPose implements Action {
 
         seq = new ActionBuilder(slidesIn)
                 .then(rotateUp)
-                .then(slidesOut)
+                .then(slidesOut) // TODO: Add thenParallel function. Do all in parallel with individual constraints
                 .then(wristBasketPose);
     }
 
