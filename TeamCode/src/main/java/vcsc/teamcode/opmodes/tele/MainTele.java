@@ -2,7 +2,11 @@ package vcsc.teamcode.opmodes.tele;
 
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 import vcsc.core.util.GamepadButton;
 import vcsc.teamcode.DebugConstants;
@@ -27,6 +31,7 @@ import vcsc.teamcode.opmodes.base.BaseOpMode;
 @TeleOp(name = "MainTele", group = "Main")
 public class MainTele extends BaseOpMode {
     boolean rumbledEndGame = false, rumbledMatchEnd = false;
+    private Limelight3A limelight;
 
     BasketPose basketPose;
     IntakePose intakePose;
@@ -58,6 +63,11 @@ public class MainTele extends BaseOpMode {
         hangPose = new SetRotPose(rotState, ArmRotPose.HANG);
         grab = new Grab(elbowState, wristState, clawState);
         cancel = new Cancel(rotState, neutralAction, downFromBasket);
+        //limelight initialization
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        telemetry.setMsTransmissionInterval(11);
+        limelight.pipelineSwitch(0);
+        limelight.start();
 
         /*  ===============
             Button Bindings
@@ -100,6 +110,7 @@ public class MainTele extends BaseOpMode {
         super.start();
         wristState.setPose(WristPose.STOW);
         elbowState.setPose(ElbowPose.STOW);
+
     }
 
     @Override
@@ -164,23 +175,35 @@ public class MainTele extends BaseOpMode {
             /*if (!(-gamepad2.left_stick_y > 0 && extState.getRealPosition() >= ArmExtPose.INTAKE.getLength())
                     && !(-gamepad2.left_stick_y < 0 && extState.getRealPosition() <= 0)) {
                 extState.setPower(-gamepad2.left_stick_y);*/
+            // TODO: fix opmodeIsActive so it can pull results
+           /* while (opModeIsActive()) {
+                LLResult result = limelight.getLatestResult();
+                if (result != null) {
+                    if (result.isValid()) {
+                        Pose3D botpose = result.getBotpose();
+                        telemetry.addData("tx", result.getTx());
+                        telemetry.addData("ty", result.getTy());
+                        telemetry.addData("Botpose", botpose.toString());
 
 
-        }
+                    }*\
 
         /*  ================
             Both Controllers
             ================ */
 
-        // ----- Rumbling -----
-        if (matchTimer.seconds() >= 90 && !rumbledEndGame) { // End game rumble
-            gamepad1.rumble(500);
-            gamepad2.rumble(500);
-            rumbledEndGame = true;
-        } else if (matchTimer.seconds() >= 120 && !rumbledMatchEnd) { // Match end 3 rumbles
-            gamepad1.rumbleBlips(3);
-            gamepad2.rumbleBlips(3);
-            rumbledMatchEnd = true;
+                    // ----- Rumbling -----
+                    if (matchTimer.seconds() >= 90 && !rumbledEndGame) { // End game rumble
+                        gamepad1.rumble(500);
+                        gamepad2.rumble(500);
+                        rumbledEndGame = true;
+                    } else if (matchTimer.seconds() >= 120 && !rumbledMatchEnd) { // Match end 3 rumbles
+                        gamepad1.rumbleBlips(3);
+                        gamepad2.rumbleBlips(3);
+                        rumbledMatchEnd = true;
+                    }
+                }
+            }
         }
-    }
-}
+
+
