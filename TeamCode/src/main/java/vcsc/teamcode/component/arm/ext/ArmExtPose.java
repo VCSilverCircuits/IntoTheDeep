@@ -2,7 +2,7 @@ package vcsc.teamcode.component.arm.ext;
 
 public enum ArmExtPose {
     RETRACT(0),
-    BASKET(55),
+    BASKET(57),
     MAX_ROTATE(5),
     INTAKE(22),
     HANG(10);
