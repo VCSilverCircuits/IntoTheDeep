@@ -1,5 +1,6 @@
 package vcsc.teamcode.opmodes.base;
 
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
@@ -15,6 +16,7 @@ import vcsc.teamcode.component.arm.ext.ArmExtActuator;
 import vcsc.teamcode.component.arm.ext.ArmExtState;
 import vcsc.teamcode.component.arm.rot.ArmRotActuator;
 import vcsc.teamcode.component.arm.rot.ArmRotState;
+import vcsc.teamcode.component.camera.Camera;
 import vcsc.teamcode.component.claw.ClawActuator;
 import vcsc.teamcode.component.claw.ClawState;
 import vcsc.teamcode.component.hooks.HookActuator;
@@ -34,6 +36,8 @@ public class BaseOpMode extends OpMode {
 
     protected ElapsedTime matchTimer;
     protected HookState hookState;
+    protected Camera camera;
+    protected MultipleTelemetry telem;
     ArmRotActuator rotActuator;
     ArmExtActuator extActuator;
     ClawActuator clawActuator;
@@ -41,10 +45,10 @@ public class BaseOpMode extends OpMode {
     WristActuator wristActuator;
     HookActuator hookActuator;
 
-
     @Override
     public void init() {
         GlobalTelemetry.init(telemetry);
+        telem = GlobalTelemetry.getInstance();
         rotState = new ArmRotState();
         rotActuator = new ArmRotActuator(hardwareMap, DebugConstants.rotCoeffs);
         rotState.registerActuator(rotActuator);
@@ -64,6 +68,8 @@ public class BaseOpMode extends OpMode {
         wristState = new WristState();
         wristActuator = new WristActuator(hardwareMap);
         wristState.registerActuator(wristActuator);
+
+        camera = new Camera(hardwareMap);
 
         hookState = new HookState();
         hookActuator = new HookActuator(
@@ -93,11 +99,12 @@ public class BaseOpMode extends OpMode {
         elbowActuator.loop();
         wristActuator.loop();
         hookActuator.loop();
+        camera.loop();
 
         gw1.loop(gamepad1);
         gw2.loop(gamepad2);
 
         drive.updatePoseEstimate();
-        GlobalTelemetry.getInstance().update();
+        telem.update();
     }
 }

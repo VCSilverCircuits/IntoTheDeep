@@ -19,7 +19,7 @@ import vcsc.teamcode.component.wrist.WristActuator;
 import vcsc.teamcode.component.wrist.WristPivotPose;
 import vcsc.teamcode.component.wrist.WristState;
 
-@TeleOp(group = "Testing", name = "Basket")
+@TeleOp(group = "Testing", name = "SetPoses")
 public class TestTele extends OpMode {
     ArmRotState rotState;
     ArmRotActuator rotActuator;
