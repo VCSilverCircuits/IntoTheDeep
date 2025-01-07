@@ -58,9 +58,10 @@ public abstract class PoweredPIDFActuator extends Actuator {
             newTarget += Math.min(deltaPosAbs, increment);
         } else {
             newTarget -= Math.min(deltaPosAbs, increment);
-        }*/
+        }
 
-//        controller.setSetPoint(targetPosition);
+        controller.setSetPoint(newTarget);*/
+
         setInAction(!controller.atSetPoint() || power != 0);
         if (power != 0) {
             loopPower();
@@ -74,8 +75,8 @@ public abstract class PoweredPIDFActuator extends Actuator {
     public void updateState(State newState) {
         PoweredPIDFState poweredPIDFState = (PoweredPIDFState) newState;
         if (poweredPIDFState.getPower() == 0) {
-//            targetPosition = poweredPIDFState.getTargetPosition();
-            controller.setSetPoint(poweredPIDFState.getTargetPosition());
+            targetPosition = poweredPIDFState.getTargetPosition();
+            controller.setSetPoint(poweredPIDFState.getTargetPosition()); // This one
             controller.setP(coefficients.p);
             controller.setI(coefficients.i);
             controller.setD(coefficients.d);

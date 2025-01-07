@@ -42,6 +42,7 @@ public class MainAuto extends BaseLinearOpMode {
 
         while (timer.time() < 1500) {
             // Stall
+            updateComponents();
         }
 
         timer.reset();
