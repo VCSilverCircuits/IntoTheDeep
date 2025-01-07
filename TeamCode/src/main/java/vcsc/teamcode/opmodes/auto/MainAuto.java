@@ -2,6 +2,8 @@ package vcsc.teamcode.opmodes.auto;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Rotation2d;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -19,10 +21,12 @@ public class MainAuto extends BaseLinearOpMode {
         BasketPose basketPose = new BasketPose(rotState, extState, elbowState, wristState);
         DownFromBasket downFromBasket = new DownFromBasket(rotState, extState, elbowState, wristState);
         ToggleBasket toggleBasket = new ToggleBasket(extState, clawState, basketPose, downFromBasket);
+        //Actions
+        //TODO: Need to change to a spline movement for more consistent scoring and better transition to other parts of the auto
         Action reverse = drive.actionBuilder(new Pose2d(0, 0, 0))
                 .lineToX(-7.9).build();
-        /*Action reverse = drive.actionBuilder(new Pose2d(0, 0, 0))
-                .splineTo(new Vector2d(0, -8), Math.PI / 4).build();*/
+        Action sample1 = drive.actionBuilder(new Pose2d(-7.9,0,0))
+                .splineTo(new Vector2d(-7.9,7), Math.PI / 4).build();
         ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
         waitForStart();
@@ -34,9 +38,13 @@ public class MainAuto extends BaseLinearOpMode {
             basketPose.loop();
             updateComponents();
         }
-
         timer.reset();
 
+        while (timer.time() < 2000) {
+            basketPose.loop();
+            updateComponents();
+        }
+        timer.reset();
         // Drive backwards
         Actions.runBlocking(reverse);
 
@@ -52,7 +60,7 @@ public class MainAuto extends BaseLinearOpMode {
             toggleBasket.loop();
             updateComponents();
         }
-
+        Actions.runBlocking(sample1);
 
     }
 }
