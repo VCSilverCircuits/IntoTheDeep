@@ -45,6 +45,7 @@ public class IndividualTest extends OpMode {
         speed = Math.min(speed, 1); // 0.05);
         speed = Math.max(speed, 1.0 / 3000.0);
 
+
         claw.setPosition(0.4 + (0.55 - 0.4) * gamepad1.right_trigger);
 
         if (gamepad1.a) {

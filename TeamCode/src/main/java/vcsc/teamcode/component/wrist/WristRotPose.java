@@ -6,10 +6,10 @@ import com.acmerobotics.dashboard.config.Config;
 public enum WristRotPose {
     IN(0.95),
     OUT(0),
-    PREGRAB(0.9),
-    GRABBING(0.8),
+    PREGRAB(0.8),
+    GRABBING(0.75),
     STRAIGHT(0.5),
-    BASKET(0.3);
+    BASKET(0.2); //0.3
 
     final double position;
 

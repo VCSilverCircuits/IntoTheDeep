@@ -35,7 +35,7 @@ public class Grab implements Action {
 
     @Override
     public void loop() {
-        if (timer.time() > 100 && !finished) {
+        if (timer.time() > 100 && !finished) { //300
             clawState.close();
             finished = true;
         }

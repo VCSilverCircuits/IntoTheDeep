@@ -4,8 +4,8 @@ public enum ClawPose {
     OPEN(1),
     CLOSED(0);
 
-    public static final double MIN = 0.4;
-    public static final double MAX = 0.55;
+    public static final double MIN = 0.0;
+    public static final double MAX = 0.7;
     final double pos;
 
     ClawPose(double position) {

@@ -42,10 +42,11 @@ public class NeutralAction implements Action {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
         telemetry.addLine("Going to neutral pose");
 
-        seq = new ActionBuilder(slidesIn)
+        /*seq = new ActionBuilder(slidesIn)
                 .then(rotateDown)
                 .then(elbowDown)
-                .then(wristDown);
+                .then(wristDown);*/
+        seq = new ActionBuilder();
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import roadrunner.Drawing;
 import roadrunner.MecanumDrive;
 import roadrunner.TankDrive;
+import vcsc.core.GlobalTelemetry;
 
 @Disabled
 public class LocalizationTest extends LinearOpMode {
@@ -21,7 +22,7 @@ public class LocalizationTest extends LinearOpMode {
 
         if (TuningOpModes.DRIVE_CLASS.equals(MecanumDrive.class)) {
             MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
-
+            GlobalTelemetry.init(telemetry);
             waitForStart();
 
             while (opModeIsActive()) {

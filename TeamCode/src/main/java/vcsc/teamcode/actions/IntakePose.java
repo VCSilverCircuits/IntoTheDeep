@@ -34,10 +34,11 @@ public class IntakePose implements Action {
         slidesOut = new SetExtPose(extState, ArmExtPose.INTAKE);
         rotateDown = new SetRotPose(rotState, ArmRotPose.INTAKE);
 
-        seq = new ActionBuilder(slidesIn)
+        /*seq = new ActionBuilder(slidesIn)
                 .then(rotateDown)
                 .then(slidesOut)
-                .then(preGrabPose);
+                .then(preGrabPose);*/
+        seq = new ActionBuilder();
 
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
         telemetry.addLine("Going to basket pose.");

@@ -18,6 +18,7 @@ public class ToggleBasket implements Action {
     ElapsedTime clawTimer;
 
     boolean cancelled = false;
+    boolean started = false;
     double clawDelay = 150;
 
     public ToggleBasket(ArmExtState armExtState, ClawState clawState, BasketPose basketPose, DownFromBasket downFromBasket) {
@@ -32,6 +33,7 @@ public class ToggleBasket implements Action {
 
     @Override
     public void start() {
+        started = true;
         cancelled = false;
         if (armExtState.getPose() == ArmExtPose.BASKET) {
             clawState.open();
@@ -45,6 +47,9 @@ public class ToggleBasket implements Action {
 
     @Override
     public void loop() {
+        if (!started) {
+            return;
+        }
         if (armExtState.getPose() == ArmExtPose.BASKET && !cancelled) {
             if (clawTimer.time() > clawDelay && currentAction == null) {
                 downFromBasket.start();
@@ -56,6 +61,7 @@ public class ToggleBasket implements Action {
             currentAction.loop();
             if (currentAction.isFinished()) {
                 currentAction = null;
+                started = false;
             }
         }
     }
@@ -71,6 +77,7 @@ public class ToggleBasket implements Action {
     @Override
     public void cancel() {
         cancelled = true;
+        started = false;
         if (currentAction != null) {
             currentAction.cancel();
             currentAction = null;

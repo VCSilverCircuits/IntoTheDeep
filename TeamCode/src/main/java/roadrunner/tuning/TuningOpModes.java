@@ -39,7 +39,7 @@ public final class TuningOpModes {
     public static final Class<?> DRIVE_CLASS = MecanumDrive.class;
 
     public static final String GROUP = "quickstart";
-    public static final boolean DISABLED = false;
+    public static final boolean DISABLED = true;
 
     private TuningOpModes() {
     }
@@ -63,13 +63,7 @@ public final class TuningOpModes {
 
                 List<Encoder> leftEncs = new ArrayList<>(), rightEncs = new ArrayList<>();
                 List<Encoder> parEncs = new ArrayList<>(), perpEncs = new ArrayList<>();
-                if (md.localizer instanceof MecanumDrive.DriveLocalizer) {
-                    MecanumDrive.DriveLocalizer dl = (MecanumDrive.DriveLocalizer) md.localizer;
-                    leftEncs.add(dl.leftFront);
-                    leftEncs.add(dl.leftBack);
-                    rightEncs.add(dl.rightFront);
-                    rightEncs.add(dl.rightBack);
-                } else if (md.localizer instanceof ThreeDeadWheelLocalizer) {
+                if (md.localizer instanceof ThreeDeadWheelLocalizer) {
                     ThreeDeadWheelLocalizer dl = (ThreeDeadWheelLocalizer) md.localizer;
                     parEncs.add(dl.par0);
                     parEncs.add(dl.par1);

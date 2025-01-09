@@ -2,11 +2,8 @@ package vcsc.teamcode.opmodes.tele;
 
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
-import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 import vcsc.core.util.GamepadButton;
 import vcsc.teamcode.DebugConstants;
@@ -21,18 +18,14 @@ import vcsc.teamcode.actions.SetRotPose;
 import vcsc.teamcode.actions.ToggleBasket;
 import vcsc.teamcode.actions.ToggleHooks;
 import vcsc.teamcode.actions.hang.PreHang;
-import vcsc.teamcode.component.arm.elbow.ElbowPose;
 import vcsc.teamcode.component.arm.ext.ArmExtPose;
 import vcsc.teamcode.component.arm.rot.ArmRotPose;
 import vcsc.teamcode.component.wrist.WristPivotPose;
-import vcsc.teamcode.component.wrist.WristPose;
 import vcsc.teamcode.opmodes.base.BaseOpMode;
 
 @TeleOp(name = "MainTele", group = "Main")
 public class MainTele extends BaseOpMode {
     boolean rumbledEndGame = false, rumbledMatchEnd = false;
-    private Limelight3A limelight;
-
     BasketPose basketPose;
     IntakePose intakePose;
     NeutralAction neutralAction;
@@ -45,8 +38,8 @@ public class MainTele extends BaseOpMode {
     Cancel cancel;
     Grab grab;
     double wristRotateSpeed = 0.03;
-
     double driveSpeed = 1;
+    private Limelight3A limelight;
 
     @Override
     public void init() {
@@ -54,11 +47,11 @@ public class MainTele extends BaseOpMode {
         // ===== Actions =====
         preGrabPose = new PreGrabPose(elbowState, wristState, clawState);
         basketPose = new BasketPose(rotState, extState, elbowState, wristState);
+        downFromBasket = new DownFromBasket(rotState, extState, elbowState, wristState);
+        toggleBasket = new ToggleBasket(extState, clawState, basketPose, downFromBasket);
         intakePose = new IntakePose(rotState, extState, clawState, preGrabPose);
         neutralAction = new NeutralAction(rotState, extState, elbowState, wristState);
-        downFromBasket = new DownFromBasket(rotState, extState, elbowState, wristState);
         toggleHooks = new ToggleHooks(hookState);
-        toggleBasket = new ToggleBasket(extState, clawState, basketPose, downFromBasket);
         preHangPose = new PreHang(extState, rotState, hookState, elbowState); //new SetRotPose(rotState, ArmRotPose.PRE_HANG);
         hangPose = new SetRotPose(rotState, ArmRotPose.HANG);
         grab = new Grab(elbowState, wristState, clawState);
@@ -108,8 +101,6 @@ public class MainTele extends BaseOpMode {
     @Override
     public void start() {
         super.start();
-        wristState.setPose(WristPose.STOW);
-        elbowState.setPose(ElbowPose.STOW);
 
     }
 
@@ -152,7 +143,7 @@ public class MainTele extends BaseOpMode {
         if (rotState.getPose() == ArmRotPose.INTAKE) {
             // Rotation of wrist
             double newPivot = wristState.getPivot() + gamepad2.right_stick_x * wristRotateSpeed;
-            newPivot = Math.min(Math.max(newPivot, WristPivotPose.FORWARD.getPosition()), WristPivotPose.REVERSE.getPosition());
+            newPivot = Math.min(Math.max(newPivot, WristPivotPose.MIN.getPosition()), WristPivotPose.MAX.getPosition());
             wristState.setPivot(newPivot);
 
             // Extension of slides (with max and min limits)
@@ -192,18 +183,18 @@ public class MainTele extends BaseOpMode {
             Both Controllers
             ================ */
 
-                    // ----- Rumbling -----
-                    if (matchTimer.seconds() >= 90 && !rumbledEndGame) { // End game rumble
-                        gamepad1.rumble(500);
-                        gamepad2.rumble(500);
-                        rumbledEndGame = true;
-                    } else if (matchTimer.seconds() >= 120 && !rumbledMatchEnd) { // Match end 3 rumbles
-                        gamepad1.rumbleBlips(3);
-                        gamepad2.rumbleBlips(3);
-                        rumbledMatchEnd = true;
-                    }
-                }
+            // ----- Rumbling -----
+            if (matchTimer.seconds() >= 90 && !rumbledEndGame) { // End game rumble
+                gamepad1.rumble(500);
+                gamepad2.rumble(500);
+                rumbledEndGame = true;
+            } else if (matchTimer.seconds() >= 120 && !rumbledMatchEnd) { // Match end 3 rumbles
+                gamepad1.rumbleBlips(3);
+                gamepad2.rumbleBlips(3);
+                rumbledMatchEnd = true;
             }
         }
+    }
+}
 
 

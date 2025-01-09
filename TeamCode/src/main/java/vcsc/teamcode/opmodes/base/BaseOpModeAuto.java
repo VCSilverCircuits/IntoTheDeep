@@ -1,12 +1,10 @@
 package vcsc.teamcode.opmodes.base;
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import roadrunner.MecanumDrive;
 import vcsc.core.GlobalTelemetry;
 import vcsc.core.util.GamepadWrapper;
 import vcsc.teamcode.DebugConstants;
@@ -26,13 +24,12 @@ import vcsc.teamcode.component.wrist.WristActuator;
 import vcsc.teamcode.component.wrist.WristPose;
 import vcsc.teamcode.component.wrist.WristState;
 
-public class BaseOpMode extends OpMode {
+public class BaseOpModeAuto extends OpMode {
     protected ArmRotState rotState;
     protected ArmExtState extState;
     protected ClawState clawState;
     protected ElbowState elbowState;
     protected WristState wristState;
-    protected MecanumDrive drive;
 
     protected GamepadWrapper gw1, gw2;
 
@@ -80,8 +77,6 @@ public class BaseOpMode extends OpMode {
         );
         hookState.registerActuator(hookActuator);
 
-        drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
-
         gw1 = new GamepadWrapper();
         gw2 = new GamepadWrapper();
 
@@ -104,12 +99,9 @@ public class BaseOpMode extends OpMode {
         elbowActuator.loop();
         wristActuator.loop();
         hookActuator.loop();
-        camera.loop();
 
         gw1.loop(gamepad1);
         gw2.loop(gamepad2);
-
-        drive.updatePoseEstimate();
         telem.update();
     }
 }

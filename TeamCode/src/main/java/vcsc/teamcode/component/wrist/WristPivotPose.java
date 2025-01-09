@@ -4,9 +4,11 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public enum WristPivotPose {
-    FORWARD(0),
+    FORWARD(0.5),
     TILT(0.42),
-    REVERSE(0.6);
+    REVERSE(0.5), // TODO: Fully deprecate reversal
+    MIN(0),
+    MAX(1);
 
     final double position;
 

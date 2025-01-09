@@ -36,10 +36,11 @@ public class BasketPose implements Action {
         wristBasketPose = new WristBasketPose(elbowState, wristState);
         elbowOut = new SetElbowPose(elbowState, ElbowPose.STRAIGHT);
 
-        seq = new ActionBuilder(slidesIn)
+        /*seq = new ActionBuilder(slidesIn)
                 .then(rotateUp)
                 .then(slidesOut) // TODO: Add thenParallel function. Do all in parallel with individual constraints
-                .then(wristBasketPose);
+                .then(wristBasketPose);*/
+        seq = new ActionBuilder();
     }
 
     @Override
