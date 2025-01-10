@@ -148,17 +148,27 @@ public class MainTele extends BaseOpMode {
 
             // Extension of slides (with max and min limits)
 
-            double extPower = -gamepad2.left_stick_y;
+            // WARNING: Don't make too big without checking min position.
+            // This is also used for emergency reset of slides.
+            double extPower = -gamepad2.left_stick_y / 4;
             // If slides exceed the max and you're trying to go further then prevent adjusting length
             if (extPower > 0 && extState.getRealPosition() >= ArmExtPose.INTAKE.getLength()) {
                 extPower = 0;
                 // TODO: Add optional override
             }
             // If slides exceed the min and you're trying to go further then prevent adjusting length
-            else if (extPower < 0 && extState.getRealPosition() <= 0) {
-                extPower = 0;
-            }
+//            else if (extPower < 0 && extState.getRealPosition() <= 0) {
+//                extPower = 0;
+//            }
             extState.setPower(extPower);
+
+            if (gamepad2.dpad_left) {
+                rotState.setPower(-0.2);
+            } else {
+                rotState.setPower(0);
+            }
+
+            telem.addData("Current", extState.getCurrent());
 
 
             /* --- Alternative Solution */

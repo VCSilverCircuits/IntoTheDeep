@@ -18,7 +18,7 @@ import vcsc.teamcode.actions.DownFromBasket;
 import vcsc.teamcode.actions.Grab;
 import vcsc.teamcode.actions.IntakePose;
 import vcsc.teamcode.actions.NeutralAction;
-import vcsc.teamcode.actions.PreGrabPose;
+import vcsc.teamcode.actions.PreGrabPoseAuto;
 import vcsc.teamcode.actions.ToggleBasket;
 import vcsc.teamcode.component.arm.elbow.ElbowPose;
 import vcsc.teamcode.opmodes.base.BaseOpModeAuto;
@@ -37,7 +37,7 @@ public class PedroAutov1 extends BaseOpModeAuto {
     BasketPose basketPose;
     DownFromBasket downFromBasket;
     ToggleBasket toggleBasket;
-    PreGrabPose preGrabPose;
+    PreGrabPoseAuto preGrabPose;
     IntakePose intakePose;
     Grab grab;
     NeutralAction neutralAction;
@@ -52,43 +52,36 @@ public class PedroAutov1 extends BaseOpModeAuto {
         // Path for scoring preload
         scorePreload = new Path(new BezierLine(new Point(startPose), new Point(scorePose)));
         scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading());
-        scorePreload.setPathEndVelocityConstraint(0.3);
 
         // Path chains for picking up and scoring samples
         grabPickup1 = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(scorePose), new Point(pickup1Pose)))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), pickup1Pose.getHeading())
-                .setPathEndVelocityConstraint(0.3)
                 .build();
 
         scorePickup1 = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(pickup1Pose), new Point(scorePose)))
                 .setLinearHeadingInterpolation(pickup1Pose.getHeading(), scorePose.getHeading())
-                .setPathEndVelocityConstraint(0.3)
                 .build();
 
         grabPickup2 = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(scorePose), new Point(pickup2Pose)))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), pickup2Pose.getHeading())
-                .setPathEndVelocityConstraint(0.3)
                 .build();
 
         scorePickup2 = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(pickup2Pose), new Point(scorePose)))
                 .setLinearHeadingInterpolation(pickup2Pose.getHeading(), scorePose.getHeading())
-                .setPathEndVelocityConstraint(0.3)
                 .build();
 
         grabPickup3 = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(scorePose), new Point(pickup3Pose)))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), pickup3Pose.getHeading())
-                .setPathEndVelocityConstraint(0.3)
                 .build();
 
         scorePickup3 = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(pickup3Pose), new Point(scorePose)))
                 .setLinearHeadingInterpolation(pickup3Pose.getHeading(), scorePose.getHeading())
-                .setPathEndVelocityConstraint(0.3)
                 .build();
 
         // Curved path for parking
@@ -109,7 +102,7 @@ public class PedroAutov1 extends BaseOpModeAuto {
                 elbowState.setPose(ElbowPose.STOW);
                 break;
             case 1: // Wait until the robot is near the scoring position
-                if (follower.getPose().getX() > (scorePose.getX() - 1) && follower.getPose().getY() > (scorePose.getY() - 1) && pathTimer.getElapsedTime() < basketDelayUp) {
+                if (follower.getPose().getX() > (scorePose.getX() - 1) && follower.getPose().getY() > (scorePose.getY() - 1) && pathTimer.getElapsedTime() > basketDelayUp) {
                     toggleBasket.start();
                     setPathState(2);
                 }
@@ -147,7 +140,7 @@ public class PedroAutov1 extends BaseOpModeAuto {
                 }
                 break;
             case 7: // Wait until the robot is near the scoring position
-                if (follower.getPose().getX() > (scorePose.getX() - 1) && follower.getPose().getY() > (scorePose.getY() - 1) && pathTimer.getElapsedTime() < basketDelayUp) {
+                if (follower.getPose().getX() > (scorePose.getX() - 1) && follower.getPose().getY() > (scorePose.getY() - 1) && pathTimer.getElapsedTime() > basketDelayUp) {
                     toggleBasket.start();
                     setPathState(8);
                 }
@@ -184,7 +177,7 @@ public class PedroAutov1 extends BaseOpModeAuto {
                 }
                 break;
             case 13: // Wait until the robot is near the scoring position
-                if (follower.getPose().getX() > (scorePose.getX() - 1) && follower.getPose().getY() > (scorePose.getY() - 1) && pathTimer.getElapsedTime() < basketDelayUp) {
+                if (follower.getPose().getX() > (scorePose.getX() - 1) && follower.getPose().getY() > (scorePose.getY() - 1) && pathTimer.getElapsedTime() > basketDelayUp) {
                     toggleBasket.start();
                     setPathState(14);
                 }
@@ -221,7 +214,7 @@ public class PedroAutov1 extends BaseOpModeAuto {
                 }
                 break;
             case 19: // Wait until the robot is near the scoring position
-                if (follower.getPose().getX() > (scorePose.getX() - 1) && follower.getPose().getY() > (scorePose.getY() - 1) && pathTimer.getElapsedTime() < basketDelayUp) {
+                if (follower.getPose().getX() > (scorePose.getX() - 1) && follower.getPose().getY() > (scorePose.getY() - 1) && pathTimer.getElapsedTime() > basketDelayUp) {
                     toggleBasket.start();
                     setPathState(20);
                 }
@@ -233,47 +226,11 @@ public class PedroAutov1 extends BaseOpModeAuto {
                     setPathState(21);
                 }
                 break;
-//
-//            case 3: // Wait until the robot returns to the scoring position
-//                if (follower.getPose().getX() > (scorePose.getX() - 1) && follower.getPose().getY() > (scorePose.getY() - 1)) {
-//                    follower.followPath(grabPickup2, true);
-//                    setPathState(4);
-//                }
-//                break;
-//
-//            case 4: // Wait until the robot is near the second sample pickup position
-//                if (follower.getPose().getX() > (pickup2Pose.getX() - 1) && follower.getPose().getY() > (pickup2Pose.getY() - 1)) {
-//                    follower.followPath(scorePickup2, true);
-//                    setPathState(5);
-//                }
-//                break;
-//
-//            case 5: // Wait until the robot returns to the scoring position
-//                if (follower.getPose().getX() > (scorePose.getX() - 1) && follower.getPose().getY() > (scorePose.getY() - 1)) {
-//                    follower.followPath(grabPickup3, true);
-//                    setPathState(6);
-//                }
-//                break;
-//
-//            case 6: // Wait until the robot is near the third sample pickup position
-//                if (follower.getPose().getX() > (pickup3Pose.getX() - 1) && follower.getPose().getY() > (pickup3Pose.getY() - 1)) {
-//                    follower.followPath(scorePickup3, true);
-//                    setPathState(7);
-//                }
-//                break;
-//
-//            case 7: // Wait until the robot returns to the scoring position
-//                if (follower.getPose().getX() > (scorePose.getX() - 1) && follower.getPose().getY() > (scorePose.getY() - 1)) {
-//                    follower.followPath(park, true);
-//                    setPathState(8);
-//                }
-//                break;
-//
-//            case 8: // Wait until the robot is near the parking position
-//                if (follower.getPose().getX() > (parkPose.getX() - 1) && follower.getPose().getY() > (parkPose.getY() - 1)) {
-//                    setPathState(-1); // End the autonomous routine
-//                }
-//                break;
+            case 21: // Wait until the robot is near the parking position
+                if (follower.getPose().getX() > (parkPose.getX() - 1) && follower.getPose().getY() > (parkPose.getY() - 1)) {
+                    setPathState(-1); // End the autonomous routine
+                }
+                break;
         }
     }
 
@@ -325,7 +282,7 @@ public class PedroAutov1 extends BaseOpModeAuto {
         basketPose = new BasketPose(rotState, extState, elbowState, wristState);
         downFromBasket = new DownFromBasket(rotState, extState, elbowState, wristState);
         toggleBasket = new ToggleBasket(extState, clawState, basketPose, downFromBasket);
-        preGrabPose = new PreGrabPose(elbowState, wristState, clawState);
+        preGrabPose = new PreGrabPoseAuto(elbowState, wristState, clawState);
         intakePose = new IntakePose(rotState, extState, clawState, preGrabPose);
         grab = new Grab(elbowState, wristState, clawState);
         neutralAction = new NeutralAction(rotState, extState, elbowState, wristState);

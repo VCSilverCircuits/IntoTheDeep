@@ -28,8 +28,13 @@ public class PoweredPIDFState extends State {
         notifyActuators();
     }
 
+
     public double getRealPosition() {
         return primaryActuator.getPosition();
+    }
+
+    public double getCurrent() {
+        return primaryActuator.getCurrent();
     }
 
     public double getTargetPosition() {

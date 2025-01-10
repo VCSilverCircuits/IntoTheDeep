@@ -8,9 +8,9 @@ import vcsc.teamcode.component.wrist.WristRotPose;
 import vcsc.teamcode.component.wrist.WristState;
 
 public class PreGrabPose implements Action {
-    ElbowState elbowState;
-    WristState wristState;
-    ClawState clawState;
+    protected ElbowState elbowState;
+    protected WristState wristState;
+    protected ClawState clawState;
 
     public PreGrabPose(ElbowState elbowState, WristState wristState, ClawState clawState) {
         super();
