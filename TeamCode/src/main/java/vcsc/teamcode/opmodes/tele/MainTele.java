@@ -49,7 +49,7 @@ public class MainTele extends BaseOpMode {
         // ===== Actions =====
         preGrabPose = new PreGrabPose(elbowState, wristState, clawState);
         basketPose = new BasketPose(rotState, extState, elbowState, wristState);
-        lowerBasketPose = new LowerBasketPose(rotState,elbowState,wristState);
+        lowerBasketPose = new LowerBasketPose(rotState, elbowState, wristState);
         downFromBasket = new DownFromBasket(rotState, extState, elbowState, wristState);
         toggleBasket = new ToggleBasket(extState, clawState, basketPose, downFromBasket);
         intakePose = new IntakePose(rotState, extState, clawState, preGrabPose);
@@ -73,27 +73,32 @@ public class MainTele extends BaseOpMode {
         // Basket pose
         gw1.bindButton(GamepadButton.LEFT_TRIGGER, toggleBasket);
         gw1.bindRunnable(GamepadButton.LEFT_TRIGGER, () -> {
+            lowerBasketPose.cancel();
             intakePose.cancel();
+            neutralAction.cancel();
             telemetry.addLine("Cancelling intake and neutral");
+        });
+        // Lower Basket Pose
+        gw1.bindButton(GamepadButton.LEFT_BUMPER, lowerBasketPose);
+        gw1.bindRunnable(GamepadButton.LEFT_BUMPER, () -> {
+            basketPose.cancel();
+            intakePose.cancel();
+            neutralAction.cancel();
+            telemetry.addLine("Cancelling basket and intake");
         });
         // Intake pose
         gw1.bindButton(GamepadButton.RIGHT_TRIGGER, intakePose);
         gw1.bindRunnable(GamepadButton.RIGHT_TRIGGER, () -> {
             basketPose.cancel();
+            lowerBasketPose.cancel();
             neutralAction.cancel();
             telemetry.addLine("Cancelling basket and neutral");
-        });
-        // Lower Basket Pose
-        gw1.bindButton(GamepadButton.LEFT_BUMPER, lowerBasketPose);
-        gw1.bindRunnable(GamepadButton.LEFT_BUMPER,() -> {
-            basketPose.cancel();
-            intakePose.cancel();
-            telemetry.addLine("Cancelling basket and intake");
         });
         // Cancel button
         gw1.bindButton(GamepadButton.B, cancel);
         gw1.bindRunnable(GamepadButton.B, () -> {
             basketPose.cancel();
+            lowerBasketPose.cancel();
             intakePose.cancel();
             telemetry.addLine("Cancelling basket and intake");
         });
