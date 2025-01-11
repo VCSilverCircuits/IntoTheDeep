@@ -23,7 +23,7 @@ import vcsc.teamcode.actions.ToggleBasket;
 import vcsc.teamcode.component.arm.elbow.ElbowPose;
 import vcsc.teamcode.opmodes.base.BaseOpModeAuto;
 
-@Autonomous(name = "PedroAutoV1", group = "Testing")
+@Autonomous(name = "Auto", group = "Testing")
 public class PedroAutov1 extends BaseOpModeAuto {
     private final Pose startPose = new Pose(6, 113, Math.toRadians(270));  // Starting position
     private final Pose scorePose = new Pose(14, 129, Math.toRadians(315)); // Scoring position
@@ -95,6 +95,7 @@ public class PedroAutov1 extends BaseOpModeAuto {
         double scoreDelay = 800;
         double basketDelayUp = 2800;
         double basketDelayDown = 3000;
+
         switch (pathState) {
             case 0: // Move from start to scoring position
                 follower.followPath(scorePreload);
@@ -116,7 +117,7 @@ public class PedroAutov1 extends BaseOpModeAuto {
                 break;
 //
             case 3: // Wait until the robot is near the first sample pickup position
-                if (follower.getPose().getX() > (pickup1Pose.getX() - 1) && follower.getPose().getY() > (pickup1Pose.getY() - 1)) {
+                if (follower.getPose().getX() > (pickup1Pose.getX() - 1) && follower.getPose().getY() < (pickup1Pose.getY() - 1)) {
                     intakePose.start();
                     setPathState(4);
                 }
@@ -140,7 +141,7 @@ public class PedroAutov1 extends BaseOpModeAuto {
                 }
                 break;
             case 7: // Wait until the robot is near the scoring position
-                if (follower.getPose().getX() > (scorePose.getX() - 1) && follower.getPose().getY() > (scorePose.getY() - 1) && pathTimer.getElapsedTime() > basketDelayUp) {
+                if (follower.getPose().getX() < (scorePose.getX() + 1) && follower.getPose().getY() > (scorePose.getY() - 1) && pathTimer.getElapsedTime() > basketDelayUp) {
                     toggleBasket.start();
                     setPathState(8);
                 }
@@ -177,7 +178,7 @@ public class PedroAutov1 extends BaseOpModeAuto {
                 }
                 break;
             case 13: // Wait until the robot is near the scoring position
-                if (follower.getPose().getX() > (scorePose.getX() - 1) && follower.getPose().getY() > (scorePose.getY() - 1) && pathTimer.getElapsedTime() > basketDelayUp) {
+                if (follower.getPose().getX() < (scorePose.getX() + 1) && follower.getPose().getY() < (scorePose.getY() + 1) && pathTimer.getElapsedTime() > basketDelayUp) {
                     toggleBasket.start();
                     setPathState(14);
                 }
@@ -214,7 +215,7 @@ public class PedroAutov1 extends BaseOpModeAuto {
                 }
                 break;
             case 19: // Wait until the robot is near the scoring position
-                if (follower.getPose().getX() > (scorePose.getX() - 1) && follower.getPose().getY() > (scorePose.getY() - 1) && pathTimer.getElapsedTime() > basketDelayUp) {
+                if (follower.getPose().getX() < (scorePose.getX() + 1) && follower.getPose().getY() < (scorePose.getY() + 1) && pathTimer.getElapsedTime() > basketDelayUp) {
                     toggleBasket.start();
                     setPathState(20);
                 }
@@ -262,11 +263,10 @@ public class PedroAutov1 extends BaseOpModeAuto {
         autonomousPathUpdate();
 
         // Feedback to Driver Hub
-        telemetry.addData("path state", pathState);
-        telemetry.addData("x", follower.getPose().getX());
-        telemetry.addData("y", follower.getPose().getY());
-        telemetry.addData("heading", follower.getPose().getHeading());
-        telemetry.update();
+        telem.addData("path state", pathState);
+        telem.addData("x", follower.getPose().getX());
+        telem.addData("y", follower.getPose().getY());
+        telem.addData("heading", follower.getPose().getHeading());
     }
 
     /**

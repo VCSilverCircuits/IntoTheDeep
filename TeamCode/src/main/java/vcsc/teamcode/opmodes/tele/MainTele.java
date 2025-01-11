@@ -23,7 +23,7 @@ import vcsc.teamcode.component.arm.rot.ArmRotPose;
 import vcsc.teamcode.component.wrist.WristPivotPose;
 import vcsc.teamcode.opmodes.base.BaseOpMode;
 
-@TeleOp(name = "MainTele", group = "Main")
+@TeleOp(name = "Tele", group = "Main")
 public class MainTele extends BaseOpMode {
     boolean rumbledEndGame = false, rumbledMatchEnd = false;
     BasketPose basketPose;

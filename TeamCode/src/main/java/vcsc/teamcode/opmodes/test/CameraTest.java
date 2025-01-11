@@ -1,10 +1,12 @@
 package vcsc.teamcode.opmodes.test;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import vcsc.teamcode.abstracts.Block;
 import vcsc.teamcode.opmodes.base.BaseOpMode;
 
+@Disabled
 @TeleOp(group = "Test", name = "CameraTest")
 public class CameraTest extends BaseOpMode {
     @Override

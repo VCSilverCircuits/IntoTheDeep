@@ -1,5 +1,6 @@
 package vcsc.teamcode.opmodes.test;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
@@ -19,6 +20,7 @@ import vcsc.teamcode.component.wrist.WristActuator;
 import vcsc.teamcode.component.wrist.WristPivotPose;
 import vcsc.teamcode.component.wrist.WristState;
 
+@Disabled
 @TeleOp(group = "Testing", name = "SetPoses")
 public class TestTele extends OpMode {
     ArmRotState rotState;

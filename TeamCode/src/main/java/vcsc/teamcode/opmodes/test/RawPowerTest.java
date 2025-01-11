@@ -1,5 +1,6 @@
 package vcsc.teamcode.opmodes.test;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import vcsc.core.util.DcMotorGroup;
 
+@Disabled
 @TeleOp(group = "Test", name = "RawPower")
 public class RawPowerTest extends OpMode {
     DcMotorGroup motors;

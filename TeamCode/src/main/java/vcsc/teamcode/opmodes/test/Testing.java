@@ -1,5 +1,6 @@
 package vcsc.teamcode.opmodes.test;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -7,6 +8,7 @@ import vcsc.core.mock.MockServo;
 import vcsc.teamcode.component.claw.ClawActuator;
 import vcsc.teamcode.component.claw.ClawState;
 
+@Disabled
 @TeleOp(name = "Testing", group = "Testing")
 public class Testing extends OpMode {
     ClawState clawState;

@@ -2,6 +2,7 @@ package vcsc.teamcode.opmodes.test;
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
@@ -10,6 +11,7 @@ import vcsc.core.GlobalTelemetry;
 import vcsc.teamcode.component.arm.rot.ArmRotActuator;
 import vcsc.teamcode.component.arm.rot.ArmRotState;
 
+@Disabled
 @Autonomous(group = "Testing", name = "RotTest")
 public class RotTest extends OpMode {
     double position = 0.0;

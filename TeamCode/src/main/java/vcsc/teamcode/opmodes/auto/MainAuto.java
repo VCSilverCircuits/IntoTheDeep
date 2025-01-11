@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import vcsc.teamcode.actions.BasketPose;
@@ -15,6 +16,7 @@ import vcsc.teamcode.actions.PreGrabPose;
 import vcsc.teamcode.actions.ToggleBasket;
 import vcsc.teamcode.opmodes.base.BaseLinearOpMode;
 
+@Disabled
 @Autonomous(group = "Main", name = "MainAuto", preselectTeleOp = "MainTele")
 public class MainAuto extends BaseLinearOpMode {
     @Override
