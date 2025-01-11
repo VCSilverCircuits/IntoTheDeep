@@ -46,6 +46,9 @@ public class IntakePose implements Action {
 
     @Override
     public void start() {
+        if (extState.getPose() == ArmExtPose.BASKET) {
+            return;
+        }
         seq = new ActionBuilder();
 
         if (rotState.getPose() != ArmRotPose.INTAKE) {

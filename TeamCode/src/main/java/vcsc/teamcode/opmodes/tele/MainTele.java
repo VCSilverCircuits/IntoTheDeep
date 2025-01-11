@@ -89,6 +89,9 @@ public class MainTele extends BaseOpMode {
         // Intake pose
         gw1.bindButton(GamepadButton.RIGHT_TRIGGER, intakePose);
         gw1.bindRunnable(GamepadButton.RIGHT_TRIGGER, () -> {
+            if (extState.getPose() == ArmExtPose.BASKET) {
+                return;
+            }
             basketPose.cancel();
             lowerBasketPose.cancel();
             neutralAction.cancel();
