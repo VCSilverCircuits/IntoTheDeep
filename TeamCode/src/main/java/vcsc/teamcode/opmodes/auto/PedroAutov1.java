@@ -19,6 +19,7 @@ import vcsc.teamcode.actions.Grab;
 import vcsc.teamcode.actions.IntakePose;
 import vcsc.teamcode.actions.NeutralAction;
 import vcsc.teamcode.actions.PreGrabPose;
+import vcsc.teamcode.actions.PreGrabPoseAuto;
 import vcsc.teamcode.actions.ToggleBasket;
 import vcsc.teamcode.component.arm.elbow.ElbowPose;
 import vcsc.teamcode.opmodes.base.BaseOpModeAuto;
@@ -325,7 +326,7 @@ public class PedroAutov1 extends BaseOpModeAuto {
         basketPose = new BasketPose(rotState, extState, elbowState, wristState);
         downFromBasket = new DownFromBasket(rotState, extState, elbowState, wristState);
         toggleBasket = new ToggleBasket(extState, clawState, basketPose, downFromBasket);
-        preGrabPose = new PreGrabPose(elbowState, wristState, clawState);
+        preGrabPose = new PreGrabPoseAuto(elbowState, wristState, clawState);
         intakePose = new IntakePose(rotState, extState, clawState, preGrabPose);
         grab = new Grab(elbowState, wristState, clawState);
         neutralAction = new NeutralAction(rotState, extState, elbowState, wristState);
