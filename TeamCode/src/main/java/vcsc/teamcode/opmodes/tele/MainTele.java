@@ -12,6 +12,7 @@ import vcsc.teamcode.actions.Cancel;
 import vcsc.teamcode.actions.DownFromBasket;
 import vcsc.teamcode.actions.Grab;
 import vcsc.teamcode.actions.IntakePose;
+import vcsc.teamcode.actions.LowerBasketPose;
 import vcsc.teamcode.actions.NeutralAction;
 import vcsc.teamcode.actions.PreGrabPose;
 import vcsc.teamcode.actions.SetRotPose;
@@ -27,6 +28,7 @@ import vcsc.teamcode.opmodes.base.BaseOpMode;
 public class MainTele extends BaseOpMode {
     boolean rumbledEndGame = false, rumbledMatchEnd = false;
     BasketPose basketPose;
+    LowerBasketPose lowerBasketPose;
     IntakePose intakePose;
     NeutralAction neutralAction;
     ToggleHooks toggleHooks;
@@ -47,6 +49,7 @@ public class MainTele extends BaseOpMode {
         // ===== Actions =====
         preGrabPose = new PreGrabPose(elbowState, wristState, clawState);
         basketPose = new BasketPose(rotState, extState, elbowState, wristState);
+        lowerBasketPose = new LowerBasketPose(rotState,elbowState,wristState);
         downFromBasket = new DownFromBasket(rotState, extState, elbowState, wristState);
         toggleBasket = new ToggleBasket(extState, clawState, basketPose, downFromBasket);
         intakePose = new IntakePose(rotState, extState, clawState, preGrabPose);
@@ -80,6 +83,13 @@ public class MainTele extends BaseOpMode {
             neutralAction.cancel();
             telemetry.addLine("Cancelling basket and neutral");
         });
+        // Lower Basket Pose
+        gw1.bindButton(GamepadButton.LEFT_BUMPER, lowerBasketPose);
+        gw1.bindRunnable(GamepadButton.LEFT_BUMPER,() -> {
+            basketPose.cancel();
+            intakePose.cancel();
+            telemetry.addLine("Cancelling basket and intake");
+        });
         // Cancel button
         gw1.bindButton(GamepadButton.B, cancel);
         gw1.bindRunnable(GamepadButton.B, () -> {
@@ -112,6 +122,11 @@ public class MainTele extends BaseOpMode {
         super.loop();
         extState.setSpeed(DebugConstants.extSpeed);
         rotState.setSpeed(DebugConstants.rotSpeed);
+        telem.addData("ElbowRot", elbowState.getPosition());
+        telem.addData("WristRot", wristState.getRot());
+        telem.addData("WristPivot", wristState.getPivot());
+        telem.addData("LeftHook", hookState.getPositionLeft());
+        telem.addData("RightHook", hookState.getPositionRight());
 
         /*  ============
             Controller 1
