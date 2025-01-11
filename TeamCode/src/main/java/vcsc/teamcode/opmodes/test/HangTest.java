@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
@@ -13,6 +14,7 @@ import vcsc.core.GlobalTelemetry;
 import vcsc.teamcode.component.arm.rot.ArmRotActuator;
 import vcsc.teamcode.component.arm.rot.ArmRotState;
 
+@Disabled
 @Autonomous(group = "Testing", name = "HangTest")
 public class HangTest extends OpMode {
     ServoImplEx hookRight;

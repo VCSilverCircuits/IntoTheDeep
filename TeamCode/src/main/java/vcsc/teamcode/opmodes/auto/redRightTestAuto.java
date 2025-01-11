@@ -5,11 +5,13 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import roadrunner.MecanumDrive;
 
 
+@Disabled
 @Autonomous(name = "Basic Autonomous", group = "Autonomous")
 public class redRightTestAuto extends LinearOpMode {
 

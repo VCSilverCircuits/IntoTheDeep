@@ -3,6 +3,7 @@ package vcsc.teamcode;
 import com.acmerobotics.roadrunner.ftc.LynxFirmware;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -10,6 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
+@Disabled
 @Autonomous(name = "LinearAuto")
 public class ScrimmageAuto extends LinearOpMode {
 
@@ -18,6 +20,7 @@ public class ScrimmageAuto extends LinearOpMode {
     DcMotorEx leftFront, leftBack, rightBack, rightFront;
 
     ElapsedTime timer = new ElapsedTime();
+
     @Override
     public void runOpMode() throws InterruptedException {
         LynxFirmware.throwIfModulesAreOutdated(hardwareMap);

@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+
 import vcsc.core.GlobalTelemetry;
 import vcsc.core.abstracts.actuator.PoweredPIDFActuator;
 import vcsc.core.util.DcMotorGroup;
@@ -35,6 +37,20 @@ public class ArmRotActuator extends PoweredPIDFActuator {
     @Override
     public double getPosition() {
         return -motors.getCurrentPosition();
+    }
+
+    @Override
+    public void loop() {
+        super.loop();
+//        if (getPosition() < 0) {
+//            motors.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            motors.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        }
+    }
+
+    @Override
+    public double getCurrent() {
+        return motors.getCurrent(CurrentUnit.MILLIAMPS);
     }
 
     @Override

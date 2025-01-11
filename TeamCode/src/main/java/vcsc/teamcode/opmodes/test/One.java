@@ -1,9 +1,11 @@
 package vcsc.teamcode.opmodes.test;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
+@Disabled
 @TeleOp(name = "One", group = "Testing")
 public class One extends LinearOpMode {
 

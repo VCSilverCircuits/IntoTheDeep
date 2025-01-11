@@ -47,6 +47,8 @@ public abstract class PoweredPIDFActuator extends Actuator {
 
     public abstract double getPosition();
 
+    public abstract double getCurrent();
+
     @Override
     public void loop() {
         /*double newTarget = controller.getSetPoint();
