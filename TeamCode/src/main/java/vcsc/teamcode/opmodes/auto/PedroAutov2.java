@@ -31,8 +31,8 @@ public class PedroAutov2 extends BaseOpModeAuto {
     private final Pose scorePose = new Pose(14, 129, Math.toRadians(315)); // Scoring position
 
     private final Pose pickup1Pose = new Pose(24, 122, Math.toRadians(0)); // First sample pickup
-    private final Pose pickup2Pose = new Pose(24, 132, Math.toRadians(0)); // Second sample pickup
-    private final Pose pickup3Pose = new Pose(25, 134, Math.toRadians(22)); // Third sample pickup
+    private final Pose pickup2Pose = new Pose(24, 131, Math.toRadians(0)); // Second sample pickup
+    private final Pose pickup3Pose = new Pose(25, 132.5, Math.toRadians(22)); // Third sample pickup
 
     private final Pose parkPose = new Pose(60, 98, Math.toRadians(90));    // Parking position
     private final Pose parkControlPose = new Pose(65, 125, Math.toRadians(90)); // Control point for curved path
@@ -92,11 +92,12 @@ public class PedroAutov2 extends BaseOpModeAuto {
     }
 
     public void autonomousPathUpdate() {
-        double grabDelay = 2000;
-        double neutralDelay = 250;
-        double scoreDelay = 800;
-        double basketDelayUp = 2800;
-        double basketDelayDown = 3000;
+        double grabDelay = 2000; // 4
+        double neutralDelay = 250; // 4
+        double scoreDelay = 800; // 4
+        double basketDelayUp = 2800; //4
+        double basketDelayDown = 3000; // 4
+
 
         switch (pathState) {
             case 0: // Move from start to scoring position
@@ -104,6 +105,10 @@ public class PedroAutov2 extends BaseOpModeAuto {
                 setPathState(1);
                 elbowState.setPose(ElbowPose.STOW);
                 break;
+            /*
+                   X: 6   --> 14
+                   Y: 113 --> 129
+             */
             case 1: // Wait until the robot is near the scoring position
                 if (follower.getPose().getX() > (scorePose.getX() - 1) && follower.getPose().getY() > (scorePose.getY() - 1) && pathTimer.getElapsedTime() > basketDelayUp) {
                     toggleBasket.start();
@@ -230,7 +235,7 @@ public class PedroAutov2 extends BaseOpModeAuto {
                 }
                 break;
             case 21: // Wait until the robot is near the parking position
-                if (follower.getPose().getX() > (parkPose.getX() - 1) && follower.getPose().getY() > (parkPose.getY() - 1)) {
+                if (follower.getPose().getX() > (parkPose.getX() - 1) && follower.getPose().getY() < (parkPose.getY() + 1)) {
                     setPathState(-1); // End the autonomous routine
                 }
                 break;
@@ -269,6 +274,7 @@ public class PedroAutov2 extends BaseOpModeAuto {
         telem.addData("x", follower.getPose().getX());
         telem.addData("y", follower.getPose().getY());
         telem.addData("heading", follower.getPose().getHeading());
+        telem.addData("timer", pathTimer.getElapsedTime());
     }
 
     /**

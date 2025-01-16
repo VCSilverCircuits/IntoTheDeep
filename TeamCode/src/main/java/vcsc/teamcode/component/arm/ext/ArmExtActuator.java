@@ -60,7 +60,7 @@ public class ArmExtActuator extends PoweredPIDFActuator {
         telemetry.addData("At Position", controller.atSetPoint());
         telemetry.addData("Output Power", outputPower);
         telemetry.addData("Current position", getPosition());
-        motors.setPower(Math.min(Math.abs(outputPower), 1.0) * Math.signum(outputPower));
+        motors.setPower(Math.min(Math.abs(outputPower), 0.8) * Math.signum(outputPower));
     }
 
     @Override

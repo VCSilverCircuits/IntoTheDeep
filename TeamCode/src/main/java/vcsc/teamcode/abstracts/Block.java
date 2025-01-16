@@ -1,21 +1,18 @@
 package vcsc.teamcode.abstracts;
 
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
-
 public class Block {
     private COLOR color;
-    private double x, y;
-    private LLResultTypes.ColorResult innerResult;
+    private double x, y, angle;
 
     public Block(COLOR color, double x, double y) {
-        new Block(color, x, y, null);
+        new Block(color, x, y, 0);
     }
 
-    public Block(COLOR color, double x, double y, LLResultTypes.ColorResult innerResult) {
+    public Block(COLOR color, double x, double y, double angle) {
         this.color = color;
         this.x = x;
         this.y = y;
-        this.innerResult = innerResult;
+        this.angle = angle;
     }
 
     public double getX() {
@@ -26,8 +23,8 @@ public class Block {
         return y;
     }
 
-    public LLResultTypes.ColorResult getInnerResult() {
-        return innerResult;
+    public double getAngle() {
+        return angle;
     }
 
     public COLOR getColor() {

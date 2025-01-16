@@ -30,10 +30,10 @@ public class PedroAutov1 extends BaseOpModeAuto {
     private final Pose scorePose = new Pose(14, 129, Math.toRadians(315)); // Scoring position
 
     private final Pose pickup1Pose = new Pose(24, 122, Math.toRadians(0)); // First sample pickup
-    private final Pose pickup2Pose = new Pose(24, 132, Math.toRadians(0)); // Second sample pickup
-    private final Pose pickup3Pose = new Pose(25, 134, Math.toRadians(22)); // Third sample pickup
+    private final Pose pickup2Pose = new Pose(24, 131, Math.toRadians(0)); // Second sample pickup
+    private final Pose pickup3Pose = new Pose(25, 131, Math.toRadians(22)); // Third sample pickup
 
-    private final Pose parkPose = new Pose(60, 98, Math.toRadians(90));    // Parking position
+    private final Pose parkPose = new Pose(60, 98, Math.toRadians(270));    // Parking position
     private final Pose parkControlPose = new Pose(65, 125, Math.toRadians(90)); // Control point for curved path
     BasketPose basketPose;
     DownFromBasket downFromBasket;
@@ -306,11 +306,11 @@ public class PedroAutov1 extends BaseOpModeAuto {
         autonomousPathUpdate();
 
         // Feedback to Driver Hub
-        telemetry.addData("path state", pathState);
-        telemetry.addData("x", follower.getPose().getX());
-        telemetry.addData("y", follower.getPose().getY());
-        telemetry.addData("heading", follower.getPose().getHeading());
-        telemetry.update();
+        telem.addData("path state", pathState);
+        telem.addData("x", follower.getPose().getX());
+        telem.addData("y", follower.getPose().getY());
+        telem.addData("heading", follower.getPose().getHeading());
+        telem.addData("timer", pathTimer.getElapsedTime());
     }
 
     /**

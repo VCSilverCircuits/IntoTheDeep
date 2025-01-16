@@ -1,12 +1,11 @@
 package vcsc.teamcode.component.camera;
 
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import java.util.List;
-
+import vcsc.core.GlobalTelemetry;
 import vcsc.core.abstracts.actuator.Actuator;
 import vcsc.core.abstracts.state.State;
 import vcsc.teamcode.abstracts.Block;
@@ -27,12 +26,20 @@ public class Camera extends Actuator {
 
     public Block getBlock() {
         LLResult result = limelight.getLatestResult();
-        if (result == null) {
-            return null;
-        }
-        List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
-        for (LLResultTypes.ColorResult cr : colorResults) {
-            return new Block(Block.COLOR.BLUE, cr.getTargetXPixels(), cr.getTargetYPixels(), cr);
+        double[] block_data = result.getPythonOutput();
+        MultipleTelemetry telem = GlobalTelemetry.getInstance();
+        double color = block_data[0];
+        double x = block_data[1];
+        double y = block_data[2];
+        double width = block_data[3];
+        double height = block_data[4];
+        double angle = block_data[5];
+        if (color == 0) {
+            return new Block(Block.COLOR.RED, x, y, angle);
+        } else if (color == 1) {
+            return new Block(Block.COLOR.BLUE, x, y, angle);
+        } else if (color == 2) {
+            return new Block(Block.COLOR.YELLOW, x, y, angle);
         }
         return null;
     }

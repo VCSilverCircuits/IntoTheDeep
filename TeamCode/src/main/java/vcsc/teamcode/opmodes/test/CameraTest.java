@@ -1,14 +1,25 @@
 package vcsc.teamcode.opmodes.test;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import vcsc.core.GlobalTelemetry;
 import vcsc.teamcode.abstracts.Block;
-import vcsc.teamcode.opmodes.base.BaseOpMode;
+import vcsc.teamcode.component.camera.Camera;
 
-@Disabled
 @TeleOp(group = "Test", name = "CameraTest")
-public class CameraTest extends BaseOpMode {
+public class CameraTest extends OpMode {
+    Camera camera;
+    MultipleTelemetry telem;
+
+    @Override
+    public void init() {
+        camera = new Camera(hardwareMap);
+        GlobalTelemetry.init(telemetry);
+        telem = GlobalTelemetry.getInstance();
+    }
+
     @Override
     public void loop() {
 //        super.loop();
@@ -18,11 +29,10 @@ public class CameraTest extends BaseOpMode {
             telem.addData("Block", block.getColor());
             telem.addData("X", block.getX());
             telem.addData("Y", block.getY());
-            telem.addData("Pitch", block.getInnerResult().getTargetPoseCameraSpace().getOrientation().getPitch());
-            telem.addData("Roll", block.getInnerResult().getTargetPoseCameraSpace().getOrientation().getRoll());
-            telem.addData("Yaw", block.getInnerResult().getTargetPoseCameraSpace().getOrientation().getYaw());
+            telem.addData("Angle", block.getAngle());
         } else {
             telem.addLine("No blocks detected.");
         }
+        telem.update();
     }
 }

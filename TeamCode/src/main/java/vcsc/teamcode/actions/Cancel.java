@@ -31,7 +31,11 @@ public class Cancel implements Action {
 
     @Override
     public void loop() {
-        currentAction.loop();
+        if (currentAction != null) {
+            currentAction.loop();
+        } else {
+            return;
+        }
         if (currentAction != null && currentAction.isFinished()) {
             currentAction = null;
         }

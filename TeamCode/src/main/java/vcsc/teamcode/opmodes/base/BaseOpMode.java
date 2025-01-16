@@ -104,7 +104,7 @@ public class BaseOpMode extends OpMode {
         elbowActuator.loop();
         wristActuator.loop();
         hookActuator.loop();
-        camera.loop();
+//        camera.loop();
 
         gw1.loop(gamepad1);
         gw2.loop(gamepad2);

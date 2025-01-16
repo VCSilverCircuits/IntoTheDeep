@@ -2,7 +2,6 @@ package vcsc.teamcode.opmodes.tele;
 
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import vcsc.core.util.GamepadButton;
@@ -41,7 +40,7 @@ public class MainTele extends BaseOpMode {
     Grab grab;
     double wristRotateSpeed = 0.03;
     double driveSpeed = 1;
-    private Limelight3A limelight;
+//    private Limelight3A limelight;
 
     @Override
     public void init() {
@@ -49,7 +48,7 @@ public class MainTele extends BaseOpMode {
         // ===== Actions =====
         preGrabPose = new PreGrabPose(elbowState, wristState, clawState);
         basketPose = new BasketPose(rotState, extState, elbowState, wristState);
-        lowerBasketPose = new LowerBasketPose(rotState, elbowState, wristState);
+//        lowerBasketPose = new LowerBasketPose(rotState, elbowState, wristState);
         downFromBasket = new DownFromBasket(rotState, extState, elbowState, wristState);
         toggleBasket = new ToggleBasket(extState, clawState, basketPose, downFromBasket);
         intakePose = new IntakePose(rotState, extState, clawState, preGrabPose);
@@ -60,10 +59,10 @@ public class MainTele extends BaseOpMode {
         grab = new Grab(elbowState, wristState, clawState);
         cancel = new Cancel(rotState, neutralAction, downFromBasket);
         //limelight initialization
-        limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        telemetry.setMsTransmissionInterval(11);
-        limelight.pipelineSwitch(0);
-        limelight.start();
+//        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+//        telemetry.setMsTransmissionInterval(11);
+//        limelight.pipelineSwitch(0);
+//        limelight.start();
 
         /*  ===============
             Button Bindings
@@ -73,19 +72,19 @@ public class MainTele extends BaseOpMode {
         // Basket pose
         gw1.bindButton(GamepadButton.LEFT_TRIGGER, toggleBasket);
         gw1.bindRunnable(GamepadButton.LEFT_TRIGGER, () -> {
-            lowerBasketPose.cancel();
+//            lowerBasketPose.cancel();
             intakePose.cancel();
             neutralAction.cancel();
             telemetry.addLine("Cancelling intake and neutral");
         });
         // Lower Basket Pose
-        gw1.bindButton(GamepadButton.LEFT_BUMPER, lowerBasketPose);
+        /*gw1.bindButton(GamepadButton.LEFT_BUMPER, lowerBasketPose);
         gw1.bindRunnable(GamepadButton.LEFT_BUMPER, () -> {
             basketPose.cancel();
             intakePose.cancel();
             neutralAction.cancel();
             telemetry.addLine("Cancelling basket and intake");
-        });
+        });*/
         // Intake pose
         gw1.bindButton(GamepadButton.RIGHT_TRIGGER, intakePose);
         gw1.bindRunnable(GamepadButton.RIGHT_TRIGGER, () -> {
@@ -93,7 +92,7 @@ public class MainTele extends BaseOpMode {
                 return;
             }
             basketPose.cancel();
-            lowerBasketPose.cancel();
+//            lowerBasketPose.cancel();
             neutralAction.cancel();
             telemetry.addLine("Cancelling basket and neutral");
         });
@@ -101,7 +100,7 @@ public class MainTele extends BaseOpMode {
         gw1.bindButton(GamepadButton.B, cancel);
         gw1.bindRunnable(GamepadButton.B, () -> {
             basketPose.cancel();
-            lowerBasketPose.cancel();
+//            lowerBasketPose.cancel();
             intakePose.cancel();
             telemetry.addLine("Cancelling basket and intake");
         });
@@ -211,6 +210,11 @@ public class MainTele extends BaseOpMode {
 
 
                     }*\
+
+            */
+
+
+
 
         /*  ================
             Both Controllers

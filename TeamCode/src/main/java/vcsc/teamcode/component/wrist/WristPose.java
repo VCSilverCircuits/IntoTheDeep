@@ -6,7 +6,8 @@ import com.acmerobotics.dashboard.config.Config;
 public enum WristPose {
     DEFAULT(WristPivotPose.FORWARD, WristRotPose.STRAIGHT),
     STOW(WristPivotPose.FORWARD, WristRotPose.IN),
-    BASKET(WristPivotPose.REVERSE, WristRotPose.BASKET);
+    BASKET(WristPivotPose.REVERSE, WristRotPose.BASKET),
+    SPECIMEN(WristPivotPose.REVERSE, WristRotPose.SPECIMEN);
 
     final double pivot;
     final double rot;
