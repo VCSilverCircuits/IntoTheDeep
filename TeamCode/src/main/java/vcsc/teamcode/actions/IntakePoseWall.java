@@ -55,7 +55,7 @@ public class IntakePoseWall implements Action {
         }
 
         seq.then(rotateDown)
-                .then(slidesOut)
+//                .then(slidesOut)
                 .then(preGrabPose);
         seq.start();
     }

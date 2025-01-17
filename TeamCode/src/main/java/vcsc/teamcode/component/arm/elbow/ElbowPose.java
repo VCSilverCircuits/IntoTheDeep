@@ -8,8 +8,8 @@ public enum ElbowPose {
     PREGRAB(0.6),
     PREGRAB_AUTO(0.5),
     STRAIGHT(0.7),
-    SPECIMEN(0.8),
-    WALL(0.9),
+    SPECIMEN(0.57),
+    WALL(0.52),
     HANG(0.9),
     GRAB(0.75),
     STOW(0);
