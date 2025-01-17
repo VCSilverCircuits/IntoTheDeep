@@ -4,7 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public enum WristRotPose {
-    IN(0.95),
+    STOW(0.95),
     OUT(0),
     PREGRAB(0.8),
     GRABBING(0.75),

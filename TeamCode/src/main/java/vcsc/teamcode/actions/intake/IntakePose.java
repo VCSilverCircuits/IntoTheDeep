@@ -1,4 +1,4 @@
-package vcsc.teamcode.actions;
+package vcsc.teamcode.actions.intake;
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
@@ -7,11 +7,13 @@ import vcsc.core.abstracts.action.Action;
 import vcsc.core.abstracts.action.ActionBuilder;
 import vcsc.teamcode.component.arm.ext.ArmExtPose;
 import vcsc.teamcode.component.arm.ext.ArmExtState;
+import vcsc.teamcode.component.arm.ext.actions.SetExtPose;
 import vcsc.teamcode.component.arm.rot.ArmRotPose;
 import vcsc.teamcode.component.arm.rot.ArmRotState;
+import vcsc.teamcode.component.arm.rot.actions.SetRotPose;
 import vcsc.teamcode.component.claw.ClawState;
 
-public class IntakePoseWall implements Action {
+public class IntakePose implements Action {
     ArmRotState rotState;
     ArmExtState extState;
     ClawState clawState;
@@ -21,10 +23,10 @@ public class IntakePoseWall implements Action {
     SetExtPose slidesOut;
     SetRotPose rotateDown;
 
-    PreGrabPoseWall preGrabPose;
+    PreGrabPose preGrabPose;
 
 
-    public IntakePoseWall(ArmRotState rotState, ArmExtState extState, ClawState clawState, PreGrabPoseWall preGrabPose) {
+    public IntakePose(ArmRotState rotState, ArmExtState extState, ClawState clawState, PreGrabPose preGrabPose) {
         this.rotState = rotState;
         this.extState = extState;
         this.clawState = clawState;
@@ -41,6 +43,7 @@ public class IntakePoseWall implements Action {
         seq = new ActionBuilder();
 
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
+        telemetry.addLine("Going to basket pose.");
     }
 
     @Override
@@ -55,7 +58,7 @@ public class IntakePoseWall implements Action {
         }
 
         seq.then(rotateDown)
-//                .then(slidesOut)
+                .then(slidesOut)
                 .then(preGrabPose);
         seq.start();
     }

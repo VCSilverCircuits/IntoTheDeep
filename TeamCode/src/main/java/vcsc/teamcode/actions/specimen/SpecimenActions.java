@@ -1,19 +1,17 @@
-package vcsc.teamcode.actions;
+package vcsc.teamcode.actions.specimen;
 
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import vcsc.core.abstracts.action.Action;
-import vcsc.teamcode.actions.basket.BasketPose;
-import vcsc.teamcode.actions.basket.DownFromBasket;
 import vcsc.teamcode.component.arm.ext.ArmExtPose;
 import vcsc.teamcode.component.arm.ext.ArmExtState;
 import vcsc.teamcode.component.claw.ClawState;
 
-public class ToggleBasket implements Action {
+public class SpecimenActions implements Action {
     ArmExtState armExtState;
-    BasketPose basketPose;
-    DownFromBasket downFromBasket;
+    SpecimenPose specimenPose;
+    ScoreSpecimen scoreSpecimen;
     ClawState clawState;
 
     Action currentAction;
@@ -23,12 +21,12 @@ public class ToggleBasket implements Action {
     boolean started = false;
     double clawDelay = 150;
 
-    public ToggleBasket(ArmExtState armExtState, ClawState clawState, BasketPose basketPose, DownFromBasket downFromBasket) {
+    public SpecimenActions(ArmExtState armExtState, ClawState clawState, SpecimenPose specimenPose, ScoreSpecimen scoreSpecimen) {
         super();
         this.armExtState = armExtState;
         this.clawState = clawState;
-        this.basketPose = basketPose;
-        this.downFromBasket = downFromBasket;
+        this.specimenPose = specimenPose;
+        this.scoreSpecimen = scoreSpecimen;
         clawTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
     }
@@ -37,13 +35,14 @@ public class ToggleBasket implements Action {
     public void start() {
         started = true;
         cancelled = false;
-        if (armExtState.getPose() == ArmExtPose.BASKET) {
-            clawState.open();
-            clawTimer.reset();
+        if (armExtState.getPose() == ArmExtPose.SPECIMEN_PRE_SCORE) {
+            scoreSpecimen.start();
+            specimenPose.cancel();
+            currentAction = scoreSpecimen;
         } else {
-            basketPose.start();
-            downFromBasket.cancel();
-            currentAction = basketPose;
+            specimenPose.start();
+            scoreSpecimen.cancel();
+            currentAction = specimenPose;
         }
     }
 
@@ -51,13 +50,6 @@ public class ToggleBasket implements Action {
     public void loop() {
         if (!started) {
             return;
-        }
-        if (armExtState.getPose() == ArmExtPose.BASKET && !cancelled) {
-            if (clawTimer.time() > clawDelay && currentAction == null) {
-                downFromBasket.start();
-                basketPose.cancel();
-                currentAction = downFromBasket;
-            }
         }
         if (currentAction != null) {
             currentAction.loop();

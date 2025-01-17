@@ -1,16 +1,20 @@
-package vcsc.teamcode.actions;
+package vcsc.teamcode.actions.specimen;
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
 import vcsc.core.GlobalTelemetry;
 import vcsc.core.abstracts.action.Action;
 import vcsc.core.abstracts.action.ActionBuilder;
+import vcsc.teamcode.actions.basket.WristSpecimenPose;
 import vcsc.teamcode.component.arm.elbow.ElbowPose;
 import vcsc.teamcode.component.arm.elbow.ElbowState;
+import vcsc.teamcode.component.arm.elbow.actions.SetElbowPose;
 import vcsc.teamcode.component.arm.ext.ArmExtPose;
 import vcsc.teamcode.component.arm.ext.ArmExtState;
+import vcsc.teamcode.component.arm.ext.actions.SetExtPose;
 import vcsc.teamcode.component.arm.rot.ArmRotPose;
 import vcsc.teamcode.component.arm.rot.ArmRotState;
+import vcsc.teamcode.component.arm.rot.actions.SetRotPose;
 import vcsc.teamcode.component.wrist.WristState;
 
 public class SpecimenPose implements Action {
@@ -31,7 +35,7 @@ public class SpecimenPose implements Action {
         this.elbowState = elbowState;
         this.wristState = wristState;
         slidesIn = new SetExtPose(extState, ArmExtPose.RETRACT);
-        slidesOut = new SetExtPose(extState, ArmExtPose.SPECIMEN);
+        slidesOut = new SetExtPose(extState, ArmExtPose.SPECIMEN_PRE_SCORE);
         rotateUp = new SetRotPose(rotState, ArmRotPose.SPECIMEN);
         wristBasketPose = new WristSpecimenPose(elbowState, wristState);
         elbowOut = new SetElbowPose(elbowState, ElbowPose.STRAIGHT);

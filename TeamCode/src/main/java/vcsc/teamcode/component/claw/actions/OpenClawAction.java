@@ -18,19 +18,17 @@ public class OpenClawAction extends ClawAction {
 
     @Override
     public void loop() {
-        if (!clawState.actuatorsInAction()) {
-            // move to the next thing
-        }
+
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 
     @Override
     public void cancel() {
-        
+
     }
 
 }

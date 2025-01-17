@@ -1,4 +1,4 @@
-package vcsc.teamcode.actions;
+package vcsc.teamcode.actions.intake;
 
 import vcsc.core.abstracts.action.Action;
 import vcsc.teamcode.component.arm.elbow.ElbowPose;

@@ -1,4 +1,5 @@
-package vcsc.teamcode.actions;
+package vcsc.teamcode.actions.basket;
+
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
@@ -18,7 +19,7 @@ import vcsc.teamcode.component.wrist.WristPose;
 import vcsc.teamcode.component.wrist.WristState;
 import vcsc.teamcode.component.wrist.actions.SetWristPose;
 
-public class NeutralAction implements Action {
+public class DownFromBasket implements Action {
     ArmRotState rotState;
     ArmExtState extState;
 
@@ -29,9 +30,10 @@ public class NeutralAction implements Action {
     SetExtPose slidesIn;
     SetRotPose rotateDown;
     SetElbowPose elbowDown;
+    SetElbowPose elbowUp;
     SetWristPose wristDown;
 
-    public NeutralAction(ArmRotState rotState, ArmExtState extState, ElbowState elbowState, WristState wristState) {
+    public DownFromBasket(ArmRotState rotState, ArmExtState extState, ElbowState elbowState, WristState wristState) {
         this.rotState = rotState;
         this.extState = extState;
 
@@ -41,25 +43,26 @@ public class NeutralAction implements Action {
         slidesIn = new SetExtPose(extState, ArmExtPose.RETRACT);
         rotateDown = new SetRotPose(rotState, ArmRotPose.INTAKE);
         elbowDown = new SetElbowPose(elbowState, ElbowPose.STOW);
+        elbowUp = new SetElbowPose(elbowState, ElbowPose.STRAIGHT);
         wristDown = new SetWristPose(wristState, WristPose.STOW);
 
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
         telemetry.addLine("Going to neutral pose");
 
-        /*seq = new ActionBuilder(slidesIn)
+        seq = new ActionBuilder(slidesIn)
                 .then(rotateDown)
                 .then(elbowDown)
-                .then(wristDown);*/
-        seq = new ActionBuilder();
+                .then(wristDown);
     }
 
     @Override
     public void start() {
-        seq = new ActionBuilder(elbowDown)
+
+        seq = new ActionBuilder(elbowUp)
                 .then(wristDown)
                 .then(slidesIn)
-                .then(rotateDown)
-                .then(elbowDown);
+                .then(elbowDown)
+                .then(rotateDown);
         seq.start();
     }
 

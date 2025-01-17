@@ -8,13 +8,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import vcsc.teamcode.actions.BasketPose;
-import vcsc.teamcode.actions.DownFromBasket;
-import vcsc.teamcode.actions.Grab;
-import vcsc.teamcode.actions.LowerBasketPose;
 import vcsc.teamcode.actions.NeutralAction;
-import vcsc.teamcode.actions.PreGrabPose;
 import vcsc.teamcode.actions.ToggleBasket;
+import vcsc.teamcode.actions.basket.BasketPose;
+import vcsc.teamcode.actions.basket.DownFromBasket;
+import vcsc.teamcode.actions.intake.Grab;
+import vcsc.teamcode.actions.intake.PreGrabPose;
 import vcsc.teamcode.opmodes.base.BaseLinearOpMode;
 
 @Disabled

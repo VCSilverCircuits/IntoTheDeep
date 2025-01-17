@@ -7,10 +7,10 @@ import static vcsc.teamcode.DebugConstants.armRot;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import vcsc.teamcode.actions.Grab;
-import vcsc.teamcode.actions.IntakePoseWall;
-import vcsc.teamcode.actions.PreGrabPoseWall;
-import vcsc.teamcode.actions.SpecimenPose;
+import vcsc.teamcode.actions.intake.Grab;
+import vcsc.teamcode.actions.intake.IntakePoseWall;
+import vcsc.teamcode.actions.intake.PreGrabPoseWall;
+import vcsc.teamcode.actions.specimen.SpecimenPose;
 import vcsc.teamcode.component.wrist.WristPivotPose;
 import vcsc.teamcode.opmodes.base.BaseOpMode;
 

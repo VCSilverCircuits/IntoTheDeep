@@ -1,50 +1,49 @@
-package vcsc.teamcode.actions;
+package vcsc.teamcode.component.arm.ext.actions;
 
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
 import vcsc.core.GlobalTelemetry;
 import vcsc.core.abstracts.action.Action;
-import vcsc.teamcode.component.arm.rot.ArmRotPose;
-import vcsc.teamcode.component.arm.rot.ArmRotState;
+import vcsc.teamcode.component.arm.ext.ArmExtPose;
+import vcsc.teamcode.component.arm.ext.ArmExtState;
 
-public class SetRotPose implements Action {
-    ArmRotState rotState;
-    ArmRotPose targetPose;
+public class SetExtPose implements Action {
+    ArmExtState extState;
+    ArmExtPose targetPose;
 
     boolean finished = true;
 
     DIRECTION direction;
 
-    public SetRotPose(ArmRotState rotState, ArmRotPose targetPose) {
+    public SetExtPose(ArmExtState extState, ArmExtPose targetPose) {
         super();
-        this.rotState = rotState;
+        this.extState = extState;
         this.targetPose = targetPose;
-        finished = true;
     }
 
     @Override
     public void start() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
-        telemetry.addData("Rotating slides to position", targetPose.getAngle());
-        if (targetPose.getAngle() > rotState.getRealPosition()) {
+        telemetry.addData("Extending slides to position", targetPose.getLength());
+        if (targetPose.getLength() > extState.getRealPosition()) {
             direction = DIRECTION.UP;
         } else {
             direction = DIRECTION.DOWN;
         }
         finished = false;
-        rotState.setPose(targetPose);
+        extState.setPose(targetPose);
     }
 
     @Override
     public void loop() {
-        if (direction == DIRECTION.UP && rotState.getRealPosition() > targetPose.getAngle()) {
+        if (direction == DIRECTION.UP && extState.getRealPosition() >= targetPose.getLength()) {
             finished = true;
         }
-        if (direction == DIRECTION.DOWN && rotState.getRealPosition() < targetPose.getAngle()) {
+        if (direction == DIRECTION.DOWN && extState.getRealPosition() <= targetPose.getLength()) {
             finished = true;
         }
-        if (!rotState.actuatorsInAction()) {
+        if (!extState.actuatorsInAction()) {
             finished = true;
         }
     }

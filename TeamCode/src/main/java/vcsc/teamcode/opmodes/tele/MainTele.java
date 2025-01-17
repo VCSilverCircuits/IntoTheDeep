@@ -6,20 +6,28 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import vcsc.core.util.GamepadButton;
 import vcsc.teamcode.DebugConstants;
-import vcsc.teamcode.actions.BasketPose;
 import vcsc.teamcode.actions.Cancel;
-import vcsc.teamcode.actions.DownFromBasket;
-import vcsc.teamcode.actions.Grab;
-import vcsc.teamcode.actions.IntakePose;
-import vcsc.teamcode.actions.LowerBasketPose;
 import vcsc.teamcode.actions.NeutralAction;
-import vcsc.teamcode.actions.PreGrabPose;
-import vcsc.teamcode.actions.SetRotPose;
+import vcsc.teamcode.actions.NeutralActionSpecimen;
 import vcsc.teamcode.actions.ToggleBasket;
-import vcsc.teamcode.actions.ToggleHooks;
+import vcsc.teamcode.actions.basket.BasketPose;
+import vcsc.teamcode.actions.basket.DownFromBasket;
+import vcsc.teamcode.actions.basket.LowerBasketPose;
 import vcsc.teamcode.actions.hang.PreHang;
+import vcsc.teamcode.actions.intake.Grab;
+import vcsc.teamcode.actions.intake.GrabWall;
+import vcsc.teamcode.actions.intake.IntakePose;
+import vcsc.teamcode.actions.intake.IntakePoseWall;
+import vcsc.teamcode.actions.intake.PreGrabPose;
+import vcsc.teamcode.actions.intake.PreGrabPoseWall;
+import vcsc.teamcode.actions.intake.WallActions;
+import vcsc.teamcode.actions.specimen.ScoreSpecimen;
+import vcsc.teamcode.actions.specimen.SpecimenActions;
+import vcsc.teamcode.actions.specimen.SpecimenPose;
 import vcsc.teamcode.component.arm.ext.ArmExtPose;
 import vcsc.teamcode.component.arm.rot.ArmRotPose;
+import vcsc.teamcode.component.arm.rot.actions.SetRotPose;
+import vcsc.teamcode.component.hooks.actions.ToggleHooks;
 import vcsc.teamcode.component.wrist.WristPivotPose;
 import vcsc.teamcode.opmodes.base.BaseOpMode;
 
@@ -30,12 +38,19 @@ public class MainTele extends BaseOpMode {
     LowerBasketPose lowerBasketPose;
     IntakePose intakePose;
     NeutralAction neutralAction;
+    NeutralActionSpecimen neutralActionSpecimen;
     ToggleHooks toggleHooks;
     PreHang preHangPose;
     SetRotPose hangPose;
     PreGrabPose preGrabPose;
     ToggleBasket toggleBasket;
     DownFromBasket downFromBasket;
+    SpecimenPose specimenPose;
+    ScoreSpecimen scoreSpecimen;
+    SpecimenActions specimenActions;
+    IntakePoseWall intakePoseWall;
+    GrabWall grabWall;
+    WallActions wallActions;
     Cancel cancel;
     Grab grab;
     double wristRotateSpeed = 0.03;
@@ -58,6 +73,13 @@ public class MainTele extends BaseOpMode {
         hangPose = new SetRotPose(rotState, ArmRotPose.HANG);
         grab = new Grab(elbowState, wristState, clawState);
         cancel = new Cancel(rotState, neutralAction, downFromBasket);
+        specimenPose = new SpecimenPose(rotState, extState, elbowState, wristState);
+        neutralActionSpecimen = new NeutralActionSpecimen(rotState, extState, elbowState, wristState);
+        scoreSpecimen = new ScoreSpecimen(extState, clawState, neutralActionSpecimen);
+        specimenActions = new SpecimenActions(extState, clawState, specimenPose, scoreSpecimen);
+        intakePoseWall = new IntakePoseWall(rotState, extState, clawState, new PreGrabPoseWall(elbowState, wristState, clawState));
+        grabWall = new GrabWall(elbowState, wristState, clawState);
+        wallActions = new WallActions(elbowState, clawState, intakePoseWall, grabWall);
         //limelight initialization
 //        limelight = hardwareMap.get(Limelight3A.class, "limelight");
 //        telemetry.setMsTransmissionInterval(11);
@@ -102,8 +124,53 @@ public class MainTele extends BaseOpMode {
             basketPose.cancel();
 //            lowerBasketPose.cancel();
             intakePose.cancel();
+            specimenActions.cancel();
+            wallActions.cancel();
             telemetry.addLine("Cancelling basket and intake");
         });
+
+        // Specimens
+        /*gw1.bindButton(GamepadButton.LEFT_BUMPER, intakePoseWall);
+        gw1.bindRunnable(GamepadButton.LEFT_BUMPER, () -> {
+            basketPose.cancel();
+            intakePose.cancel();
+            neutralAction.cancel();
+            grabWall.cancel();
+            telemetry.addLine("Cancelling basket and intake");
+        });
+        gw1.bindButton(GamepadButton.RIGHT_BUMPER, grabWall);
+        gw1.bindRunnable(GamepadButton.RIGHT_BUMPER, () -> {
+            basketPose.cancel();
+            intakePose.cancel();
+            neutralAction.cancel();
+            intakePoseWall.cancel();
+            telemetry.addLine("Cancelling basket and intake");
+        });*/
+
+        gw1.bindButton(GamepadButton.RIGHT_BUMPER, wallActions);
+        gw1.bindRunnable(GamepadButton.RIGHT_BUMPER, () -> {
+            basketPose.cancel();
+            intakePose.cancel();
+            specimenActions.cancel();
+            grabWall.cancel();
+            telemetry.addLine("Cancelling basket and intake");
+        });
+
+        gw1.bindButton(GamepadButton.LEFT_BUMPER, specimenActions);
+        gw1.bindRunnable(GamepadButton.LEFT_BUMPER, () -> {
+            basketPose.cancel();
+            intakePose.cancel();
+            wallActions.cancel();
+            telemetry.addLine("Cancelling basket and intake");
+        });
+        /*gw1.bindButton(GamepadButton.RIGHT_BUMPER, scoreSpecimen);
+        gw1.bindRunnable(GamepadButton.RIGHT_BUMPER, () -> {
+            basketPose.cancel();
+            intakePose.cancel();
+            neutralActionSpecimen.cancel();
+            specimenPose.cancel();
+            telemetry.addLine("Cancelling basket and intake");
+        });*/
 
 
         // ----- Controller 2 -----

@@ -1,4 +1,4 @@
-package vcsc.teamcode.actions;
+package vcsc.teamcode.actions.intake;
 
 
 import com.qualcomm.robotcore.util.ElapsedTime;
