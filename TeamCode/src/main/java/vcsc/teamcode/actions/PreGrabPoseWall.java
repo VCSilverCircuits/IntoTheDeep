@@ -1,10 +1,12 @@
 package vcsc.teamcode.actions;
 
+import static vcsc.teamcode.DebugConstants.WALL_ELBOW;
+import static vcsc.teamcode.DebugConstants.WALL_WRIST_ROT;
+
 import vcsc.core.abstracts.action.Action;
-import vcsc.teamcode.component.arm.elbow.ElbowPose;
 import vcsc.teamcode.component.arm.elbow.ElbowState;
 import vcsc.teamcode.component.claw.ClawState;
-import vcsc.teamcode.component.wrist.WristRotPose;
+import vcsc.teamcode.component.wrist.WristPivotPose;
 import vcsc.teamcode.component.wrist.WristState;
 
 public class PreGrabPoseWall implements Action {
@@ -22,8 +24,10 @@ public class PreGrabPoseWall implements Action {
     @Override
     public void start() {
         clawState.open();
-        elbowState.setPose(ElbowPose.WALL);
-        wristState.setRotPose(WristRotPose.WALL);
+        elbowState.setPosition(WALL_ELBOW);
+//        wristState.setRotPose(WristRotPose.WALL);
+        wristState.setPivotPose(WristPivotPose.FORWARD);
+        wristState.setRot(WALL_WRIST_ROT);
     }
 
     @Override
