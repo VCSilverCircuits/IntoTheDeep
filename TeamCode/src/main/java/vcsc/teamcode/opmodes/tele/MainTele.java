@@ -2,6 +2,8 @@ package vcsc.teamcode.opmodes.tele;
 
 import com.pedropathing.localization.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.acmerobotics.roadrunner.PoseVelocity2d;
+import com.acmerobotics.roadrunner.Vector2d;
 
 import vcsc.core.util.GamepadButton;
 import vcsc.teamcode.DebugConstants;
