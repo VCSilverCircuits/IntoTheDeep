@@ -16,7 +16,7 @@ public class GrabWall implements Action {
     ClawState clawState;
     ElapsedTime timer;
     boolean finished = true;
-    int stage = 0;
+    int stage = -1;
 
     public GrabWall(ElbowState elbowState, WristState wristState, ClawState clawState) {
         super();
@@ -36,6 +36,9 @@ public class GrabWall implements Action {
 
     @Override
     public void loop() {
+        if (isFinished()) {
+            return;
+        }
         if (stage == 0 && timer.time() > 50) {
             elbowState.setPose(ElbowPose.STOW);
             stage = 1;
@@ -44,6 +47,7 @@ public class GrabWall implements Action {
         if (stage == 1 && timer.time() > 200) {
             wristState.setRotPose(WristRotPose.STOW);
             finished = true;
+            stage = -1;
         }
     }
 
@@ -54,6 +58,7 @@ public class GrabWall implements Action {
 
     @Override
     public void cancel() {
-
+        stage = -1;
+        finished = true;
     }
 }

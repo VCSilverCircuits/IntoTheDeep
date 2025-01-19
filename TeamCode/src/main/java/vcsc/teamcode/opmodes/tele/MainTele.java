@@ -1,7 +1,6 @@
 package vcsc.teamcode.opmodes.tele;
 
-import com.acmerobotics.roadrunner.PoseVelocity2d;
-import com.acmerobotics.roadrunner.Vector2d;
+import com.pedropathing.localization.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import vcsc.core.util.GamepadButton;
@@ -24,6 +23,7 @@ import vcsc.teamcode.actions.intake.WallActions;
 import vcsc.teamcode.actions.specimen.ScoreSpecimen;
 import vcsc.teamcode.actions.specimen.SpecimenActions;
 import vcsc.teamcode.actions.specimen.SpecimenPose;
+import vcsc.teamcode.component.arm.elbow.ElbowPose;
 import vcsc.teamcode.component.arm.ext.ArmExtPose;
 import vcsc.teamcode.component.arm.rot.ArmRotPose;
 import vcsc.teamcode.component.arm.rot.actions.SetRotPose;
@@ -152,7 +152,6 @@ public class MainTele extends BaseOpMode {
             basketPose.cancel();
             intakePose.cancel();
             specimenActions.cancel();
-            grabWall.cancel();
             telemetry.addLine("Cancelling basket and intake");
         });
 
@@ -180,6 +179,8 @@ public class MainTele extends BaseOpMode {
         gw2.bindButton(GamepadButton.RIGHT_BUMPER, preGrabPose);
         gw2.bindButton(GamepadButton.LEFT_BUMPER, grab);
         gw2.bindButton(GamepadButton.RIGHT_TRIGGER, neutralAction);
+
+        follower.setStartingPose(new Pose(0, 0, 0));
     }
 
     @Override
@@ -210,7 +211,7 @@ public class MainTele extends BaseOpMode {
         // ----- Drivetrain -----
 
         // Slow down driving if the slides are extended
-        if (extState.getTargetPosition() > 10) {
+        if (extState.getTargetPosition() > 10 && extState.getPose() != ArmExtPose.SPECIMEN_PRE_SCORE || elbowState.getPose() == ElbowPose.WALL) {
             driveSpeed = 0.25;
         } else {
             driveSpeed = 1;
@@ -218,13 +219,14 @@ public class MainTele extends BaseOpMode {
 
 //        elbowState.setPosition(DebugConstants.elbow);
 
-        drive.setDrivePowers(new PoseVelocity2d(
+        follower.setTeleOpMovementVectors(-gamepad1.left_stick_y * driveSpeed, -gamepad1.left_stick_x * driveSpeed, -gamepad1.right_stick_x * driveSpeed);
+        /*drive.setDrivePowers(new PoseVelocity2d(
                 new Vector2d(
                         -gamepad1.left_stick_y * driveSpeed,
                         -gamepad1.left_stick_x * driveSpeed
                 ),
                 -gamepad1.right_stick_x * driveSpeed
-        ));
+        ));*/
 
         /*  ============
             Controller 2
@@ -258,29 +260,6 @@ public class MainTele extends BaseOpMode {
             }
 
             telem.addData("Current", extState.getCurrent());
-
-
-            /* --- Alternative Solution */
-            // If slides exceed the max or min and you're trying to go further then prevent adjusting length
-            /*if (!(-gamepad2.left_stick_y > 0 && extState.getRealPosition() >= ArmExtPose.INTAKE.getLength())
-                    && !(-gamepad2.left_stick_y < 0 && extState.getRealPosition() <= 0)) {
-                extState.setPower(-gamepad2.left_stick_y);*/
-            // TODO: fix opmodeIsActive so it can pull results
-           /* while (opModeIsActive()) {
-                LLResult result = limelight.getLatestResult();
-                if (result != null) {
-                    if (result.isValid()) {
-                        Pose3D botpose = result.getBotpose();
-                        telemetry.addData("tx", result.getTx());
-                        telemetry.addData("ty", result.getTy());
-                        telemetry.addData("Botpose", botpose.toString());
-
-
-                    }*\
-
-            */
-
-
 
 
         /*  ================

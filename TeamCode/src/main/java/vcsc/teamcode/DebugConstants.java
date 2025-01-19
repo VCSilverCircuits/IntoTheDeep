@@ -20,4 +20,5 @@ public class DebugConstants {
     public static double extSpeed = 10000;
     public static double WALL_ELBOW = 0.75;
     public static double WALL_WRIST_ROT = 0.08;
+    public static boolean CLAW_OPEN = true;
 }

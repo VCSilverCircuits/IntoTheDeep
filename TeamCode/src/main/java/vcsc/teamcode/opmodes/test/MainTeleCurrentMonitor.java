@@ -1,7 +1,5 @@
 package vcsc.teamcode.opmodes.test;
 
-import com.acmerobotics.roadrunner.PoseVelocity2d;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -237,13 +235,13 @@ public class MainTeleCurrentMonitor extends BaseOpMode {
 
 //        elbowState.setPosition(DebugConstants.elbow);
 
-        drive.setDrivePowers(new PoseVelocity2d(
+        /*drive.setDrivePowers(new PoseVelocity2d(
                 new Vector2d(
                         -gamepad1.left_stick_y * driveSpeed,
                         -gamepad1.left_stick_x * driveSpeed
                 ),
                 -gamepad1.right_stick_x * driveSpeed
-        ));
+        ));*/
 
         /*  ============
             Controller 2

@@ -1,5 +1,6 @@
 package vcsc.teamcode.opmodes.test;
 
+import static vcsc.teamcode.DebugConstants.CLAW_OPEN;
 import static vcsc.teamcode.DebugConstants.WALL_ELBOW;
 import static vcsc.teamcode.DebugConstants.WALL_WRIST_ROT;
 import static vcsc.teamcode.DebugConstants.armExt;
@@ -41,5 +42,10 @@ public class SpecimenTest extends BaseOpMode {
         wristState.setPivotPose(WristPivotPose.FORWARD);
         elbowState.setPosition(WALL_ELBOW);
         extState.setExtensionLength(armExt);
+        if (CLAW_OPEN) {
+            clawState.open();
+        } else {
+            clawState.close();
+        }
     }
 }

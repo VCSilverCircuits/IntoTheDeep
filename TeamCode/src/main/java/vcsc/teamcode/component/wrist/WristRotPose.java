@@ -9,7 +9,7 @@ public enum WristRotPose {
     PREGRAB(0.8),
     GRABBING(0.75),
     SPECIMEN(0.2),
-    WALL(0.58),
+    WALL(0.55), // 0.58
     STRAIGHT(0.5),
     BASKET(0.2); //0.3
 

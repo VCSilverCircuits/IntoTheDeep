@@ -26,7 +26,7 @@ public class SpecimenPose implements Action {
     SetExtPose slidesIn;
     SetExtPose slidesOut;
     SetRotPose rotateUp;
-    WristSpecimenPose wristBasketPose;
+    WristSpecimenPose wristSpecimenPose;
     SetElbowPose elbowOut;
 
     public SpecimenPose(ArmRotState rotState, ArmExtState extState, ElbowState elbowState, WristState wristState) {
@@ -37,7 +37,7 @@ public class SpecimenPose implements Action {
         slidesIn = new SetExtPose(extState, ArmExtPose.RETRACT);
         slidesOut = new SetExtPose(extState, ArmExtPose.SPECIMEN_PRE_SCORE);
         rotateUp = new SetRotPose(rotState, ArmRotPose.SPECIMEN);
-        wristBasketPose = new WristSpecimenPose(elbowState, wristState);
+        wristSpecimenPose = new WristSpecimenPose(elbowState, wristState);
         elbowOut = new SetElbowPose(elbowState, ElbowPose.STRAIGHT);
 
         /*seq = new ActionBuilder(slidesIn)
@@ -54,14 +54,16 @@ public class SpecimenPose implements Action {
 
         seq = new ActionBuilder();
 
-        if (rotState.getPose() != ArmRotPose.BASKET) {
-            seq.then(slidesIn)
-                    .then(elbowOut);
+        if (rotState.getPose() != ArmRotPose.SPECIMEN) {
+            seq.then(slidesIn);
         }
 
-        seq.then(rotateUp)
+        /*seq.then(rotateUp)
                 .then(slidesOut)
-                .then(wristBasketPose);
+                .then(wristBasketPose);*/
+        seq.then(wristSpecimenPose)
+                .then(rotateUp)
+                .then(slidesOut);
         seq.start();
     }
 
