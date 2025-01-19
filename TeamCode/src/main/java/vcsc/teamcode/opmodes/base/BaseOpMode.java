@@ -116,7 +116,8 @@ public class BaseOpMode extends OpMode {
         gw1.loop(gamepad1);
         gw2.loop(gamepad2);
 
-        // follower.update();
+        drive.updatePoseEstimate();
+       // follower.update();
         telem.update();
     }
 }
