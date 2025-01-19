@@ -34,7 +34,7 @@ public class BaseOpMode extends OpMode {
     protected ClawState clawState;
     protected ElbowState elbowState;
     protected WristState wristState;
-    //protected MecanumDrive drive;
+    protected MecanumDrive drive;
     protected Follower follower;
 
     protected GamepadWrapper gw1, gw2;
@@ -83,7 +83,7 @@ public class BaseOpMode extends OpMode {
         );
         hookState.registerActuator(hookActuator);
 
-        // drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
+        drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
 
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap);
@@ -100,7 +100,7 @@ public class BaseOpMode extends OpMode {
         wristState.setPose(WristPose.STOW);
         elbowState.setPose(ElbowPose.STOW);
         clawState.close();
-        follower.startTeleopDrive();
+        // follower.startTeleopDrive();
     }
 
     @Override
@@ -116,7 +116,7 @@ public class BaseOpMode extends OpMode {
         gw1.loop(gamepad1);
         gw2.loop(gamepad2);
 
-        follower.update();
+        // follower.update();
         telem.update();
     }
 }
