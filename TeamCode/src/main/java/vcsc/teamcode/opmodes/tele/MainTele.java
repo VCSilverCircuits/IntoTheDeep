@@ -219,14 +219,14 @@ public class MainTele extends BaseOpMode {
 
 //        elbowState.setPosition(DebugConstants.elbow);
 
-        follower.setTeleOpMovementVectors(-gamepad1.left_stick_y * driveSpeed, -gamepad1.left_stick_x * driveSpeed, -gamepad1.right_stick_x * driveSpeed);
-        /*drive.setDrivePowers(new PoseVelocity2d(
+        //follower.setTeleOpMovementVectors(-gamepad1.left_stick_y * driveSpeed, -gamepad1.left_stick_x * driveSpeed, -gamepad1.right_stick_x * driveSpeed);
+        drive.setDrivePowers(new PoseVelocity2d(
                 new Vector2d(
                         -gamepad1.left_stick_y * driveSpeed,
                         -gamepad1.left_stick_x * driveSpeed
                 ),
                 -gamepad1.right_stick_x * driveSpeed
-        ));*/
+        ));
 
         /*  ============
             Controller 2
