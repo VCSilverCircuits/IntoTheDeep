@@ -98,7 +98,7 @@ public class MainTele extends BaseOpMode {
         gw1.bindRunnable(GamepadButton.LEFT_TRIGGER, () -> {
 //            lowerBasketPose.cancel();
             intakePose.cancel();
-            neutralAction.cancel();
+            cancel.cancel();
             specimenActions.cancel();
             wallActions.cancel();
             telemetry.addLine("Cancelling intake and neutral");
@@ -119,7 +119,7 @@ public class MainTele extends BaseOpMode {
             }
             basketPose.cancel();
 //            lowerBasketPose.cancel();
-            neutralAction.cancel();
+            cancel.cancel();
             specimenActions.cancel();
             wallActions.cancel();
             telemetry.addLine("Cancelling basket and neutral");
@@ -157,6 +157,7 @@ public class MainTele extends BaseOpMode {
         gw1.bindRunnable(GamepadButton.RIGHT_BUMPER, () -> {
             basketPose.cancel();
             intakePose.cancel();
+            cancel.cancel();
             specimenActions.cancel();
             telemetry.addLine("Cancelling basket and intake");
         });
@@ -165,6 +166,7 @@ public class MainTele extends BaseOpMode {
         gw1.bindRunnable(GamepadButton.LEFT_BUMPER, () -> {
             basketPose.cancel();
             intakePose.cancel();
+            cancel.cancel();
             wallActions.cancel();
             telemetry.addLine("Cancelling basket and intake");
         });
