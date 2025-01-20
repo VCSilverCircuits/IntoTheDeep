@@ -1,9 +1,9 @@
 package vcsc.teamcode.opmodes.tele;
 
-import com.pedropathing.localization.Pose;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.pedropathing.localization.Pose;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import vcsc.core.util.GamepadButton;
 import vcsc.teamcode.DebugConstants;
@@ -99,6 +99,8 @@ public class MainTele extends BaseOpMode {
 //            lowerBasketPose.cancel();
             intakePose.cancel();
             neutralAction.cancel();
+            specimenActions.cancel();
+            wallActions.cancel();
             telemetry.addLine("Cancelling intake and neutral");
         });
         // Lower Basket Pose
@@ -118,6 +120,8 @@ public class MainTele extends BaseOpMode {
             basketPose.cancel();
 //            lowerBasketPose.cancel();
             neutralAction.cancel();
+            specimenActions.cancel();
+            wallActions.cancel();
             telemetry.addLine("Cancelling basket and neutral");
         });
         // Cancel button
