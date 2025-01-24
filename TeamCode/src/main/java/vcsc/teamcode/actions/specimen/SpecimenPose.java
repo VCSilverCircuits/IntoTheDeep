@@ -74,6 +74,8 @@ public class SpecimenPose implements Action {
 
     @Override
     public void loop() {
+        MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
+        telemetry.addLine("[ACTION] Specimen pose is running.");
         seq.loop();
 //        MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
 //        telemetry.addData("Stage", currentStage);

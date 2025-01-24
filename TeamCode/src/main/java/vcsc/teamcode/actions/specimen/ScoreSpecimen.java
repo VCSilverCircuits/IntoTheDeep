@@ -1,5 +1,8 @@
 package vcsc.teamcode.actions.specimen;
 
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+
+import vcsc.core.GlobalTelemetry;
 import vcsc.core.abstracts.action.Action;
 import vcsc.core.abstracts.action.ActionBuilder;
 import vcsc.teamcode.actions.NeutralActionSpecimen;
@@ -35,6 +38,8 @@ public class ScoreSpecimen implements Action {
 
     @Override
     public void loop() {
+        MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
+        telemetry.addLine("[ACTION] Score specimen is running.");
         seq.loop();
     }
 

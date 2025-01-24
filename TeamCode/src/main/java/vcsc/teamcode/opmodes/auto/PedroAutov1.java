@@ -31,7 +31,7 @@ public class PedroAutov1 extends BaseOpModeAuto {
 
     private final Pose pickup1Pose = new Pose(24, 122, Math.toRadians(0)); // First sample pickup
     private final Pose pickup2Pose = new Pose(24, 131, Math.toRadians(0)); // Second sample pickup
-    private final Pose pickup3Pose = new Pose(25, 131, Math.toRadians(22)); // Third sample pickup
+    private final Pose pickup3Pose = new Pose(26, 132, Math.toRadians(29)); // Third sample pickup
 
     private final Pose parkPose = new Pose(60, 98, Math.toRadians(270));    // Parking position
     private final Pose parkControlPose = new Pose(65, 125, Math.toRadians(90)); // Control point for curved path

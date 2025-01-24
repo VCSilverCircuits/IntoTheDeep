@@ -51,7 +51,7 @@ public class SpecimenPathing extends BaseOpModeAuto {
                                 new Point(34.067, 65.971, Point.CARTESIAN),
                                 new Point(20.670, 13.952, Point.CARTESIAN),
                                 new Point(70.622, 55.292, Point.CARTESIAN),
-                                new Point(50, 23.254, Point.CARTESIAN)
+                                new Point(45, 23.254, Point.CARTESIAN)
                         )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(180)).build();
@@ -151,9 +151,9 @@ public class SpecimenPathing extends BaseOpModeAuto {
                         // Line 9
                         new BezierCurve(
                                 new Point(39.000, 74.000, Point.CARTESIAN),
-                                new Point(22.737, 54.431, Point.CARTESIAN),
-                                new Point(50.813, 29.282, Point.CARTESIAN),
-                                new Point(18.000, 31.694, Point.CARTESIAN)
+                                new Point(27.38755980861244, 53.91387559808612, Point.CARTESIAN),
+                                new Point(11.885167464114833, 67.17703349282297, Point.CARTESIAN),
+                                new Point(12.91866028708134, 30.488038277511965, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(245)).setPathEndVelocityConstraint(1).build();
@@ -196,14 +196,15 @@ public class SpecimenPathing extends BaseOpModeAuto {
             follower.followPath(scorePreload, true);
             pathTimer.reset();
             pathSegment = 2;
-        } else if (pathSegment == 2 && specimenPose.isFinished() && follower.getPose().getX() >= 39.0 && pathTimer.time() > 0 && !follower.isBusy()) {
+        } else if (pathSegment == 2 && follower.getPose().getX() >= 39.0 && !follower.isBusy()) { // specimenPose.isFinished() &&
             scoreSpecimen.start();
             pathSegment = 3;
             pathTimer.reset();
-        } else if (pathSegment == 3 && (scoreSpecimen.isFinished() || pathTimer.time() > 800)) {
+        } else if (pathSegment == 3 && (scoreSpecimen.isFinished() || pathTimer.time() > 800)) { // 800
+            clawState.open();
             follower.followPath(prep1, true);
             pathSegment = 4;
-        } else if (pathSegment == 4 && follower.getPose().getX() > 49) {
+        } else if (pathSegment == 4 && follower.getPose().getX() > 44) {
             follower.followPath(push1, true);
             pathSegment = 5;
         } else if (pathSegment == 5 && follower.getPose().getX() < 16) {
@@ -233,6 +234,7 @@ public class SpecimenPathing extends BaseOpModeAuto {
             pathSegment = 12;
             pathTimer.reset();
         } else if (pathSegment == 12 && (scoreSpecimen.isFinished() || pathTimer.time() > 800)) {
+            clawState.open();
             follower.followPath(grab2);
             intakePoseWall.start();
             pathSegment = 13;
@@ -248,6 +250,7 @@ public class SpecimenPathing extends BaseOpModeAuto {
             pathSegment = 16;
             pathTimer.reset();
         } else if (pathSegment == 16 && (scoreSpecimen.isFinished() || pathTimer.time() > 800)) {
+            clawState.open();
             follower.followPath(grab3);
             intakePoseWall.start();
             pathSegment = 17;
@@ -263,13 +266,14 @@ public class SpecimenPathing extends BaseOpModeAuto {
             pathSegment = 20;
             pathTimer.reset();
         } else if (pathSegment == 20 && (scoreSpecimen.isFinished() || pathTimer.time() > 800)) {
+            clawState.open();
             follower.followPath(grab4);
             intakePoseWall.start();
             pathSegment = 21;
         }
 
         follower.update();
-        if (pathSegment > 1)
+        if (pathSegment > 99) // 1
             follower.telemetryDebug(telem);
 
         specimenPose.loop();

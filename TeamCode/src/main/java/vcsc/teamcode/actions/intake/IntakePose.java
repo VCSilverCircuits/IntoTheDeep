@@ -58,8 +58,8 @@ public class IntakePose implements Action {
         }
 
         seq.then(rotateDown)
-                .then(slidesOut)
-                .then(preGrabPose);
+                .then(preGrabPose)
+                .then(slidesOut);
         seq.start();
     }
 
