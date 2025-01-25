@@ -190,6 +190,10 @@ public class MainTele extends BaseOpMode {
         gw2.bindButton(GamepadButton.RIGHT_BUMPER, preGrabPose);
         gw2.bindButton(GamepadButton.LEFT_BUMPER, grab);
         gw2.bindButton(GamepadButton.RIGHT_TRIGGER, neutralAction);
+        gw2.bindRunnable(GamepadButton.DPAD_UP, () -> {
+            extState.reset();
+            rotState.reset();
+        });
 
         follower.setStartingPose(new Pose(0, 0, 0));
     }
