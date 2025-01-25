@@ -203,7 +203,9 @@ public class SpecimenPathing extends BaseOpModeAuto {
         } else if (pathSegment == 3 && (scoreSpecimen.isFinished() || pathTimer.time() > 800)) { // 800
             scoreSpecimen.cancel();
             clawState.open();
-            neutralActionSpecimen.start();
+            if (!scoreSpecimen.isFinished()) {
+                neutralActionSpecimen.start();
+            }
             follower.followPath(prep1, true);
             pathSegment = 4;
         } else if (pathSegment == 4 && follower.getPose().getX() > 44) {
@@ -238,7 +240,9 @@ public class SpecimenPathing extends BaseOpModeAuto {
         } else if (pathSegment == 12 && (scoreSpecimen.isFinished() || pathTimer.time() > 800)) {
             scoreSpecimen.cancel();
             clawState.open();
-            neutralActionSpecimen.start();
+            if (!scoreSpecimen.isFinished()) {
+                neutralActionSpecimen.start();
+            }
             follower.followPath(grab2);
             intakePoseWall.start();
             pathSegment = 13;
@@ -256,7 +260,9 @@ public class SpecimenPathing extends BaseOpModeAuto {
         } else if (pathSegment == 16 && (scoreSpecimen.isFinished() || pathTimer.time() > 800)) {
             scoreSpecimen.cancel();
             clawState.open();
-            neutralActionSpecimen.start();
+            if (!scoreSpecimen.isFinished()) {
+                neutralActionSpecimen.start();
+            }
             follower.followPath(grab3);
             intakePoseWall.start();
             pathSegment = 17;
@@ -274,7 +280,9 @@ public class SpecimenPathing extends BaseOpModeAuto {
         } else if (pathSegment == 20 && (scoreSpecimen.isFinished() || pathTimer.time() > 800)) {
             scoreSpecimen.cancel();
             clawState.open();
-            neutralActionSpecimen.start();
+            if (!scoreSpecimen.isFinished()) {
+                neutralActionSpecimen.start();
+            }
             follower.followPath(grab4);
             intakePoseWall.start();
             pathSegment = 21;
