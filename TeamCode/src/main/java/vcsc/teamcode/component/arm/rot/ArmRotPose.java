@@ -2,9 +2,9 @@ package vcsc.teamcode.component.arm.rot;
 
 public enum ArmRotPose {
     INTAKE(0),
-    HANG(0),
+    HANG(-10),
     BASKET(92),
-    SPECIMEN(80),
+    SPECIMEN(85),
     PRE_HANG(100);
 
     final double angle;

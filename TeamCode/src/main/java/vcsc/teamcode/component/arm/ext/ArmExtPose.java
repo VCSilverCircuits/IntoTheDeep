@@ -5,8 +5,8 @@ public enum ArmExtPose {
     BASKET(70), //61
     MAX_ROTATE(5),
     INTAKE(30),
-    SPECIMEN_PRE_SCORE(0),
-    SPECIMEN_SCORE(25),
+    SPECIMEN_PRE_SCORE(9),
+    SPECIMEN_SCORE(29),
     HANG(18);
 
 

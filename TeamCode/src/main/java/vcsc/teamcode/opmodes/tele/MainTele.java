@@ -57,6 +57,7 @@ public class MainTele extends BaseOpMode {
     Grab grab;
     double wristRotateSpeed = 0.03;
     double driveSpeed = 1;
+    double turnSpeed = 1;
 //    private Limelight3A limelight;
 
     @Override
@@ -221,8 +222,14 @@ public class MainTele extends BaseOpMode {
         // Slow down driving if the slides are extended
         if (extState.getTargetPosition() > 10 && extState.getPose() != ArmExtPose.SPECIMEN_PRE_SCORE || elbowState.getPose() == ElbowPose.WALL) {
             driveSpeed = 0.25;
+            turnSpeed = 0.25;
         } else {
             driveSpeed = 1;
+            turnSpeed = 1;
+        }
+
+        if (extState.getPose() == ArmExtPose.SPECIMEN_PRE_SCORE) {
+            turnSpeed = 0.25;
         }
 
 //        elbowState.setPosition(DebugConstants.elbow);
@@ -233,7 +240,7 @@ public class MainTele extends BaseOpMode {
                         -gamepad1.left_stick_y * driveSpeed,
                         -gamepad1.left_stick_x * driveSpeed
                 ),
-                -gamepad1.right_stick_x * driveSpeed
+                -gamepad1.right_stick_x * turnSpeed
         ));
 
         /*  ============

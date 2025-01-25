@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import vcsc.core.abstracts.action.Action;
 import vcsc.teamcode.component.arm.elbow.ElbowPose;
 import vcsc.teamcode.component.arm.elbow.ElbowState;
+import vcsc.teamcode.component.claw.ClawPose;
 import vcsc.teamcode.component.claw.ClawState;
 import vcsc.teamcode.component.wrist.WristRotPose;
 import vcsc.teamcode.component.wrist.WristState;
@@ -30,7 +31,7 @@ public class GrabWall implements Action {
     public void start() {
         finished = false;
         stage = 0;
-        clawState.close();
+        clawState.setPose(ClawPose.MOSTLY_CLOSED);
         timer.reset();
     }
 

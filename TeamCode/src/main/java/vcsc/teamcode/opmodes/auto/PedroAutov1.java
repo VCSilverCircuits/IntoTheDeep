@@ -24,7 +24,7 @@ import vcsc.teamcode.actions.intake.PreGrabPoseAuto;
 import vcsc.teamcode.component.arm.elbow.ElbowPose;
 import vcsc.teamcode.opmodes.base.BaseOpModeAuto;
 
-@Autonomous(name = "Auto", group = "Testing")
+@Autonomous(name = "SAMPLE (Basket) Auto", group = "Testing")
 public class PedroAutov1 extends BaseOpModeAuto {
     private final Pose startPose = new Pose(6, 113, Math.toRadians(270));  // Starting position
     private final Pose scorePose = new Pose(14, 129, Math.toRadians(315)); // Scoring position

@@ -31,4 +31,8 @@ public class ClawState extends State {
     public void close() {
         setPosition(ClawPose.CLOSED);
     }
+
+    public void setPose(ClawPose pose) {
+        setPosition(pose.getPos());
+    }
 }
