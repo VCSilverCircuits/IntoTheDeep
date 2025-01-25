@@ -1,6 +1,7 @@
 package vcsc.teamcode.actions.basket;
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import vcsc.core.GlobalTelemetry;
 import vcsc.core.abstracts.action.Action;
@@ -28,6 +29,9 @@ public class BasketPose implements Action {
     WristBasketPose wristBasketPose;
     SetElbowPose elbowOut;
 
+    boolean wristPoseChanged = false;
+    ElapsedTime overrideTimer;
+
     public BasketPose(ArmRotState rotState, ArmExtState extState, ElbowState elbowState, WristState wristState) {
         this.rotState = rotState;
         this.extState = extState;
@@ -38,6 +42,7 @@ public class BasketPose implements Action {
         rotateUp = new SetRotPose(rotState, ArmRotPose.BASKET);
         wristBasketPose = new WristBasketPose(elbowState, wristState);
         elbowOut = new SetElbowPose(elbowState, ElbowPose.STRAIGHT);
+        overrideTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
         /*seq = new ActionBuilder(slidesIn)
                 .then(rotateUp)
@@ -50,6 +55,7 @@ public class BasketPose implements Action {
     public void start() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
         telemetry.addLine("Going to basket pose.");
+        wristPoseChanged = false;
 
         seq = new ActionBuilder();
 
@@ -59,8 +65,9 @@ public class BasketPose implements Action {
         }
 
         seq.then(rotateUp)
-                .then(slidesOut)
-                .then(wristBasketPose);
+                .then(slidesOut);
+        //.then(wristBasketPose);
+        overrideTimer.reset();
         seq.start();
     }
 
@@ -72,6 +79,10 @@ public class BasketPose implements Action {
     @Override
     public void loop() {
         seq.loop();
+        if (!wristPoseChanged && (extState.getExtensionLength() > ArmExtPose.BASKET.getLength() - 15 || overrideTimer.time() > 3000)) {
+            wristBasketPose.start();
+            wristPoseChanged = true;
+        }
 //        MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
 //        telemetry.addData("Stage", currentStage);
 //        telemetry.addData("RotInAction", rotState.actuatorsInAction());
