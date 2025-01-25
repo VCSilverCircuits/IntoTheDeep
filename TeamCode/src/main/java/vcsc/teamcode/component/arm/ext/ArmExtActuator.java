@@ -52,6 +52,12 @@ public class ArmExtActuator extends PoweredPIDFActuator {
         motors.setPower(power);
     }
 
+    public void reset() {
+        motors.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motors.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        controller.setSetPoint(0);
+    }
+
     @Override
     protected void loopPID() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();

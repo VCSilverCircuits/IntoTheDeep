@@ -28,6 +28,9 @@ public class PoweredPIDFState extends State {
         notifyActuators();
     }
 
+    public void reset() {
+        primaryActuator.reset();
+    }
 
     public double getRealPosition() {
         return primaryActuator.getPosition();

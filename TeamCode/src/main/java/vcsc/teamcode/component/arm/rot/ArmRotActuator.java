@@ -39,6 +39,12 @@ public class ArmRotActuator extends PoweredPIDFActuator {
         return -motors.getCurrentPosition();
     }
 
+    public void reset() {
+        motors.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motors.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        controller.setSetPoint(0);
+    }
+
     @Override
     public void loop() {
         super.loop();
