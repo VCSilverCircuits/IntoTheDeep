@@ -35,6 +35,8 @@ import vcsc.teamcode.opmodes.base.BaseOpMode;
 
 @TeleOp(name = "Tele", group = "Main")
 public class MainTele extends BaseOpMode {
+    final double DEFAULT_TURN_SPEED = 0.75;
+    final double DEFAULT_DRIVE_SPEED = 1;
     boolean rumbledEndGame = false, rumbledMatchEnd = false;
     BasketPose basketPose;
     LowerBasketPose lowerBasketPose;
@@ -56,8 +58,8 @@ public class MainTele extends BaseOpMode {
     Cancel cancel;
     Grab grab;
     double wristRotateSpeed = 0.03;
-    double driveSpeed = 1;
-    double turnSpeed = 1;
+    double driveSpeed = DEFAULT_DRIVE_SPEED;
+    double turnSpeed = DEFAULT_TURN_SPEED;
 //    private Limelight3A limelight;
 
     @Override
@@ -224,8 +226,8 @@ public class MainTele extends BaseOpMode {
             driveSpeed = 0.25;
             turnSpeed = 0.25;
         } else {
-            driveSpeed = 1;
-            turnSpeed = 1;
+            driveSpeed = DEFAULT_DRIVE_SPEED;
+            turnSpeed = DEFAULT_TURN_SPEED;
         }
 
         if (extState.getPose() == ArmExtPose.SPECIMEN_PRE_SCORE) {
