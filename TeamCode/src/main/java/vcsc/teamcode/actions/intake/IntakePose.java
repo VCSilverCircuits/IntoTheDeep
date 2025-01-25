@@ -1,4 +1,4 @@
-package vcsc.teamcode.actions;
+package vcsc.teamcode.actions.intake;
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
@@ -7,8 +7,10 @@ import vcsc.core.abstracts.action.Action;
 import vcsc.core.abstracts.action.ActionBuilder;
 import vcsc.teamcode.component.arm.ext.ArmExtPose;
 import vcsc.teamcode.component.arm.ext.ArmExtState;
+import vcsc.teamcode.component.arm.ext.actions.SetExtPose;
 import vcsc.teamcode.component.arm.rot.ArmRotPose;
 import vcsc.teamcode.component.arm.rot.ArmRotState;
+import vcsc.teamcode.component.arm.rot.actions.SetRotPose;
 import vcsc.teamcode.component.claw.ClawState;
 
 public class IntakePose implements Action {
@@ -56,8 +58,8 @@ public class IntakePose implements Action {
         }
 
         seq.then(rotateDown)
-                .then(slidesOut)
-                .then(preGrabPose);
+                .then(preGrabPose)
+                .then(slidesOut);
         seq.start();
     }
 

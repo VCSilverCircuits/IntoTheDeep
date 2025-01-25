@@ -1,4 +1,4 @@
-package vcsc.teamcode.actions;
+package vcsc.teamcode.actions.basket;
 
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -10,11 +10,11 @@ import vcsc.teamcode.component.arm.elbow.ElbowState;
 import vcsc.teamcode.component.wrist.WristPose;
 import vcsc.teamcode.component.wrist.WristState;
 
-public class WristBasketPose implements Action {
+public class WristSpecimenPose implements Action {
     ElbowState elbowState;
     WristState wristState;
 
-    public WristBasketPose(ElbowState elbowState, WristState wristState) {
+    public WristSpecimenPose(ElbowState elbowState, WristState wristState) {
         super();
         this.elbowState = elbowState;
         this.wristState = wristState;
@@ -24,8 +24,8 @@ public class WristBasketPose implements Action {
     public void start() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
         telemetry.addLine("Moving elbow and wrist to basket pose.");
-        elbowState.setPose(ElbowPose.BASKET);
-        wristState.setPose(WristPose.BASKET);
+        elbowState.setPose(ElbowPose.SPECIMEN);
+        wristState.setPose(WristPose.SPECIMEN);
     }
 
     @Override

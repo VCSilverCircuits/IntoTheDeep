@@ -14,13 +14,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
-import vcsc.teamcode.actions.BasketPose;
-import vcsc.teamcode.actions.DownFromBasket;
-import vcsc.teamcode.actions.Grab;
-import vcsc.teamcode.actions.IntakePose;
 import vcsc.teamcode.actions.NeutralAction;
-import vcsc.teamcode.actions.PreGrabPoseAuto;
 import vcsc.teamcode.actions.ToggleBasket;
+import vcsc.teamcode.actions.basket.BasketPose;
+import vcsc.teamcode.actions.basket.DownFromBasket;
+import vcsc.teamcode.actions.intake.Grab;
+import vcsc.teamcode.actions.intake.IntakePose;
+import vcsc.teamcode.actions.intake.PreGrabPoseAuto;
 import vcsc.teamcode.component.arm.elbow.ElbowPose;
 import vcsc.teamcode.opmodes.base.BaseOpModeAuto;
 

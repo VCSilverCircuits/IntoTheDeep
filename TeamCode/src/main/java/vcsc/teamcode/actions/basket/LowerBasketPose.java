@@ -1,4 +1,4 @@
-package vcsc.teamcode.actions;
+package vcsc.teamcode.actions.basket;
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
@@ -7,8 +7,10 @@ import vcsc.core.abstracts.action.Action;
 import vcsc.core.abstracts.action.ActionBuilder;
 import vcsc.teamcode.component.arm.elbow.ElbowPose;
 import vcsc.teamcode.component.arm.elbow.ElbowState;
+import vcsc.teamcode.component.arm.elbow.actions.SetElbowPose;
 import vcsc.teamcode.component.arm.rot.ArmRotPose;
 import vcsc.teamcode.component.arm.rot.ArmRotState;
+import vcsc.teamcode.component.arm.rot.actions.SetRotPose;
 import vcsc.teamcode.component.wrist.WristState;
 
 public class LowerBasketPose implements Action {
@@ -19,7 +21,8 @@ public class LowerBasketPose implements Action {
     SetRotPose rotateUp;
     WristBasketPose wristBasketPose;
     SetElbowPose elbowOut;
-    public LowerBasketPose(ArmRotState rotState, ElbowState elbowState, WristState wristState){
+
+    public LowerBasketPose(ArmRotState rotState, ElbowState elbowState, WristState wristState) {
         this.rotState = rotState;
         this.elbowState = elbowState;
         this.wristState = wristState;
@@ -28,6 +31,7 @@ public class LowerBasketPose implements Action {
         elbowOut = new SetElbowPose(elbowState, ElbowPose.STRAIGHT);
         seq = new ActionBuilder();
     }
+
     @Override
     public void start() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
@@ -42,12 +46,15 @@ public class LowerBasketPose implements Action {
                 .then(wristBasketPose);
         seq.start();
     }
+
     @Override
-    public void cancel() {seq.cancel();}
+    public void cancel() {
+        seq.cancel();
+    }
 
     @Override
     public void loop() {
-    seq.loop();
+        seq.loop();
     }
 
     @Override

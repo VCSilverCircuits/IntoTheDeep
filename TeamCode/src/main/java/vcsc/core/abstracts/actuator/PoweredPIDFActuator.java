@@ -73,6 +73,8 @@ public abstract class PoweredPIDFActuator extends Actuator {
         loopTime.reset();
     }
 
+    abstract public void reset();
+
     @Override
     public void updateState(State newState) {
         PoweredPIDFState poweredPIDFState = (PoweredPIDFState) newState;

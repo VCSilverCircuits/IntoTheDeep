@@ -1,4 +1,4 @@
-package vcsc.teamcode.actions;
+package vcsc.teamcode.component.arm.rot.actions;
 
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;

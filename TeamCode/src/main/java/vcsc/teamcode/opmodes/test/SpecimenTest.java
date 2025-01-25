@@ -1,5 +1,6 @@
 package vcsc.teamcode.opmodes.test;
 
+import static vcsc.teamcode.DebugConstants.CLAW_OPEN;
 import static vcsc.teamcode.DebugConstants.WALL_ELBOW;
 import static vcsc.teamcode.DebugConstants.WALL_WRIST_ROT;
 import static vcsc.teamcode.DebugConstants.armExt;
@@ -7,10 +8,10 @@ import static vcsc.teamcode.DebugConstants.armRot;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import vcsc.teamcode.actions.Grab;
-import vcsc.teamcode.actions.IntakePoseWall;
-import vcsc.teamcode.actions.PreGrabPoseWall;
-import vcsc.teamcode.actions.SpecimenPose;
+import vcsc.teamcode.actions.intake.Grab;
+import vcsc.teamcode.actions.intake.IntakePoseWall;
+import vcsc.teamcode.actions.intake.PreGrabPoseWall;
+import vcsc.teamcode.actions.specimen.SpecimenPose;
 import vcsc.teamcode.component.wrist.WristPivotPose;
 import vcsc.teamcode.opmodes.base.BaseOpMode;
 
@@ -41,5 +42,10 @@ public class SpecimenTest extends BaseOpMode {
         wristState.setPivotPose(WristPivotPose.FORWARD);
         elbowState.setPosition(WALL_ELBOW);
         extState.setExtensionLength(armExt);
+        if (CLAW_OPEN) {
+            clawState.open();
+        } else {
+            clawState.close();
+        }
     }
 }

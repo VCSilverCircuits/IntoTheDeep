@@ -1,16 +1,20 @@
-package vcsc.teamcode.actions;
+package vcsc.teamcode.actions.specimen;
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
 import vcsc.core.GlobalTelemetry;
 import vcsc.core.abstracts.action.Action;
 import vcsc.core.abstracts.action.ActionBuilder;
+import vcsc.teamcode.actions.basket.WristSpecimenPose;
 import vcsc.teamcode.component.arm.elbow.ElbowPose;
 import vcsc.teamcode.component.arm.elbow.ElbowState;
+import vcsc.teamcode.component.arm.elbow.actions.SetElbowPose;
 import vcsc.teamcode.component.arm.ext.ArmExtPose;
 import vcsc.teamcode.component.arm.ext.ArmExtState;
+import vcsc.teamcode.component.arm.ext.actions.SetExtPose;
 import vcsc.teamcode.component.arm.rot.ArmRotPose;
 import vcsc.teamcode.component.arm.rot.ArmRotState;
+import vcsc.teamcode.component.arm.rot.actions.SetRotPose;
 import vcsc.teamcode.component.wrist.WristState;
 
 public class SpecimenPose implements Action {
@@ -22,7 +26,7 @@ public class SpecimenPose implements Action {
     SetExtPose slidesIn;
     SetExtPose slidesOut;
     SetRotPose rotateUp;
-    WristSpecimenPose wristBasketPose;
+    WristSpecimenPose wristSpecimenPose;
     SetElbowPose elbowOut;
 
     public SpecimenPose(ArmRotState rotState, ArmExtState extState, ElbowState elbowState, WristState wristState) {
@@ -31,9 +35,9 @@ public class SpecimenPose implements Action {
         this.elbowState = elbowState;
         this.wristState = wristState;
         slidesIn = new SetExtPose(extState, ArmExtPose.RETRACT);
-        slidesOut = new SetExtPose(extState, ArmExtPose.SPECIMEN);
+        slidesOut = new SetExtPose(extState, ArmExtPose.SPECIMEN_PRE_SCORE);
         rotateUp = new SetRotPose(rotState, ArmRotPose.SPECIMEN);
-        wristBasketPose = new WristSpecimenPose(elbowState, wristState);
+        wristSpecimenPose = new WristSpecimenPose(elbowState, wristState);
         elbowOut = new SetElbowPose(elbowState, ElbowPose.STRAIGHT);
 
         /*seq = new ActionBuilder(slidesIn)
@@ -50,14 +54,16 @@ public class SpecimenPose implements Action {
 
         seq = new ActionBuilder();
 
-        if (rotState.getPose() != ArmRotPose.BASKET) {
-            seq.then(slidesIn)
-                    .then(elbowOut);
+        if (rotState.getPose() != ArmRotPose.SPECIMEN) {
+            seq.then(slidesIn);
         }
 
-        seq.then(rotateUp)
+        /*seq.then(rotateUp)
                 .then(slidesOut)
-                .then(wristBasketPose);
+                .then(wristBasketPose);*/
+        seq.then(wristSpecimenPose)
+                .then(rotateUp)
+                .then(slidesOut);
         seq.start();
     }
 
@@ -68,6 +74,8 @@ public class SpecimenPose implements Action {
 
     @Override
     public void loop() {
+        MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
+        telemetry.addLine("[ACTION] Specimen pose is running.");
         seq.loop();
 //        MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
 //        telemetry.addData("Stage", currentStage);

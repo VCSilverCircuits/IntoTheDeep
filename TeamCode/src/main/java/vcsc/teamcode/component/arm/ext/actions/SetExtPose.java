@@ -1,4 +1,4 @@
-package vcsc.teamcode.actions;
+package vcsc.teamcode.component.arm.ext.actions;
 
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -37,6 +37,8 @@ public class SetExtPose implements Action {
 
     @Override
     public void loop() {
+        MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
+        telemetry.addLine("[ACTION] SetExtPose is running.");
         if (direction == DIRECTION.UP && extState.getRealPosition() >= targetPose.getLength()) {
             finished = true;
         }

@@ -17,13 +17,14 @@ import vcsc.core.util.DcMotorGroup;
 
 public class ArmExtActuator extends PoweredPIDFActuator {
     // Three 5:1 ultraplanetary gearbox
-    public static final double MOTOR_GEAR_RATIO = 2.89 * 2.89;
+    public static final double MOTOR_GEAR_RATIO = 3.61; //2.89 * 2.89;
     // Gear ratio of driven gears
     public static final double DRIVE_GEAR_RATIO = 60.0 / 56.0;
 
     // 20 mm pulley
     public static final double PULLEY_DIAMETER = 20;
     public static final double CM_PER_TICK = PULLEY_DIAMETER * Math.PI / (10.0 * DRIVE_GEAR_RATIO * MOTOR_GEAR_RATIO * TPR);
+    public static final double MAX_EXTENSION_POWER = 1.0;
     DcMotorGroup motors;
 
     public ArmExtActuator(HardwareMap hardwareMap, PIDFCoefficients coefficients) {
@@ -51,6 +52,12 @@ public class ArmExtActuator extends PoweredPIDFActuator {
         motors.setPower(power);
     }
 
+    public void reset() {
+        motors.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motors.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        controller.setSetPoint(0);
+    }
+
     @Override
     protected void loopPID() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
@@ -60,7 +67,7 @@ public class ArmExtActuator extends PoweredPIDFActuator {
         telemetry.addData("At Position", controller.atSetPoint());
         telemetry.addData("Output Power", outputPower);
         telemetry.addData("Current position", getPosition());
-        motors.setPower(Math.min(Math.abs(outputPower), 0.8) * Math.signum(outputPower));
+        motors.setPower(Math.min(Math.abs(outputPower), MAX_EXTENSION_POWER) * Math.signum(outputPower));
     }
 
     @Override

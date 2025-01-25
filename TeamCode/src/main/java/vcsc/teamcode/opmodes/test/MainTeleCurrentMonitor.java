@@ -1,9 +1,9 @@
-package vcsc.teamcode.opmodes.tele;
+package vcsc.teamcode.opmodes.test;
 
-import com.acmerobotics.roadrunner.PoseVelocity2d;
-import com.acmerobotics.roadrunner.Vector2d;
-import com.pedropathing.localization.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 import vcsc.core.util.GamepadButton;
 import vcsc.teamcode.DebugConstants;
@@ -25,7 +25,6 @@ import vcsc.teamcode.actions.intake.WallActions;
 import vcsc.teamcode.actions.specimen.ScoreSpecimen;
 import vcsc.teamcode.actions.specimen.SpecimenActions;
 import vcsc.teamcode.actions.specimen.SpecimenPose;
-import vcsc.teamcode.component.arm.elbow.ElbowPose;
 import vcsc.teamcode.component.arm.ext.ArmExtPose;
 import vcsc.teamcode.component.arm.rot.ArmRotPose;
 import vcsc.teamcode.component.arm.rot.actions.SetRotPose;
@@ -33,10 +32,8 @@ import vcsc.teamcode.component.hooks.actions.ToggleHooks;
 import vcsc.teamcode.component.wrist.WristPivotPose;
 import vcsc.teamcode.opmodes.base.BaseOpMode;
 
-@TeleOp(name = "Tele", group = "Main")
-public class MainTele extends BaseOpMode {
-    final double DEFAULT_TURN_SPEED = 0.75;
-    final double DEFAULT_DRIVE_SPEED = 1;
+@TeleOp(name = "Current Monitoring Tele", group = "Testing")
+public class MainTeleCurrentMonitor extends BaseOpMode {
     boolean rumbledEndGame = false, rumbledMatchEnd = false;
     BasketPose basketPose;
     LowerBasketPose lowerBasketPose;
@@ -58,8 +55,11 @@ public class MainTele extends BaseOpMode {
     Cancel cancel;
     Grab grab;
     double wristRotateSpeed = 0.03;
-    double driveSpeed = DEFAULT_DRIVE_SPEED;
-    double turnSpeed = DEFAULT_TURN_SPEED;
+    double driveSpeed = 1;
+    DcMotorEx leftFront;
+    DcMotorEx leftBack;
+    DcMotorEx rightBack;
+    DcMotorEx rightFront;
 //    private Limelight3A limelight;
 
     @Override
@@ -85,6 +85,11 @@ public class MainTele extends BaseOpMode {
         intakePoseWall = new IntakePoseWall(rotState, extState, clawState, new PreGrabPoseWall(elbowState, wristState, clawState));
         grabWall = new GrabWall(elbowState, wristState, clawState);
         wallActions = new WallActions(elbowState, clawState, intakePoseWall, grabWall);
+
+        leftFront = hardwareMap.get(DcMotorEx.class, "frontLeft");
+        leftBack = hardwareMap.get(DcMotorEx.class, "backLeft");
+        rightBack = hardwareMap.get(DcMotorEx.class, "backRight");
+        rightFront = hardwareMap.get(DcMotorEx.class, "frontRight");
         //limelight initialization
 //        limelight = hardwareMap.get(Limelight3A.class, "limelight");
 //        telemetry.setMsTransmissionInterval(11);
@@ -101,9 +106,7 @@ public class MainTele extends BaseOpMode {
         gw1.bindRunnable(GamepadButton.LEFT_TRIGGER, () -> {
 //            lowerBasketPose.cancel();
             intakePose.cancel();
-            cancel.cancel();
-            specimenActions.cancel();
-            wallActions.cancel();
+            neutralAction.cancel();
             telemetry.addLine("Cancelling intake and neutral");
         });
         // Lower Basket Pose
@@ -122,9 +125,7 @@ public class MainTele extends BaseOpMode {
             }
             basketPose.cancel();
 //            lowerBasketPose.cancel();
-            cancel.cancel();
-            specimenActions.cancel();
-            wallActions.cancel();
+            neutralAction.cancel();
             telemetry.addLine("Cancelling basket and neutral");
         });
         // Cancel button
@@ -160,8 +161,8 @@ public class MainTele extends BaseOpMode {
         gw1.bindRunnable(GamepadButton.RIGHT_BUMPER, () -> {
             basketPose.cancel();
             intakePose.cancel();
-            cancel.cancel();
             specimenActions.cancel();
+            grabWall.cancel();
             telemetry.addLine("Cancelling basket and intake");
         });
 
@@ -169,7 +170,6 @@ public class MainTele extends BaseOpMode {
         gw1.bindRunnable(GamepadButton.LEFT_BUMPER, () -> {
             basketPose.cancel();
             intakePose.cancel();
-            cancel.cancel();
             wallActions.cancel();
             telemetry.addLine("Cancelling basket and intake");
         });
@@ -190,12 +190,6 @@ public class MainTele extends BaseOpMode {
         gw2.bindButton(GamepadButton.RIGHT_BUMPER, preGrabPose);
         gw2.bindButton(GamepadButton.LEFT_BUMPER, grab);
         gw2.bindButton(GamepadButton.RIGHT_TRIGGER, neutralAction);
-        gw2.bindRunnable(GamepadButton.DPAD_UP, () -> {
-            extState.reset();
-            rotState.reset();
-        });
-
-        follower.setStartingPose(new Pose(0, 0, 0));
     }
 
     @Override
@@ -218,6 +212,13 @@ public class MainTele extends BaseOpMode {
         telem.addData("LeftHook", hookState.getPositionLeft());
         telem.addData("RightHook", hookState.getPositionRight());
 
+        telem.addData("leftFront Current", leftFront.getCurrent(CurrentUnit.AMPS));
+        telem.addData("leftBack Current", leftBack.getCurrent(CurrentUnit.AMPS));
+        telem.addData("rightBack Current", rightBack.getCurrent(CurrentUnit.AMPS));
+        telem.addData("rightFront Current", rightFront.getCurrent(CurrentUnit.AMPS));
+        telem.addData("ext Current", extState.getCurrent());
+        telem.addData("rot Current", rotState.getCurrent());
+
         /*  ============
             Controller 1
             ============ */
@@ -226,28 +227,21 @@ public class MainTele extends BaseOpMode {
         // ----- Drivetrain -----
 
         // Slow down driving if the slides are extended
-        if (extState.getTargetPosition() > 10 && extState.getPose() != ArmExtPose.SPECIMEN_PRE_SCORE || elbowState.getPose() == ElbowPose.WALL) {
+        if (extState.getTargetPosition() > 10) {
             driveSpeed = 0.25;
-            turnSpeed = 0.25;
         } else {
-            driveSpeed = DEFAULT_DRIVE_SPEED;
-            turnSpeed = DEFAULT_TURN_SPEED;
-        }
-
-        if (extState.getPose() == ArmExtPose.SPECIMEN_PRE_SCORE) {
-            turnSpeed = 0.25;
+            driveSpeed = 1;
         }
 
 //        elbowState.setPosition(DebugConstants.elbow);
 
-        //follower.setTeleOpMovementVectors(-gamepad1.left_stick_y * driveSpeed, -gamepad1.left_stick_x * driveSpeed, -gamepad1.right_stick_x * driveSpeed);
-        drive.setDrivePowers(new PoseVelocity2d(
+        /*drive.setDrivePowers(new PoseVelocity2d(
                 new Vector2d(
                         -gamepad1.left_stick_y * driveSpeed,
                         -gamepad1.left_stick_x * driveSpeed
                 ),
-                -gamepad1.right_stick_x * turnSpeed
-        ));
+                -gamepad1.right_stick_x * driveSpeed
+        ));*/
 
         /*  ============
             Controller 2
@@ -281,6 +275,29 @@ public class MainTele extends BaseOpMode {
             }
 
             telem.addData("Current", extState.getCurrent());
+
+
+            /* --- Alternative Solution */
+            // If slides exceed the max or min and you're trying to go further then prevent adjusting length
+            /*if (!(-gamepad2.left_stick_y > 0 && extState.getRealPosition() >= ArmExtPose.INTAKE.getLength())
+                    && !(-gamepad2.left_stick_y < 0 && extState.getRealPosition() <= 0)) {
+                extState.setPower(-gamepad2.left_stick_y);*/
+            // TODO: fix opmodeIsActive so it can pull results
+           /* while (opModeIsActive()) {
+                LLResult result = limelight.getLatestResult();
+                if (result != null) {
+                    if (result.isValid()) {
+                        Pose3D botpose = result.getBotpose();
+                        telemetry.addData("tx", result.getTx());
+                        telemetry.addData("ty", result.getTy());
+                        telemetry.addData("Botpose", botpose.toString());
+
+
+                    }*\
+
+            */
+
+
 
 
         /*  ================

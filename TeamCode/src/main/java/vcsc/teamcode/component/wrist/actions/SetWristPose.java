@@ -1,4 +1,4 @@
-package vcsc.teamcode.actions;
+package vcsc.teamcode.component.wrist.actions;
 
 
 import vcsc.core.abstracts.action.Action;

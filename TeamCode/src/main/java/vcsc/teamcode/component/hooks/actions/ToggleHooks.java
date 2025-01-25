@@ -1,27 +1,29 @@
-package vcsc.teamcode.actions;
+package vcsc.teamcode.component.hooks.actions;
 
 
 import vcsc.core.abstracts.action.Action;
-import vcsc.teamcode.component.hooks.HookPose;
 import vcsc.teamcode.component.hooks.HookState;
 
-public class SetHookPose implements Action {
+public class ToggleHooks implements Action {
     HookState hookState;
-    HookPose targetPose;
 
-    public SetHookPose(HookState hookState, HookPose targetPose) {
+    public ToggleHooks(HookState hookState) {
         super();
         this.hookState = hookState;
-        this.targetPose = targetPose;
     }
 
     @Override
     public void start() {
-        hookState.setPose(targetPose);
+        if (hookState.isHang()) {
+            hookState.open();
+        } else {
+            hookState.hang();
+        }
     }
 
     @Override
     public void loop() {
+
     }
 
     @Override
@@ -31,6 +33,6 @@ public class SetHookPose implements Action {
 
     @Override
     public void cancel() {
-    }
 
+    }
 }

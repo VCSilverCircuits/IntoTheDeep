@@ -2,7 +2,7 @@ package vcsc.teamcode.component.hooks;
 
 public enum HookPose {
     OPEN(1, 0),
-    HANG(0.5, 0.55);
+    HANG(0.5, 0.5);
 
     final double left, right;
 

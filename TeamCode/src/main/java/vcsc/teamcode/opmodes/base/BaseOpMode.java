@@ -1,12 +1,16 @@
 package vcsc.teamcode.opmodes.base;
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.roadrunner.Pose2d;
+import com.pedropathing.follower.Follower;
+import com.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import roadrunner.MecanumDrive;
+import com.acmerobotics.roadrunner.Pose2d;
+
+import pedroPathing.constants.FConstants;
+import pedroPathing.constants.LConstants;
 import vcsc.core.GlobalTelemetry;
 import vcsc.core.util.GamepadWrapper;
 import vcsc.teamcode.DebugConstants;
@@ -33,6 +37,7 @@ public class BaseOpMode extends OpMode {
     protected ElbowState elbowState;
     protected WristState wristState;
     protected MecanumDrive drive;
+    protected Follower follower;
 
     protected GamepadWrapper gw1, gw2;
 
@@ -82,6 +87,9 @@ public class BaseOpMode extends OpMode {
 
         drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
 
+        Constants.setConstants(FConstants.class, LConstants.class);
+        follower = new Follower(hardwareMap);
+
         gw1 = new GamepadWrapper();
         gw2 = new GamepadWrapper();
 
@@ -94,6 +102,7 @@ public class BaseOpMode extends OpMode {
         wristState.setPose(WristPose.STOW);
         elbowState.setPose(ElbowPose.STOW);
         clawState.close();
+        // follower.startTeleopDrive();
     }
 
     @Override
@@ -110,6 +119,7 @@ public class BaseOpMode extends OpMode {
         gw2.loop(gamepad2);
 
         drive.updatePoseEstimate();
+       // follower.update();
         telem.update();
     }
 }
