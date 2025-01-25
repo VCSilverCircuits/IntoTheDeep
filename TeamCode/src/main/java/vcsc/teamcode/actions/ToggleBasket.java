@@ -21,7 +21,7 @@ public class ToggleBasket implements Action {
 
     boolean cancelled = false;
     boolean started = false;
-    double clawDelay = 150;
+    double clawDelay = 500;
 
     public ToggleBasket(ArmExtState armExtState, ClawState clawState, BasketPose basketPose, DownFromBasket downFromBasket) {
         super();
