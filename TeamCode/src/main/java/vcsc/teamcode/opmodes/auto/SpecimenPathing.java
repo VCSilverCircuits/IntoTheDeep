@@ -21,17 +21,23 @@ import vcsc.teamcode.actions.specimen.ScoreSpecimen;
 import vcsc.teamcode.actions.specimen.SpecimenPose;
 import vcsc.teamcode.opmodes.base.BaseOpModeAuto;
 
-@Autonomous(name = "SPECIMEN (Hook) Auto", group = "Testing")
+@Autonomous(name = "SPECIMEN (Hook) Auto", group = "Testing", preselectTeleOp = "Tele")
 public class SpecimenPathing extends BaseOpModeAuto {
-    PathChain testPath;
-    Follower follower;
-    int pathSegment = 0;
+    // X position for specimen scoring location
+    final double SCORE_X = 38.0;
+    // Buffer before starting to score
+    final double SCORE_X_BUFFER = 1;
+    final double SCORE_DELAY = 800; // Delay in milliseconds after scoring before driving
+    final double GRAB_DELAY = 80; // Delay in milliseconds after grabbing off wall before driving
+    Follower follower; // Pedropath follower
+    int pathSegment = 0; // Current path segment
     SpecimenPose specimenPose;
     NeutralActionSpecimen neutralActionSpecimen;
     ScoreSpecimen scoreSpecimen;
     IntakePoseWall intakePoseWall;
     GrabWall grabWall;
     ElapsedTime pathTimer;
+    ElapsedTime overallTimer;
     private Path scorePreload;
     private PathChain prep1, push1, prep2, push2, prep3, push3, score2, grab2, score3, grab3, score4, grab4;
 
@@ -40,7 +46,7 @@ public class SpecimenPathing extends BaseOpModeAuto {
                 // Line 1
                 new BezierLine(
                         new Point(9.301, 65.971, Point.CARTESIAN),
-                        new Point(39.0, 65, Point.CARTESIAN)
+                        new Point(SCORE_X, 65, Point.CARTESIAN)
                 )
         );
         scorePreload.setPathEndVelocityConstraint(0.5);
@@ -48,7 +54,7 @@ public class SpecimenPathing extends BaseOpModeAuto {
         prep1 = follower.pathBuilder().addPath(
                         // Line 2
                         new BezierCurve(
-                                new Point(34.067, 65.971, Point.CARTESIAN),
+                                new Point(SCORE_X, 65.971, Point.CARTESIAN),
                                 new Point(20.670, 13.952, Point.CARTESIAN),
                                 new Point(70.622, 55.292, Point.CARTESIAN),
                                 new Point(45, 23.254, Point.CARTESIAN)
@@ -105,14 +111,14 @@ public class SpecimenPathing extends BaseOpModeAuto {
                         new BezierCurve(
                                 new Point(18.000, 9.000, Point.CARTESIAN),
                                 new Point(20.842, 67.866, Point.CARTESIAN),
-                                new Point(39.0, 68, Point.CARTESIAN)
+                                new Point(SCORE_X, 68, Point.CARTESIAN)
                         )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(180)).setPathEndVelocityConstraint(1).build();
         grab2 = follower.pathBuilder().addPath(
                         // Line 9
                         new BezierCurve(
-                                new Point(39.000, 68.000, Point.CARTESIAN),
+                                new Point(SCORE_X, 68.000, Point.CARTESIAN),
                                 new Point(7.923, 67.694, Point.CARTESIAN),
                                 new Point(60.115, 27.560, Point.CARTESIAN),
                                 new Point(18.000, 31.694, Point.CARTESIAN)
@@ -124,14 +130,14 @@ public class SpecimenPathing extends BaseOpModeAuto {
                         new BezierCurve(
                                 new Point(18.000, 31.694, Point.CARTESIAN),
                                 new Point(20.842, 67.866, Point.CARTESIAN),
-                                new Point(39.0, 71, Point.CARTESIAN)
+                                new Point(SCORE_X, 71, Point.CARTESIAN)
                         )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(180)).setPathEndVelocityConstraint(1).build();
         grab3 = follower.pathBuilder().addPath(
                         // Line 9
                         new BezierCurve(
-                                new Point(39.000, 71.000, Point.CARTESIAN),
+                                new Point(SCORE_X, 71.000, Point.CARTESIAN),
                                 new Point(22.737, 54.431, Point.CARTESIAN),
                                 new Point(50.813, 29.282, Point.CARTESIAN),
                                 new Point(18.000, 31.694, Point.CARTESIAN)
@@ -143,14 +149,14 @@ public class SpecimenPathing extends BaseOpModeAuto {
                         new BezierCurve(
                                 new Point(18.000, 31.694, Point.CARTESIAN),
                                 new Point(20.842, 67.866, Point.CARTESIAN),
-                                new Point(39.0, 74, Point.CARTESIAN)
+                                new Point(SCORE_X, 74, Point.CARTESIAN)
                         )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(180)).setPathEndVelocityConstraint(1).build();
         grab4 = follower.pathBuilder().addPath(
                         // Line 9
                         new BezierCurve(
-                                new Point(39.000, 74.000, Point.CARTESIAN),
+                                new Point(SCORE_X, 74.000, Point.CARTESIAN),
                                 new Point(27.38755980861244, 53.91387559808612, Point.CARTESIAN),
                                 new Point(11.885167464114833, 67.17703349282297, Point.CARTESIAN),
                                 new Point(12.91866028708134, 30.488038277511965, Point.CARTESIAN)
@@ -170,6 +176,7 @@ public class SpecimenPathing extends BaseOpModeAuto {
         intakePoseWall = new IntakePoseWall(rotState, extState, clawState, new PreGrabPoseWall(elbowState, wristState, clawState));
         grabWall = new GrabWall(elbowState, wristState, clawState);
         pathTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+        overallTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap);
@@ -181,6 +188,7 @@ public class SpecimenPathing extends BaseOpModeAuto {
     public void start() {
         super.start();
         pathSegment = 0;
+        overallTimer.reset();
 
     }
 
@@ -188,19 +196,24 @@ public class SpecimenPathing extends BaseOpModeAuto {
     public void loop() {
         super.loop();
 
-        if (pathSegment == 0) {
+        // ===== Score Pre-load =====
+        if (pathSegment == 0) { // Raise slides
             specimenPose.start();
             pathSegment = 1;
             pathTimer.reset();
-        } else if (pathSegment == 1 && pathTimer.time() > 0) {
+        } else if (pathSegment == 1 && pathTimer.time() > 0) { // Drive to bar
             follower.followPath(scorePreload, true);
             pathTimer.reset();
             pathSegment = 2;
-        } else if (pathSegment == 2 && follower.getPose().getX() >= 38.8 && !follower.isBusy()) { // specimenPose.isFinished() &&
+        } else if (pathSegment == 2 && follower.getPose().getX() >= (SCORE_X - SCORE_X_BUFFER) && !follower.isBusy()) { // Score specimen
+            specimenPose.cancel();
             scoreSpecimen.start();
             pathSegment = 3;
             pathTimer.reset();
-        } else if (pathSegment == 3 && (scoreSpecimen.isFinished() || pathTimer.time() > 800)) { // 800
+        }
+
+        // ===== Pushing Samples =====
+        else if (pathSegment == 3 && (scoreSpecimen.isFinished() || pathTimer.time() > SCORE_DELAY)) { // Prep 1
             scoreSpecimen.cancel();
             clawState.open();
             if (!scoreSpecimen.isFinished()) {
@@ -208,36 +221,43 @@ public class SpecimenPathing extends BaseOpModeAuto {
             }
             follower.followPath(prep1, true);
             pathSegment = 4;
-        } else if (pathSegment == 4 && follower.getPose().getX() > 44) {
+        } else if (pathSegment == 4 && follower.getPose().getX() > 44) { // Push 1
             follower.followPath(push1, true);
             pathSegment = 5;
-        } else if (pathSegment == 5 && follower.getPose().getX() < 16) {
+        } else if (pathSegment == 5 && follower.getPose().getX() < 16) { // Prep 2
             follower.followPath(prep2, true);
             pathSegment = 6;
-        } else if (pathSegment == 6 && follower.getPose().getX() > 52) {
+        } else if (pathSegment == 6 && follower.getPose().getX() > 52) { // Push 2
             follower.followPath(push2, true);
             pathSegment = 7;
-        } else if (pathSegment == 7 && follower.getPose().getX() < 16) {
+        } else if (pathSegment == 7 && follower.getPose().getX() < 16) { // Prep 3
             follower.followPath(prep3, true);
             intakePoseWall.start();
             pathSegment = 8;
-        } else if (pathSegment == 8 && follower.getPose().getX() > 52) {
+        } else if (pathSegment == 8 && follower.getPose().getX() > 52) { // Push 3
             follower.followPath(push3, true);
             intakePoseWall.start();
             pathSegment = 9;
-        } else if (pathSegment == 9 && !follower.isBusy()) {
+        }
+
+        // ===== Score 2 =====
+        else if (pathSegment == 9 && !follower.isBusy()) { // Grab wall
             grabWall.start();
             pathSegment = 10;
             pathTimer.reset();
-        } else if (pathSegment == 10 && grabWall.isFinished() && pathTimer.time() > 80) {
+        } else if (pathSegment == 10 && grabWall.isFinished() && pathTimer.time() > GRAB_DELAY) { // Drive to bar
             follower.followPath(score2);
             specimenPose.start();
             pathSegment = 11;
-        } else if (pathSegment == 11 && follower.getPose().getX() >= 38.8 && !follower.isBusy()) {
+        } else if (pathSegment == 11 && follower.getPose().getX() >= (SCORE_X - SCORE_X_BUFFER) && !follower.isBusy()) { // Score specimen
+            specimenPose.cancel();
             scoreSpecimen.start();
             pathSegment = 12;
             pathTimer.reset();
-        } else if (pathSegment == 12 && (scoreSpecimen.isFinished() || pathTimer.time() > 800)) {
+        }
+
+        // ===== Score 3 =====
+        else if (pathSegment == 12 && (scoreSpecimen.isFinished() || pathTimer.time() > SCORE_DELAY)) { // Drive to wall
             scoreSpecimen.cancel();
             clawState.open();
             if (!scoreSpecimen.isFinished()) {
@@ -246,18 +266,22 @@ public class SpecimenPathing extends BaseOpModeAuto {
             follower.followPath(grab2);
             intakePoseWall.start();
             pathSegment = 13;
-        } else if (pathSegment == 13 && !follower.isBusy()) {
+        } else if (pathSegment == 13 && !follower.isBusy()) { // Grab wall
             grabWall.start();
             pathSegment = 14;
-        } else if (pathSegment == 14 && grabWall.isFinished() && pathTimer.time() > 80) {
+        } else if (pathSegment == 14 && grabWall.isFinished() && pathTimer.time() > GRAB_DELAY) { // Drive to bar
             follower.followPath(score3);
             specimenPose.start();
             pathSegment = 15;
-        } else if (pathSegment == 15 && follower.getPose().getX() >= 38.8 && !follower.isBusy()) {
+        } else if (pathSegment == 15 && follower.getPose().getX() >= (SCORE_X - SCORE_X_BUFFER) && !follower.isBusy()) { // Score specimen
+            specimenPose.cancel();
             scoreSpecimen.start();
             pathSegment = 16;
             pathTimer.reset();
-        } else if (pathSegment == 16 && (scoreSpecimen.isFinished() || pathTimer.time() > 800)) {
+        }
+
+        // ===== Score 4 =====
+        else if (pathSegment == 16 && (scoreSpecimen.isFinished() || pathTimer.time() > SCORE_DELAY)) { // Drive to wall
             scoreSpecimen.cancel();
             clawState.open();
             if (!scoreSpecimen.isFinished()) {
@@ -266,18 +290,22 @@ public class SpecimenPathing extends BaseOpModeAuto {
             follower.followPath(grab3);
             intakePoseWall.start();
             pathSegment = 17;
-        } else if (pathSegment == 17 && !follower.isBusy()) {
+        } else if (pathSegment == 17 && !follower.isBusy()) { // Grab wall
             grabWall.start();
             pathSegment = 18;
-        } else if (pathSegment == 18 && grabWall.isFinished() && pathTimer.time() > 80) {
+        } else if (pathSegment == 18 && grabWall.isFinished() && pathTimer.time() > GRAB_DELAY) { // Drive to bar
             follower.followPath(score4);
             specimenPose.start();
             pathSegment = 19;
-        } else if (pathSegment == 19 && follower.getPose().getX() >= 38.8 && !follower.isBusy()) {
+        } else if (pathSegment == 19 && follower.getPose().getX() >= (SCORE_X - SCORE_X_BUFFER) && !follower.isBusy()) { // Score specimen
+            specimenPose.cancel();
             scoreSpecimen.start();
             pathSegment = 20;
             pathTimer.reset();
-        } else if (pathSegment == 20 && (scoreSpecimen.isFinished() || pathTimer.time() > 800)) {
+        }
+
+        // ===== Park =====
+        else if (pathSegment == 20 && (scoreSpecimen.isFinished() || pathTimer.time() > SCORE_DELAY)) {
             scoreSpecimen.cancel();
             clawState.open();
             if (!scoreSpecimen.isFinished()) {
@@ -288,20 +316,32 @@ public class SpecimenPathing extends BaseOpModeAuto {
             pathSegment = 21;
         }
 
-        follower.update();
-        if (pathSegment > 99) // 1
-            follower.telemetryDebug(telem);
+        // Emergency stop timer
+        if (overallTimer.time() > 25500) {
+            specimenPose.cancel();
+            scoreSpecimen.cancel();
+            intakePoseWall.cancel();
+            grabWall.cancel();
+            neutralActionSpecimen.start();
+            pathSegment = 99;
+        }
 
+        // ===== Main Loops =====
         specimenPose.loop();
         scoreSpecimen.loop();
         intakePoseWall.loop();
         neutralActionSpecimen.loop();
         grabWall.loop();
+        follower.update();
+        if (pathSegment > 9999) // 1
+            follower.telemetryDebug(telem);
 
-        // Feedback to Driver Hub
+
+        // ===== Feedback to Driver Hub =====
         telem.addData("x", follower.getPose().getX());
         telem.addData("y", follower.getPose().getY());
         telem.addData("heading", follower.getPose().getHeading());
+        telem.addData("pathSegment", pathSegment);
 
     }
 }
