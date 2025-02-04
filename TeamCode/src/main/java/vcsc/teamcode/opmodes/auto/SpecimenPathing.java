@@ -317,7 +317,7 @@ public class SpecimenPathing extends BaseOpModeAuto {
         }
 
         // Emergency stop timer
-        if (overallTimer.time() > 25500) {
+        if (overallTimer.time() > 29500) {
             specimenPose.cancel();
             scoreSpecimen.cancel();
             intakePoseWall.cancel();

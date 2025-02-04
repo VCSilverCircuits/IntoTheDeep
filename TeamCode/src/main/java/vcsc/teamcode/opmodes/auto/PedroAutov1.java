@@ -18,7 +18,7 @@ import vcsc.teamcode.actions.ToggleBasket;
 import vcsc.teamcode.actions.basket.BasketPose;
 import vcsc.teamcode.actions.basket.DownFromBasket;
 import vcsc.teamcode.actions.intake.Grab;
-import vcsc.teamcode.actions.intake.IntakePose;
+import vcsc.teamcode.actions.intake.IntakePoseAuto;
 import vcsc.teamcode.actions.intake.PreGrabPose;
 import vcsc.teamcode.actions.intake.PreGrabPoseAuto;
 import vcsc.teamcode.component.arm.elbow.ElbowPose;
@@ -39,7 +39,7 @@ public class PedroAutov1 extends BaseOpModeAuto {
     DownFromBasket downFromBasket;
     ToggleBasket toggleBasket;
     PreGrabPose preGrabPose;
-    IntakePose intakePose;
+    IntakePoseAuto intakePoseAuto;
     Grab grab;
     NeutralAction neutralAction;
 
@@ -125,12 +125,12 @@ public class PedroAutov1 extends BaseOpModeAuto {
 //
             case 3: // Wait until the robot is near the first sample pickup position
                 if (follower.getPose().getX() > (pickup1Pose.getX() - 1) && follower.getPose().getY() > (pickup1Pose.getY() - 1)) {
-                    intakePose.start();
+                    intakePoseAuto.start();
                     setPathState(4);
                 }
                 break;
             case 4: // Grab
-                if (intakePose.isFinished() && pathTimer.getElapsedTime() > grabDelay) {
+                if (intakePoseAuto.isFinished() && pathTimer.getElapsedTime() > grabDelay) {
                     grab.start();
                     setPathState(5);
                 }
@@ -162,12 +162,12 @@ public class PedroAutov1 extends BaseOpModeAuto {
                 break;
             case 9: // Wait until the robot is near the first sample pickup position
                 if (follower.getPose().getX() > (pickup2Pose.getX() - 1) && follower.getPose().getY() > (pickup2Pose.getY() - 1)) {
-                    intakePose.start();
+                    intakePoseAuto.start();
                     setPathState(10);
                 }
                 break;
             case 10:
-                if (intakePose.isFinished() && pathTimer.getElapsedTime() > grabDelay) {
+                if (intakePoseAuto.isFinished() && pathTimer.getElapsedTime() > grabDelay) {
                     grab.start();
                     setPathState(11);
                 }
@@ -199,12 +199,12 @@ public class PedroAutov1 extends BaseOpModeAuto {
                 break;
             case 15: // Wait until the robot is near the first sample pickup position
                 if (follower.getPose().getX() > (pickup3Pose.getX() - 1) && follower.getPose().getY() > (pickup3Pose.getY() - 1)) {
-                    intakePose.start();
+                    intakePoseAuto.start();
                     setPathState(16);
                 }
                 break;
             case 16:
-                if (intakePose.isFinished() && pathTimer.getElapsedTime() > grabDelay) {
+                if (intakePoseAuto.isFinished() && pathTimer.getElapsedTime() > grabDelay) {
                     grab.start();
                     setPathState(17);
                 }
@@ -296,7 +296,7 @@ public class PedroAutov1 extends BaseOpModeAuto {
 
 //        basketPose.loop();
 //        downFromBasket.loop();
-        intakePose.loop();
+        intakePoseAuto.loop();
         toggleBasket.loop();
         grab.loop();
         neutralAction.loop();
@@ -327,7 +327,7 @@ public class PedroAutov1 extends BaseOpModeAuto {
         downFromBasket = new DownFromBasket(rotState, extState, elbowState, wristState);
         toggleBasket = new ToggleBasket(extState, clawState, basketPose, downFromBasket);
         preGrabPose = new PreGrabPoseAuto(elbowState, wristState, clawState);
-        intakePose = new IntakePose(rotState, extState, clawState, preGrabPose);
+        intakePoseAuto = new IntakePoseAuto(rotState, extState, clawState, preGrabPose);
         grab = new Grab(elbowState, wristState, clawState);
         neutralAction = new NeutralAction(rotState, extState, elbowState, wristState);
 
