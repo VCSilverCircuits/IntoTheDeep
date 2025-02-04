@@ -2,6 +2,7 @@ package vcsc.teamcode.opmodes.tele;
 
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import vcsc.core.util.GamepadButton;
@@ -26,6 +27,7 @@ import vcsc.teamcode.component.arm.rot.actions.SetRotPose;
 import vcsc.teamcode.component.hooks.actions.ToggleHooks;
 import vcsc.teamcode.opmodes.base.BaseOpMode;
 
+@Disabled
 @TeleOp(name = "Tele", group = "Test")
 public class TestTele extends BaseOpMode {
     boolean rumbledEndGame = false, rumbledMatchEnd = false;

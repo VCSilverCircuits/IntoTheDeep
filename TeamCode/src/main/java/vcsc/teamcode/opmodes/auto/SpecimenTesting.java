@@ -10,6 +10,7 @@ import com.pedropathing.pathgen.Point;
 import com.pedropathing.util.Constants;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
@@ -21,6 +22,7 @@ import vcsc.teamcode.actions.intake.PreGrabPoseAuto;
 import vcsc.teamcode.actions.specimen.SpecimenPose;
 import vcsc.teamcode.opmodes.base.BaseOpModeAuto;
 
+@Disabled
 @Autonomous(name = "SpecimenTest", group = "Main")
 public class SpecimenTesting extends BaseOpModeAuto {
     private final Pose startPose = new Pose(10.855, 62.03, Math.toRadians(180));  // Starting position
