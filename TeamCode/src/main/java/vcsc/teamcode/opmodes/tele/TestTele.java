@@ -6,25 +6,24 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import vcsc.core.util.GamepadButton;
 import vcsc.teamcode.DebugConstants;
-import vcsc.teamcode.actions.BasketPose;
 import vcsc.teamcode.actions.Cancel;
-import vcsc.teamcode.actions.DownFromBasket;
-import vcsc.teamcode.actions.Grab;
-import vcsc.teamcode.actions.IntakePose;
-import vcsc.teamcode.actions.IntakePoseWall;
-import vcsc.teamcode.actions.LowerBasketPose;
 import vcsc.teamcode.actions.NeutralAction;
-import vcsc.teamcode.actions.PreGrabPose;
-import vcsc.teamcode.actions.PreGrabPoseWall;
-import vcsc.teamcode.actions.SetRotPose;
-import vcsc.teamcode.actions.SpecimenPose;
 import vcsc.teamcode.actions.ToggleBasket;
-import vcsc.teamcode.actions.ToggleHooks;
-import vcsc.teamcode.actions.WristSpecimenPose;
+import vcsc.teamcode.actions.basket.BasketPose;
+import vcsc.teamcode.actions.basket.DownFromBasket;
+import vcsc.teamcode.actions.basket.LowerBasketPose;
+import vcsc.teamcode.actions.basket.WristSpecimenPose;
 import vcsc.teamcode.actions.hang.PreHang;
+import vcsc.teamcode.actions.intake.Grab;
+import vcsc.teamcode.actions.intake.IntakePose;
+import vcsc.teamcode.actions.intake.IntakePoseWall;
+import vcsc.teamcode.actions.intake.PreGrabPose;
+import vcsc.teamcode.actions.intake.PreGrabPoseWall;
+import vcsc.teamcode.actions.specimen.SpecimenPose;
 import vcsc.teamcode.component.arm.ext.ArmExtPose;
 import vcsc.teamcode.component.arm.rot.ArmRotPose;
-import vcsc.teamcode.component.wrist.WristPivotPose;
+import vcsc.teamcode.component.arm.rot.actions.SetRotPose;
+import vcsc.teamcode.component.hooks.actions.ToggleHooks;
 import vcsc.teamcode.opmodes.base.BaseOpMode;
 
 @TeleOp(name = "Tele", group = "Test")
@@ -66,10 +65,10 @@ public class TestTele extends BaseOpMode {
         hangPose = new SetRotPose(rotState, ArmRotPose.HANG);
         grab = new Grab(elbowState, wristState, clawState);
         cancel = new Cancel(rotState, neutralAction, downFromBasket);
-        preGrabPoseWall = new PreGrabPoseWall(elbowState,wristState,clawState);
-        wristSpecimenPose = new WristSpecimenPose(elbowState,wristState);
-        specimenPose = new SpecimenPose(rotState,extState,elbowState,wristState);
-        intakePoseWall = new IntakePoseWall(rotState,extState,clawState,preGrabPoseWall);
+        preGrabPoseWall = new PreGrabPoseWall(elbowState, wristState, clawState);
+        wristSpecimenPose = new WristSpecimenPose(elbowState, wristState);
+        specimenPose = new SpecimenPose(rotState, extState, elbowState, wristState);
+        intakePoseWall = new IntakePoseWall(rotState, extState, clawState, preGrabPoseWall);
         //limelight initialization
 //        limelight = hardwareMap.get(Limelight3A.class, "limelight");
 //        telemetry.setMsTransmissionInterval(11);
@@ -90,7 +89,7 @@ public class TestTele extends BaseOpMode {
         gw1.bindButton(GamepadButton.RIGHT_BUMPER, specimenPose);
         gw1.bindRunnable(GamepadButton.LEFT_TRIGGER, () -> {
 //            lowerBasketPose.cancel();
-                    telemetry.addLine("Cancelling intake and neutral");
+            telemetry.addLine("Cancelling intake and neutral");
         });
         gw1.bindButton(GamepadButton.LEFT_BUMPER, intakePoseWall);
         gw1.bindRunnable(GamepadButton.LEFT_TRIGGER, () -> {
@@ -170,17 +169,17 @@ public class TestTele extends BaseOpMode {
             Both Controllers
             ================ */
 
-            // ----- Rumbling -----
-            if (matchTimer.seconds() >= 90 && !rumbledEndGame) { // End game rumble
-                gamepad1.rumble(500);
-                gamepad2.rumble(500);
-                rumbledEndGame = true;
-            } else if (matchTimer.seconds() >= 120 && !rumbledMatchEnd) { // Match end 3 rumbles
-                gamepad1.rumbleBlips(3);
-                gamepad2.rumbleBlips(3);
-                rumbledMatchEnd = true;
-            }
+        // ----- Rumbling -----
+        if (matchTimer.seconds() >= 90 && !rumbledEndGame) { // End game rumble
+            gamepad1.rumble(500);
+            gamepad2.rumble(500);
+            rumbledEndGame = true;
+        } else if (matchTimer.seconds() >= 120 && !rumbledMatchEnd) { // Match end 3 rumbles
+            gamepad1.rumbleBlips(3);
+            gamepad2.rumbleBlips(3);
+            rumbledMatchEnd = true;
         }
     }
+}
 
 

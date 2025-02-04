@@ -13,18 +13,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
-import vcsc.teamcode.actions.BasketPose;
-import vcsc.teamcode.actions.DownFromBasket;
-import vcsc.teamcode.actions.Grab;
-import vcsc.teamcode.actions.IntakePose;
-import vcsc.teamcode.actions.IntakePoseWall;
 import vcsc.teamcode.actions.NeutralAction;
-import vcsc.teamcode.actions.PreGrabPoseAuto;
-import vcsc.teamcode.actions.SpecimenPose;
-import vcsc.teamcode.actions.ToggleBasket;
-import vcsc.teamcode.actions.WristSpecimenPose;
-import vcsc.teamcode.component.arm.elbow.ElbowPose;
+import vcsc.teamcode.actions.basket.WristSpecimenPose;
+import vcsc.teamcode.actions.intake.Grab;
+import vcsc.teamcode.actions.intake.IntakePoseWall;
+import vcsc.teamcode.actions.intake.PreGrabPoseAuto;
+import vcsc.teamcode.actions.specimen.SpecimenPose;
 import vcsc.teamcode.opmodes.base.BaseOpModeAuto;
+
 @Autonomous(name = "SpecimenTest", group = "Main")
 public class SpecimenTesting extends BaseOpModeAuto {
     private final Pose startPose = new Pose(10.855, 62.03, Math.toRadians(180));  // Starting position
@@ -66,7 +62,6 @@ public class SpecimenTesting extends BaseOpModeAuto {
                 .setLinearHeadingInterpolation(pickupPose.getHeading(), scorePose.getHeading())
                 .setPathEndVelocityConstraint(0.3)
                 .build();
-
 
 
         scorePickup2 = follower.pathBuilder()
@@ -210,7 +205,7 @@ public class SpecimenTesting extends BaseOpModeAuto {
                 break;
             case 19: // Wait until the robot is near the scoring position
                 if (follower.getPose().getX() > (scorePose.getX() - 1) && follower.getPose().getY() > (scorePose.getY() - 1) && pathTimer.getElapsedTime() < basketDelayUp) {
-                    SpecimenPose.start();
+                    specimenPose.start();
                     setPathState(20);
                 }
                 break;
@@ -223,59 +218,65 @@ public class SpecimenTesting extends BaseOpModeAuto {
                 break;
         }
     }
-        public void setPathState(int pState){
-            pathState = pState;
-            pathTimer.resetTimer();
-        }
-        @Override
-        public void loop () {
-            super.loop();
+
+    public void setPathState(int pState) {
+        pathState = pState;
+        pathTimer.resetTimer();
+    }
+
+    @Override
+    public void loop() {
+        super.loop();
 
 //        basketPose.loop();
 //        downFromBasket.loop();
 
-            neutralAction.loop();
+        neutralAction.loop();
 
-            // These loop the movements of the robot
-            follower.update();
-            autonomousPathUpdate();
+        // These loop the movements of the robot
+        follower.update();
+        autonomousPathUpdate();
 
-            // Feedback to Driver Hub
-            telem.addData("path state", pathState);
-            telem.addData("x", follower.getPose().getX());
-            telem.addData("y", follower.getPose().getY());
-            telem.addData("heading", follower.getPose().getHeading());
-            telem.addData("timer", pathTimer.getElapsedTime());
-        }
-        @Override
-        public void init () {
-            super.init();
-            pathTimer = new Timer();
-            opmodeTimer = new Timer();
-            opmodeTimer.resetTimer();
-
-            neutralAction = new NeutralAction(rotState, extState, elbowState, wristState);
-
-            Constants.setConstants(FConstants.class, LConstants.class);
-            follower = new Follower(hardwareMap);
-            follower.setStartingPose(startPose);
-            BuildPaths();
-        }
-        @Override
-        public void init_loop() {
-            super.init_loop();
-        }
-        @Override
-        public void start() {
-            super.start();
-            opmodeTimer.resetTimer();
-            setPathState(0);
-        }
-        @Override
-        public void stop() {
-            super.stop();
-        }
+        // Feedback to Driver Hub
+        telem.addData("path state", pathState);
+        telem.addData("x", follower.getPose().getX());
+        telem.addData("y", follower.getPose().getY());
+        telem.addData("heading", follower.getPose().getHeading());
+        telem.addData("timer", pathTimer.getElapsedTime());
     }
+
+    @Override
+    public void init() {
+        super.init();
+        pathTimer = new Timer();
+        opmodeTimer = new Timer();
+        opmodeTimer.resetTimer();
+
+        neutralAction = new NeutralAction(rotState, extState, elbowState, wristState);
+
+        Constants.setConstants(FConstants.class, LConstants.class);
+        follower = new Follower(hardwareMap);
+        follower.setStartingPose(startPose);
+        BuildPaths();
+    }
+
+    @Override
+    public void init_loop() {
+        super.init_loop();
+    }
+
+    @Override
+    public void start() {
+        super.start();
+        opmodeTimer.resetTimer();
+        setPathState(0);
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+    }
+}
 
 
 
