@@ -62,8 +62,8 @@ public class SpecimenPose implements Action {
                 .then(slidesOut)
                 .then(wristBasketPose);*/
         seq.then(wristSpecimenPose)
-                .then(rotateUp)
-                .then(slidesOut);
+                .then(slidesOut)
+                .then(rotateUp);
         seq.start();
     }
 

@@ -19,7 +19,7 @@ public class LowerBasketPose implements Action {
     WristState wristState;
     ActionBuilder seq;
     SetRotPose rotateUp;
-    WristBasketPose wristBasketPose;
+    WristElbowBasketPose wristElbowBasketPose;
     SetElbowPose elbowOut;
 
     public LowerBasketPose(ArmRotState rotState, ElbowState elbowState, WristState wristState) {
@@ -27,7 +27,7 @@ public class LowerBasketPose implements Action {
         this.elbowState = elbowState;
         this.wristState = wristState;
         rotateUp = new SetRotPose(rotState, ArmRotPose.BASKET);
-        wristBasketPose = new WristBasketPose(elbowState, wristState);
+        wristElbowBasketPose = new WristElbowBasketPose(elbowState, wristState);
         elbowOut = new SetElbowPose(elbowState, ElbowPose.STRAIGHT);
         seq = new ActionBuilder();
     }
@@ -43,7 +43,7 @@ public class LowerBasketPose implements Action {
             seq.then(elbowOut);
         }
         seq.then(rotateUp)
-                .then(wristBasketPose);
+                .then(wristElbowBasketPose);
         seq.start();
     }
 

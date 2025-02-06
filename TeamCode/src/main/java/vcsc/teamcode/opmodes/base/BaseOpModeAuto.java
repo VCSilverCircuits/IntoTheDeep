@@ -88,6 +88,7 @@ public class BaseOpModeAuto extends OpMode {
         matchTimer.reset();
         wristState.setPose(WristPose.STOW);
         elbowState.setPose(ElbowPose.STOW);
+        rotActuator.setMaxSpeed(0.6);
         clawState.close();
     }
 

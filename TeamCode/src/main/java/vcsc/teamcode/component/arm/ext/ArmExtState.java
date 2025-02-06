@@ -7,9 +7,8 @@ import vcsc.core.abstracts.state.PoweredPIDFState;
 public class ArmExtState extends PoweredPIDFState {
     ArmExtPose currentPose;
 
-    @Override
-    public double getRealPosition() {
-        return super.getRealPosition() * CM_PER_TICK;
+    public double getRealExtensionLength() {
+        return getRealPosition() * CM_PER_TICK;
     }
 
     public double getExtensionLength() {

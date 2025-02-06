@@ -1,0 +1,55 @@
+package vcsc.teamcode.actions.intake;
+
+
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import vcsc.core.abstracts.action.Action;
+import vcsc.teamcode.component.arm.elbow.ElbowPose;
+import vcsc.teamcode.component.arm.elbow.ElbowState;
+import vcsc.teamcode.component.claw.ClawState;
+import vcsc.teamcode.component.wrist.WristPivotPose;
+import vcsc.teamcode.component.wrist.WristRotPose;
+import vcsc.teamcode.component.wrist.WristState;
+
+public class GrabAutoWall implements Action {
+    ElbowState elbowState;
+    WristState wristState;
+    ClawState clawState;
+    ElapsedTime timer;
+    boolean finished = true;
+
+    public GrabAutoWall(ElbowState elbowState, WristState wristState, ClawState clawState) {
+        super();
+        this.elbowState = elbowState;
+        this.wristState = wristState;
+        this.clawState = clawState;
+        timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+    }
+
+    @Override
+    public void start() {
+        elbowState.setPose(ElbowPose.GRAB);
+        wristState.setRotPose(WristRotPose.GRABBING);
+        wristState.setPivotPose(WristPivotPose.AUTO_WALL);
+        timer.reset();
+        finished = false;
+    }
+
+    @Override
+    public void loop() {
+        if (timer.time() > 120 && !finished) { //300
+            clawState.close();
+            finished = true;
+        }
+    }
+
+    @Override
+    public boolean isFinished() {
+        return finished;
+    }
+
+    @Override
+    public void cancel() {
+
+    }
+}

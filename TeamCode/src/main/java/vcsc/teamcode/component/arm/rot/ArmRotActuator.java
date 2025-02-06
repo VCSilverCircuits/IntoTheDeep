@@ -22,6 +22,7 @@ public class ArmRotActuator extends PoweredPIDFActuator {
     public static final double DRIVE_GEAR_RATIO = 52.0 / 24.0;
     public static final double DEGREES_PER_TICK = 360.0 / (TPR * MOTOR_GEAR_RATIO * DRIVE_GEAR_RATIO);
     DcMotorGroup motors;
+    private double maxSpeed = 0.75;
 
     public ArmRotActuator(HardwareMap hardwareMap, PIDFCoefficients coefficients) {
         super(coefficients);
@@ -32,6 +33,14 @@ public class ArmRotActuator extends PoweredPIDFActuator {
         motors.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motors.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motors.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public double getMaxSpeed() {
+        return maxSpeed;
+    }
+
+    public void setMaxSpeed(double spd) {
+        maxSpeed = spd;
     }
 
     @Override
@@ -73,6 +82,6 @@ public class ArmRotActuator extends PoweredPIDFActuator {
         telemetry.addData("At Position", controller.atSetPoint());
         telemetry.addData("Output Power", outputPower);
         telemetry.addData("Current position", getPosition());
-        motors.setPower(Math.min(Math.abs(outputPower), 0.75) * Math.signum(outputPower));
+        motors.setPower(Math.min(Math.abs(outputPower), maxSpeed) * Math.signum(outputPower));
     }
 }

@@ -121,7 +121,7 @@ public class SpecimenPathing extends BaseOpModeAuto {
                                 new Point(SCORE_X, 68.000, Point.CARTESIAN),
                                 new Point(7.923, 67.694, Point.CARTESIAN),
                                 new Point(60.115, 27.560, Point.CARTESIAN),
-                                new Point(18.000, 31.694, Point.CARTESIAN)
+                                new Point(17.500, 31.694, Point.CARTESIAN)
                         )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(180)).setPathEndVelocityConstraint(1).build();
@@ -246,7 +246,7 @@ public class SpecimenPathing extends BaseOpModeAuto {
             pathSegment = 10;
             pathTimer.reset();
         } else if (pathSegment == 10 && grabWall.isFinished() && pathTimer.time() > GRAB_DELAY) { // Drive to bar
-            follower.followPath(score2);
+            follower.followPath(score2, true);
             specimenPose.start();
             pathSegment = 11;
         } else if (pathSegment == 11 && follower.getPose().getX() >= (SCORE_X - SCORE_X_BUFFER) && !follower.isBusy()) { // Score specimen
@@ -263,14 +263,14 @@ public class SpecimenPathing extends BaseOpModeAuto {
             if (!scoreSpecimen.isFinished()) {
                 neutralActionSpecimen.start();
             }
-            follower.followPath(grab2);
+            follower.followPath(grab2, true);
             intakePoseWall.start();
             pathSegment = 13;
         } else if (pathSegment == 13 && !follower.isBusy()) { // Grab wall
             grabWall.start();
             pathSegment = 14;
         } else if (pathSegment == 14 && grabWall.isFinished() && pathTimer.time() > GRAB_DELAY) { // Drive to bar
-            follower.followPath(score3);
+            follower.followPath(score3, true);
             specimenPose.start();
             pathSegment = 15;
         } else if (pathSegment == 15 && follower.getPose().getX() >= (SCORE_X - SCORE_X_BUFFER) && !follower.isBusy()) { // Score specimen
@@ -287,14 +287,14 @@ public class SpecimenPathing extends BaseOpModeAuto {
             if (!scoreSpecimen.isFinished()) {
                 neutralActionSpecimen.start();
             }
-            follower.followPath(grab3);
+            follower.followPath(grab3, true);
             intakePoseWall.start();
             pathSegment = 17;
         } else if (pathSegment == 17 && !follower.isBusy()) { // Grab wall
             grabWall.start();
             pathSegment = 18;
         } else if (pathSegment == 18 && grabWall.isFinished() && pathTimer.time() > GRAB_DELAY) { // Drive to bar
-            follower.followPath(score4);
+            follower.followPath(score4, true);
             specimenPose.start();
             pathSegment = 19;
         } else if (pathSegment == 19 && follower.getPose().getX() >= (SCORE_X - SCORE_X_BUFFER) && !follower.isBusy()) { // Score specimen
@@ -311,7 +311,7 @@ public class SpecimenPathing extends BaseOpModeAuto {
             if (!scoreSpecimen.isFinished()) {
                 neutralActionSpecimen.start();
             }
-            follower.followPath(grab4);
+            follower.followPath(grab4, true);
             intakePoseWall.start();
             pathSegment = 21;
         }

@@ -1,7 +1,5 @@
 package vcsc.teamcode.opmodes.tele;
 
-import com.acmerobotics.roadrunner.PoseVelocity2d;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.pedropathing.localization.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -240,14 +238,14 @@ public class MainTele extends BaseOpMode {
 
 //        elbowState.setPosition(DebugConstants.elbow);
 
-        //follower.setTeleOpMovementVectors(-gamepad1.left_stick_y * driveSpeed, -gamepad1.left_stick_x * driveSpeed, -gamepad1.right_stick_x * driveSpeed);
-        drive.setDrivePowers(new PoseVelocity2d(
-                new Vector2d(
-                        -gamepad1.left_stick_y * driveSpeed,
-                        -gamepad1.left_stick_x * driveSpeed
-                ),
-                -gamepad1.right_stick_x * turnSpeed
-        ));
+        follower.setTeleOpMovementVectors(-gamepad1.left_stick_y * driveSpeed, -gamepad1.left_stick_x * driveSpeed, -gamepad1.right_stick_x * turnSpeed, true);
+//        drive.setDrivePowers(new PoseVelocity2d(
+//                new Vector2d(
+//                        -gamepad1.left_stick_y * driveSpeed,
+//                        -gamepad1.left_stick_x * driveSpeed
+//                ),
+//                -gamepad1.right_stick_x * turnSpeed
+//        ));
 
         /*  ============
             Controller 2

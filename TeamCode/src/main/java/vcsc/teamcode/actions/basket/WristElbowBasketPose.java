@@ -10,11 +10,11 @@ import vcsc.teamcode.component.arm.elbow.ElbowState;
 import vcsc.teamcode.component.wrist.WristPose;
 import vcsc.teamcode.component.wrist.WristState;
 
-public class WristBasketPose implements Action {
+public class WristElbowBasketPose implements Action {
     ElbowState elbowState;
     WristState wristState;
 
-    public WristBasketPose(ElbowState elbowState, WristState wristState) {
+    public WristElbowBasketPose(ElbowState elbowState, WristState wristState) {
         super();
         this.elbowState = elbowState;
         this.wristState = wristState;

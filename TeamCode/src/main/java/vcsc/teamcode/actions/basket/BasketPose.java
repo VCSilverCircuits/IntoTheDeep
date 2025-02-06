@@ -26,8 +26,8 @@ public class BasketPose implements Action {
     SetExtPose slidesIn;
     SetExtPose slidesOut;
     SetRotPose rotateUp;
-    WristBasketPose wristBasketPose;
-    SetElbowPose elbowOut;
+    WristElbowBasketPose wristElbowBasketPose;
+    SetElbowPose elbowScore, elbowOutOfWay;
 
     boolean wristPoseChanged = false;
     ElapsedTime overrideTimer;
@@ -40,8 +40,9 @@ public class BasketPose implements Action {
         slidesIn = new SetExtPose(extState, ArmExtPose.RETRACT);
         slidesOut = new SetExtPose(extState, ArmExtPose.BASKET);
         rotateUp = new SetRotPose(rotState, ArmRotPose.BASKET);
-        wristBasketPose = new WristBasketPose(elbowState, wristState);
-        elbowOut = new SetElbowPose(elbowState, ElbowPose.STRAIGHT);
+        wristElbowBasketPose = new WristElbowBasketPose(elbowState, wristState);
+        elbowOutOfWay = new SetElbowPose(elbowState, ElbowPose.OUT_OF_WAY);
+        elbowScore = new SetElbowPose(elbowState, ElbowPose.BASKET);
         overrideTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
         /*seq = new ActionBuilder(slidesIn)
@@ -61,7 +62,7 @@ public class BasketPose implements Action {
 
         if (rotState.getPose() != ArmRotPose.BASKET) {
             seq.then(slidesIn)
-                    .then(elbowOut);
+                    .then(elbowOutOfWay);
         }
 
         seq.then(rotateUp)
@@ -79,8 +80,10 @@ public class BasketPose implements Action {
     @Override
     public void loop() {
         seq.loop();
-        if (!wristPoseChanged && (extState.getExtensionLength() > ArmExtPose.BASKET.getLength() - 15 || overrideTimer.time() > 3000)) {
-            wristBasketPose.start();
+        MultipleTelemetry telem = GlobalTelemetry.getInstance();
+        telem.addData("CURRENT EXTENSION LENGTH", extState.getRealExtensionLength());
+        if (!wristPoseChanged && (extState.getRealExtensionLength() > (ArmExtPose.BASKET.getLength() - 15) || overrideTimer.time() > 3000)) {
+            wristElbowBasketPose.start();
             wristPoseChanged = true;
         }
 //        MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
@@ -107,7 +110,7 @@ public class BasketPose implements Action {
 
     @Override
     public boolean isFinished() {
-        return seq.isFinished();
+        return seq.isFinished() && wristPoseChanged;
     }
 }
 
