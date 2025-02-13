@@ -23,19 +23,26 @@ public class LockOn implements Action {
     double lastAngle = 0;
     int MAX_ANGLE_LIST_SIZE = 50;
     boolean active = false;
+    boolean failure = false;
+    double start_heading = 0;
+    NeutralAction neutralAction;
 
-    public LockOn(Camera camera, Follower follower, WristState wristState) {
+
+    public LockOn(Camera camera, Follower follower, WristState wristState, NeutralAction neutralAction) {
         this.camera = camera;
         this.follower = follower;
         this.wristState = wristState;
         xController = new PIDController(0.002, 0, 0);
         yController = new PIDController(0.002, 0, 0);
         angleList = new ArrayList<>();
+        this.neutralAction = neutralAction;
     }
 
     @Override
     public void start() {
         active = true;
+        failure = false;
+        start_heading = follower.getPose().getHeading();
         xController.setSetPoint(0);
         yController.setSetPoint(0);
         xController.setTolerance(15);
@@ -44,11 +51,26 @@ public class LockOn implements Action {
         angleList.clear();
     }
 
+    public boolean failed() {
+        return failure;
+    }
+
     @Override
     public void loop() {
         if (!active) {
             return;
         }
+
+        if (xController.atSetPoint() && yController.atSetPoint()) {
+            active = false;
+        }
+
+        if (Math.abs(follower.getPose().getHeading() - start_heading) > Math.toRadians(100)) {
+            active = false;
+            neutralAction.start();
+            failure = true;
+        }
+
         Block block = camera.getBlock();
         if (block != null) {
             x_offset = block.getX() - 160;

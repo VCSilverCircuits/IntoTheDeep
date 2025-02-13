@@ -24,9 +24,9 @@ import vcsc.teamcode.opmodes.base.BaseOpModeAuto;
 @Autonomous(name = "SPECIMEN (Hook) Auto", group = "Testing", preselectTeleOp = "Tele")
 public class SpecimenPathing extends BaseOpModeAuto {
     // X position for specimen scoring location
-    final double SCORE_X = 38.0;
+    final double SCORE_X = 36.5;
     // Buffer before starting to score
-    final double SCORE_X_BUFFER = 1;
+    final double SCORE_X_BUFFER = 3.5;
     final double SCORE_DELAY = 800; // Delay in milliseconds after scoring before driving
     final double GRAB_DELAY = 80; // Delay in milliseconds after grabbing off wall before driving
     Follower follower; // Pedropath follower
@@ -116,15 +116,14 @@ public class SpecimenPathing extends BaseOpModeAuto {
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(180)).setPathEndVelocityConstraint(1).build();
         grab2 = follower.pathBuilder().addPath(
-                        // Line 9
-                        new BezierCurve(
-                                new Point(SCORE_X, 68.000, Point.CARTESIAN),
-                                new Point(7.923, 67.694, Point.CARTESIAN),
-                                new Point(60.115, 27.560, Point.CARTESIAN),
-                                new Point(17.500, 31.694, Point.CARTESIAN)
-                        )
+                // Line 9
+                new BezierCurve(
+                        new Point(SCORE_X, 68.000, Point.CARTESIAN),
+                        new Point(7.923, 67.694, Point.CARTESIAN),
+                        new Point(60.115, 27.560, Point.CARTESIAN),
+                        new Point(17.300, 31.694, Point.CARTESIAN)
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(180)).setPathEndVelocityConstraint(1).build();
+        ).setConstantHeadingInterpolation(Math.toRadians(180)).setPathEndVelocityConstraint(0.3).setPathEndTimeoutConstraint(1000).build();
         score3 = follower.pathBuilder().addPath(
                         // Line 8
                         new BezierCurve(
@@ -140,10 +139,10 @@ public class SpecimenPathing extends BaseOpModeAuto {
                                 new Point(SCORE_X, 71.000, Point.CARTESIAN),
                                 new Point(22.737, 54.431, Point.CARTESIAN),
                                 new Point(50.813, 29.282, Point.CARTESIAN),
-                                new Point(18.000, 31.694, Point.CARTESIAN)
+                                new Point(17.300, 31.694, Point.CARTESIAN)
                         )
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(180)).setPathEndVelocityConstraint(1).build();
+                .setConstantHeadingInterpolation(Math.toRadians(180)).setPathEndVelocityConstraint(0.3).setPathEndTimeoutConstraint(1000).build();
         score4 = follower.pathBuilder().addPath(
                         // Line 8
                         new BezierCurve(
@@ -159,10 +158,10 @@ public class SpecimenPathing extends BaseOpModeAuto {
                                 new Point(SCORE_X, 74.000, Point.CARTESIAN),
                                 new Point(27.38755980861244, 53.91387559808612, Point.CARTESIAN),
                                 new Point(11.885167464114833, 67.17703349282297, Point.CARTESIAN),
-                                new Point(12.91866028708134, 30.488038277511965, Point.CARTESIAN)
+                                new Point(17.300, 30.488038277511965, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(245)).setPathEndVelocityConstraint(1).build();
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(245)).setPathEndVelocityConstraint(0.3).setPathEndTimeoutConstraint(1000).build();
         //testPath = builder.build();
     }
 
@@ -189,7 +188,6 @@ public class SpecimenPathing extends BaseOpModeAuto {
         super.start();
         pathSegment = 0;
         overallTimer.reset();
-
     }
 
     @Override

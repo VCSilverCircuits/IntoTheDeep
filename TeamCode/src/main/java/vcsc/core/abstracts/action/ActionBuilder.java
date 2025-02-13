@@ -23,6 +23,12 @@ public class ActionBuilder implements Action {
         return this;
     }
 
+    public ActionBuilder then(Action... actions) {
+        ParallelAction parallelAction = new ParallelAction(actions);
+        actionQueue.add(parallelAction);
+        return this;
+    }
+
     private void startNextAction() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
         Action nextAction = actionQueue.peek();

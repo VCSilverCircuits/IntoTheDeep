@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
+import vcsc.core.abstracts.action.ActionBuilder;
 import vcsc.teamcode.actions.LockOn;
 import vcsc.teamcode.actions.NeutralAction;
 import vcsc.teamcode.actions.ToggleBasket;
@@ -26,8 +27,8 @@ import vcsc.teamcode.actions.intake.PreGrabPoseAuto;
 import vcsc.teamcode.component.arm.elbow.ElbowPose;
 import vcsc.teamcode.opmodes.base.BaseOpModeAuto;
 
-@Autonomous(name = "SAMPLE (Basket) Auto", group = "Testing", preselectTeleOp = "Tele")
-public class PedroAutov2 extends BaseOpModeAuto {
+@Autonomous(name = "[TEST] CAMERA SAMPLE (Basket) Auto", group = "Testing", preselectTeleOp = "Tele")
+public class SamplesWithCamera extends BaseOpModeAuto {
     private final Pose startPose = new Pose(6, 113, Math.toRadians(270));  // Starting position
     private final Pose scorePose = new Pose(14, 129, Math.toRadians(315)); // Scoring position
 
@@ -46,6 +47,7 @@ public class PedroAutov2 extends BaseOpModeAuto {
     GrabAutoWall grabWall;
     NeutralAction neutralAction;
     LockOn lockOn;
+    ActionBuilder intakeThenlock;
 
     private Path scorePreload, park;
     private PathChain grabPickup1, grabPickup2, grabPickup3, scorePickup1, scorePickup2, scorePickup3, scoreSubmersible;
@@ -131,12 +133,13 @@ public class PedroAutov2 extends BaseOpModeAuto {
 //
             case 3: // Wait until the robot is near the first sample pickup position
                 if (follower.getPose().getX() > (pickup1Pose.getX() - 1) && follower.getPose().getY() < (pickup1Pose.getY() + 1)) {
-                    intakePoseAuto.start();
+                    intakeThenlock = new ActionBuilder(intakePoseAuto).then(lockOn);
+                    intakeThenlock.start();
                     setPathState(4);
                 }
                 break;
             case 4: // Grab
-                if (intakePoseAuto.isFinished() && pathTimer.getElapsedTime() > grabDelay) {
+                if (intakeThenlock.isFinished() && pathTimer.getElapsedTime() > grabDelay) {
                     grab.start();
                     setPathState(5);
                 }
@@ -168,12 +171,13 @@ public class PedroAutov2 extends BaseOpModeAuto {
                 break;
             case 9: // Wait until the robot is near the second sample pickup position
                 if (follower.getPose().getX() > (pickup2Pose.getX() - 1) && follower.getPose().getY() > (pickup2Pose.getY() - 1)) {
-                    intakePoseAuto.start();
+                    intakeThenlock = new ActionBuilder(intakePoseAuto).then(lockOn);
+                    intakeThenlock.start();
                     setPathState(10);
                 }
                 break;
             case 10:
-                if (intakePoseAuto.isFinished() && pathTimer.getElapsedTime() > grabDelay) {
+                if (intakeThenlock.isFinished() && pathTimer.getElapsedTime() > grabDelay) {
                     grab.start();
                     setPathState(11);
                 }
@@ -205,12 +209,13 @@ public class PedroAutov2 extends BaseOpModeAuto {
                 break;
             case 15: // Wait until the robot is near the third sample pickup position
                 if (follower.getPose().getX() > (pickup3Pose.getX() - 1) && follower.getPose().getY() > (pickup3Pose.getY() - 1)) {
-                    intakePoseAuto.start();
+                    intakeThenlock = new ActionBuilder(intakePoseAuto).then(lockOn);
+                    intakeThenlock.start();
                     setPathState(16);
                 }
                 break;
             case 16:
-                if (intakePoseAuto.isFinished() && pathTimer.getElapsedTime() > grabDelay) {
+                if (intakeThenlock.isFinished() && pathTimer.getElapsedTime() > grabDelay) {
                     grabWall.start();
                     setPathState(17);
                 }
@@ -371,6 +376,7 @@ public class PedroAutov2 extends BaseOpModeAuto {
         grabWall.loop();
         neutralAction.loop();
         lockOn.loop();
+        intakeThenlock.loop();
 
         // These loop the movements of the robot
         follower.update();
@@ -408,6 +414,7 @@ public class PedroAutov2 extends BaseOpModeAuto {
         grabWall = new GrabAutoWall(elbowState, wristState, clawState);
         neutralAction = new NeutralAction(rotState, extState, elbowState, wristState);
         lockOn = new LockOn(camera, follower, wristState, neutralAction);
+        intakeThenlock = new ActionBuilder(intakePoseAuto).then(lockOn);
     }
 
     /**

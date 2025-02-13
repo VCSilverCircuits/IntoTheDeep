@@ -33,7 +33,7 @@ import vcsc.teamcode.opmodes.base.BaseOpMode;
 
 @TeleOp(name = "Tele", group = "Main")
 public class MainTele extends BaseOpMode {
-    final double DEFAULT_TURN_SPEED = 0.75;
+    final double DEFAULT_TURN_SPEED = 0.5;
     final double DEFAULT_DRIVE_SPEED = 1;
     boolean rumbledEndGame = false, rumbledMatchEnd = false;
     BasketPose basketPose;
@@ -66,7 +66,6 @@ public class MainTele extends BaseOpMode {
         // ===== Actions =====
         preGrabPose = new PreGrabPose(elbowState, wristState, clawState);
         basketPose = new BasketPose(rotState, extState, elbowState, wristState);
-//        lowerBasketPose = new LowerBasketPose(rotState, elbowState, wristState);
         downFromBasket = new DownFromBasket(rotState, extState, elbowState, wristState);
         toggleBasket = new ToggleBasket(extState, clawState, basketPose, downFromBasket);
         intakePose = new IntakePose(rotState, extState, clawState, preGrabPose);
@@ -83,11 +82,6 @@ public class MainTele extends BaseOpMode {
         intakePoseWall = new IntakePoseWall(rotState, extState, clawState, new PreGrabPoseWall(elbowState, wristState, clawState));
         grabWall = new GrabWall(elbowState, wristState, clawState);
         wallActions = new WallActions(elbowState, clawState, intakePoseWall, grabWall);
-        //limelight initialization
-//        limelight = hardwareMap.get(Limelight3A.class, "limelight");
-//        telemetry.setMsTransmissionInterval(11);
-//        limelight.pipelineSwitch(0);
-//        limelight.start();
 
         /*  ===============
             Button Bindings
