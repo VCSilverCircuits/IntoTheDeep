@@ -31,7 +31,7 @@ public class ArmExtActuator extends PoweredPIDFActuator {
         super(coefficients);
         DcMotorEx extension1 = hardwareMap.get(DcMotorEx.class, "extension1");
         DcMotorEx extension2 = hardwareMap.get(DcMotorEx.class, "extension2");
-        extension2.setDirection(DcMotorSimple.Direction.REVERSE);
+        extension1.setDirection(DcMotorSimple.Direction.REVERSE);
         motors = new DcMotorGroup(extension1, extension2);
         motors.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motors.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
