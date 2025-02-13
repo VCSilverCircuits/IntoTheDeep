@@ -209,6 +209,7 @@ public class MainTele extends BaseOpMode {
         telem.addData("WristPivot", wristState.getPivot());
         telem.addData("LeftHook", hookState.getPositionLeft());
         telem.addData("RightHook", hookState.getPositionRight());
+        telem.addData("extention", extState.getRealPosition());
 
         /*  ============
             Controller 1
