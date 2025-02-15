@@ -330,14 +330,14 @@ public class SpecimanPathingV2 extends BaseOpModeAuto {
             if (!scoreSpecimen.isFinished()) {
                 neutralActionSpecimen.start();
             }
-            follower.followPath(grab3, true);
+            follower.followPath(grab4, true);
             intakePoseWall.start();
             pathSegment = 22;
         } else if (pathSegment == 22 && !follower.isBusy()) { // Grab wall
             grabWall.start();
             pathSegment = 23;
         } else if (pathSegment == 23 && grabWall.isFinished() && pathTimer.time() > GRAB_DELAY) { // Drive to bar
-            follower.followPath(score4, true);
+            follower.followPath(score5, true);
             specimenPose.start();
             pathSegment = 24;
         } else if (pathSegment == 24 && follower.getPose().getX() >= (SCORE_X - SCORE_X_BUFFER) && !follower.isBusy()) { // Score specimen
@@ -354,7 +354,7 @@ public class SpecimanPathingV2 extends BaseOpModeAuto {
             if (!scoreSpecimen.isFinished()) {
                 neutralActionSpecimen.start();
             }
-            follower.followPath(grab4, true);
+            follower.followPath(park, true);
             intakePoseWall.start();
             pathSegment = 26;
         }
