@@ -1,5 +1,7 @@
 package vcsc.teamcode.abstracts;
 
+import android.graphics.Color;
+
 public class Block {
     private COLOR color;
     private double x, y, angle;
@@ -32,6 +34,17 @@ public class Block {
     }
 
     public enum COLOR {
-        RED, BLUE, YELLOW
+        RED, BLUE, YELLOW;
+
+        Color min;
+        Color max;
+
+        public Color getMin() {
+            return min;
+        }
+
+        public Color getMax() {
+            return max;
+        }
     }
 }

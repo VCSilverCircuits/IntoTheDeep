@@ -62,6 +62,14 @@
                 name="imu"
                 bus="0"
                 port="0" />
+            <RevColorSensorV3
+                name="leftSensor"
+                bus="1"
+                port="0" />
+            <RevColorSensorV3
+                name="rightSensor"
+                bus="2"
+                port="0" />
         </LynxModule>
     </LynxUsbDevice>
 </Robot>

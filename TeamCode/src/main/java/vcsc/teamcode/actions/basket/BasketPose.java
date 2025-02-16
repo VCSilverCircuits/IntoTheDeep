@@ -61,12 +61,10 @@ public class BasketPose implements Action {
         seq = new ActionBuilder();
 
         if (rotState.getPose() != ArmRotPose.BASKET) {
-            seq.then(slidesIn)
-                    .then(elbowOutOfWay);
+            seq.then(slidesIn, elbowOutOfWay);
         }
 
-        seq.then(rotateUp)
-                .then(slidesOut);
+        seq.then(rotateUp).then(slidesOut);
 
         overrideTimer.reset();
         seq.start();

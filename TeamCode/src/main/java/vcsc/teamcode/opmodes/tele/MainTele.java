@@ -23,6 +23,7 @@ import vcsc.teamcode.actions.intake.WallActions;
 import vcsc.teamcode.actions.specimen.ScoreSpecimen;
 import vcsc.teamcode.actions.specimen.SpecimenActions;
 import vcsc.teamcode.actions.specimen.SpecimenPose;
+import vcsc.teamcode.component.DistanceSensors;
 import vcsc.teamcode.component.arm.elbow.ElbowPose;
 import vcsc.teamcode.component.arm.ext.ArmExtPose;
 import vcsc.teamcode.component.arm.rot.ArmRotPose;
@@ -41,6 +42,7 @@ public class MainTele extends BaseOpMode {
     IntakePose intakePose;
     NeutralAction neutralAction;
     NeutralActionSpecimen neutralActionSpecimen;
+    DistanceSensors distanceSensors;
     ToggleHooks toggleHooks;
     PreHang preHangPose;
     SetRotPose hangPose;
@@ -83,6 +85,8 @@ public class MainTele extends BaseOpMode {
         grabWall = new GrabWall(elbowState, wristState, clawState);
         wallActions = new WallActions(elbowState, clawState, intakePoseWall, grabWall);
 
+        distanceSensors = new DistanceSensors(hardwareMap);
+
         /*  ===============
             Button Bindings
             ================ */
@@ -96,7 +100,7 @@ public class MainTele extends BaseOpMode {
             cancel.cancel();
             specimenActions.cancel();
             wallActions.cancel();
-            telemetry.addLine("Cancelling intake and neutral");
+            telem.addLine("Cancelling intake and neutral");
         });
         // Lower Basket Pose
         /*gw1.bindButton(GamepadButton.LEFT_BUMPER, lowerBasketPose);
@@ -104,7 +108,7 @@ public class MainTele extends BaseOpMode {
             basketPose.cancel();
             intakePose.cancel();
             neutralAction.cancel();
-            telemetry.addLine("Cancelling basket and intake");
+            telem.addLine("Cancelling basket and intake");
         });*/
         // Intake pose
         gw1.bindButton(GamepadButton.RIGHT_TRIGGER, intakePose);
@@ -117,7 +121,7 @@ public class MainTele extends BaseOpMode {
             cancel.cancel();
             specimenActions.cancel();
             wallActions.cancel();
-            telemetry.addLine("Cancelling basket and neutral");
+            telem.addLine("Cancelling basket and neutral");
         });
         // Cancel button
         gw1.bindButton(GamepadButton.B, cancel);
@@ -127,7 +131,7 @@ public class MainTele extends BaseOpMode {
             intakePose.cancel();
             specimenActions.cancel();
             wallActions.cancel();
-            telemetry.addLine("Cancelling basket and intake");
+            telem.addLine("Cancelling basket and intake");
         });
 
         // Specimens
@@ -137,7 +141,7 @@ public class MainTele extends BaseOpMode {
             intakePose.cancel();
             neutralAction.cancel();
             grabWall.cancel();
-            telemetry.addLine("Cancelling basket and intake");
+            telem.addLine("Cancelling basket and intake");
         });
         gw1.bindButton(GamepadButton.RIGHT_BUMPER, grabWall);
         gw1.bindRunnable(GamepadButton.RIGHT_BUMPER, () -> {
@@ -145,7 +149,7 @@ public class MainTele extends BaseOpMode {
             intakePose.cancel();
             neutralAction.cancel();
             intakePoseWall.cancel();
-            telemetry.addLine("Cancelling basket and intake");
+            telem.addLine("Cancelling basket and intake");
         });*/
 
         gw1.bindButton(GamepadButton.RIGHT_BUMPER, wallActions);
@@ -154,7 +158,7 @@ public class MainTele extends BaseOpMode {
             intakePose.cancel();
             cancel.cancel();
             specimenActions.cancel();
-            telemetry.addLine("Cancelling basket and intake");
+            telem.addLine("Cancelling basket and intake");
         });
 
         gw1.bindButton(GamepadButton.LEFT_BUMPER, specimenActions);
@@ -163,7 +167,7 @@ public class MainTele extends BaseOpMode {
             intakePose.cancel();
             cancel.cancel();
             wallActions.cancel();
-            telemetry.addLine("Cancelling basket and intake");
+            telem.addLine("Cancelling basket and intake");
         });
         /*gw1.bindButton(GamepadButton.RIGHT_BUMPER, scoreSpecimen);
         gw1.bindRunnable(GamepadButton.RIGHT_BUMPER, () -> {
@@ -171,7 +175,7 @@ public class MainTele extends BaseOpMode {
             intakePose.cancel();
             neutralActionSpecimen.cancel();
             specimenPose.cancel();
-            telemetry.addLine("Cancelling basket and intake");
+            telem.addLine("Cancelling basket and intake");
         });*/
 
 
@@ -274,6 +278,11 @@ public class MainTele extends BaseOpMode {
             }
 
             telem.addData("Current", extState.getCurrent());
+            telem.addData("Distance Sensor Average", distanceSensors.getAverageDistance());
+            telem.addData("Distance Sensor Left", distanceSensors.getLeftDistance());
+            telem.addData("Distance Sensor Right", distanceSensors.getRightDistance());
+            telem.addData("Distance Sensor Angle", distanceSensors.getAngle());
+
 
 
         /*  ================
