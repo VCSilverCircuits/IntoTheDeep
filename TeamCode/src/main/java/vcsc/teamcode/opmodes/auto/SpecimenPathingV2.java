@@ -5,7 +5,6 @@ import com.pedropathing.localization.Pose;
 import com.pedropathing.pathgen.BezierCurve;
 import com.pedropathing.pathgen.BezierLine;
 import com.pedropathing.pathgen.Path;
-import com.pedropathing.pathgen.PathBuilder;
 import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.pathgen.Point;
 import com.pedropathing.util.Constants;
@@ -23,7 +22,7 @@ import vcsc.teamcode.actions.specimen.SpecimenPose;
 import vcsc.teamcode.opmodes.base.BaseOpModeAuto;
 
 @Autonomous(name = "SPECIMENV2 (Hook) Auto", group = "Testing", preselectTeleOp = "Tele")
-public class SpecimanPathingV2 extends BaseOpModeAuto {
+public class SpecimenPathingV2 extends BaseOpModeAuto {
     // X position for specimen scoring location
     final double SCORE_X = 36.5;
     // Buffer before starting to score
@@ -127,7 +126,7 @@ public class SpecimanPathingV2 extends BaseOpModeAuto {
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-113))
                 .build();
 
-         score3 = follower.pathBuilder()
+        score3 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
                                 new Point(13.680, 21.308, Point.CARTESIAN),
@@ -147,7 +146,7 @@ public class SpecimanPathingV2 extends BaseOpModeAuto {
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-113))
                 .build();
 
-         score4 = follower.pathBuilder()
+        score4 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
                                 new Point(13.680, 21.308, Point.CARTESIAN),
@@ -177,7 +176,7 @@ public class SpecimanPathingV2 extends BaseOpModeAuto {
                 .setLinearHeadingInterpolation(Math.toRadians(-113), Math.toRadians(180))
                 .build();
 
-       park = follower.pathBuilder()
+        park = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
                                 new Point(36.500, 77.000, Point.CARTESIAN),
@@ -187,6 +186,7 @@ public class SpecimanPathingV2 extends BaseOpModeAuto {
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-113))
                 .build();
     }
+
     @Override
     public void init() {
         super.init();
@@ -215,6 +215,7 @@ public class SpecimanPathingV2 extends BaseOpModeAuto {
     @Override
     public void loop() {
         super.loop();
+
 
         // ===== Score Pre-load =====
         if (pathSegment == 0) { // Raise slides
@@ -322,9 +323,8 @@ public class SpecimanPathingV2 extends BaseOpModeAuto {
             scoreSpecimen.start();
             pathSegment = 20;
             pathTimer.reset();
-        // ===== Score 5 =====
-        }
-        else if (pathSegment == 21 && (scoreSpecimen.isFinished() || pathTimer.time() > SCORE_DELAY)) { // Drive to wall
+            // ===== Score 5 =====
+        } else if (pathSegment == 21 && (scoreSpecimen.isFinished() || pathTimer.time() > SCORE_DELAY)) { // Drive to wall
             scoreSpecimen.cancel();
             clawState.open();
             if (!scoreSpecimen.isFinished()) {

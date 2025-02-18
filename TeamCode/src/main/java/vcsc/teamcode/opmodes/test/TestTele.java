@@ -56,7 +56,7 @@ public class TestTele extends OpMode {
 
 
         clawState = new ClawState();
-        clawActuator = new ClawActuator(hardwareMap.get(ServoImplEx.class, "claw"));
+        clawActuator = new ClawActuator(hardwareMap);
         clawState.registerActuator(clawActuator);
 
         elbowState = new ElbowState();

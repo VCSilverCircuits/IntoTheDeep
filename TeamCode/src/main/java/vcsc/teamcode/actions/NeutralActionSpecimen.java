@@ -46,7 +46,7 @@ public class NeutralActionSpecimen implements Action {
         wristDown = new SetWristPose(wristState, WristPose.STOW);
 
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
-        telemetry.addLine("Going to neutral pose");
+//        telemetry.addLine("Going to neutral pose");
 
         /*seq = new ActionBuilder(slidesIn)
                 .then(rotateDown)

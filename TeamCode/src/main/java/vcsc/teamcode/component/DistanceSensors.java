@@ -1,6 +1,7 @@
 package vcsc.teamcode.component;
 
-import com.qualcomm.robotcore.hardware.ColorRangeSensor;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -10,12 +11,12 @@ import vcsc.core.abstracts.state.State;
 
 public class DistanceSensors extends Actuator {
     public static double DISTANCE_SENSOR_SPACING = 150;
-    ColorRangeSensor leftSensor;
-    ColorRangeSensor rightSensor;
+    DistanceSensor leftSensor;
+    DistanceSensor rightSensor;
 
     public DistanceSensors(HardwareMap hardwareMap) {
-        leftSensor = hardwareMap.get(ColorRangeSensor.class, "leftSensor");
-        rightSensor = hardwareMap.get(ColorRangeSensor.class, "rightSensor");
+        leftSensor = hardwareMap.get(Rev2mDistanceSensor.class, "leftSensor");
+        rightSensor = hardwareMap.get(Rev2mDistanceSensor.class, "rightSensor");
     }
 
     public double getLeftDistance() {

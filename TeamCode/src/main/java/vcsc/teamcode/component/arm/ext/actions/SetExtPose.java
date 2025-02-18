@@ -25,7 +25,7 @@ public class SetExtPose implements Action {
     @Override
     public void start() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
-        telemetry.addData("Extending slides to position", targetPose.getLength());
+//        telemetry.addData("Extending slides to position", targetPose.getLength());
         if (targetPose.getLength() > extState.getRealPosition()) {
             direction = DIRECTION.UP;
         } else {
@@ -38,7 +38,7 @@ public class SetExtPose implements Action {
     @Override
     public void loop() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
-        telemetry.addLine("[ACTION] SetExtPose is running.");
+//        telemetry.addLine("[ACTION] SetExtPose is running.");
         if (direction == DIRECTION.UP && extState.getRealPosition() >= targetPose.getLength()) {
             finished = true;
         }

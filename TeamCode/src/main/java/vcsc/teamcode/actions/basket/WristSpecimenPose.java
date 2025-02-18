@@ -23,7 +23,7 @@ public class WristSpecimenPose implements Action {
     @Override
     public void start() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
-        telemetry.addLine("Moving elbow and wrist to basket pose.");
+//        telemetry.addLine("Moving elbow and wrist to basket pose.");
         elbowState.setPose(ElbowPose.SPECIMEN);
         wristState.setPose(WristPose.SPECIMEN);
     }

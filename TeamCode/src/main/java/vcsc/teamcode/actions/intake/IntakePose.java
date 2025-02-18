@@ -43,7 +43,7 @@ public class IntakePose implements Action {
         seq = new ActionBuilder();
 
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
-        telemetry.addLine("Going to basket pose.");
+//        telemetry.addLine("Going to basket pose.");
     }
 
     @Override

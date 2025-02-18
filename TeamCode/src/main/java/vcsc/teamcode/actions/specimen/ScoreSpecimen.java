@@ -39,7 +39,7 @@ public class ScoreSpecimen implements Action {
     @Override
     public void loop() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
-        telemetry.addLine("[ACTION] Score specimen is running.");
+//        telemetry.addLine("[ACTION] Score specimen is running.");
         seq.loop();
     }
 

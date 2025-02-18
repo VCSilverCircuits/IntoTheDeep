@@ -29,7 +29,7 @@ public class Testing extends OpMode {
         clawServo.forcePosition(0.8);
         clawState = new ClawState();
         clawState.setPosition(0);
-        clawActuator = new ClawActuator(clawServo);
+//        clawActuator = new ClawActuator(clawServo);
 
     }
 

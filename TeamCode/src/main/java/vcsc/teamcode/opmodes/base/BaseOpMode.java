@@ -14,6 +14,7 @@ import roadrunner.MecanumDrive;
 import vcsc.core.GlobalTelemetry;
 import vcsc.core.util.GamepadWrapper;
 import vcsc.teamcode.DebugConstants;
+import vcsc.teamcode.component.DistanceSensors;
 import vcsc.teamcode.component.arm.elbow.ElbowActuator;
 import vcsc.teamcode.component.arm.elbow.ElbowPose;
 import vcsc.teamcode.component.arm.elbow.ElbowState;
@@ -45,9 +46,12 @@ public class BaseOpMode extends OpMode {
     protected HookState hookState;
     protected Camera camera;
     protected MultipleTelemetry telem;
+    protected DistanceSensors distanceSensors;
+    // NOTE: DO NOT LEAVE THIS AS PROTECTED
+    protected ClawActuator clawActuator;
+    // NOTE: DO NOT LEAVE THIS AS PROTECTED
+    protected ArmExtActuator extActuator;
     ArmRotActuator rotActuator;
-    ArmExtActuator extActuator;
-    ClawActuator clawActuator;
     ElbowActuator elbowActuator;
     WristActuator wristActuator;
     HookActuator hookActuator;
@@ -65,7 +69,7 @@ public class BaseOpMode extends OpMode {
         extState.registerActuator(extActuator);
 
         clawState = new ClawState();
-        clawActuator = new ClawActuator(hardwareMap.get(ServoImplEx.class, "claw"));
+        clawActuator = new ClawActuator(hardwareMap);
         clawState.registerActuator(clawActuator);
 
         elbowState = new ElbowState();
@@ -86,6 +90,8 @@ public class BaseOpMode extends OpMode {
         hookState.registerActuator(hookActuator);
 
         drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
+
+        distanceSensors = new DistanceSensors(hardwareMap);
 
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap);

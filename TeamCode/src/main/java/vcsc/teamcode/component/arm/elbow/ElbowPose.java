@@ -11,6 +11,8 @@ public enum ElbowPose {
     OUT_OF_WAY(0.7),
     SPECIMEN(0.7),
     WALL(0.52),
+    SPECIMEN_GROUND_PREGRAB(0.7),
+    SPECIMEN_GROUND_GRAB(0.73),
     HANG(0.9),
     GRAB(0.75),
     STOW(0);

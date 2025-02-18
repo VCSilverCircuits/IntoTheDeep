@@ -78,10 +78,10 @@ public class ArmRotActuator extends PoweredPIDFActuator {
     protected void loopPID() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
         double outputPower = controller.calculate(getPosition());
-        telemetry.addData("Run Position", controller.getSetPoint());
-        telemetry.addData("At Position", controller.atSetPoint());
-        telemetry.addData("Output Power", outputPower);
-        telemetry.addData("Current position", getPosition());
+//        telemetry.addData("Run Position", controller.getSetPoint());
+//        telemetry.addData("At Position", controller.atSetPoint());
+//        telemetry.addData("Output Power", outputPower);
+//        telemetry.addData("Current position", getPosition());
         motors.setPower(Math.min(Math.abs(outputPower), maxSpeed) * Math.signum(outputPower));
     }
 }

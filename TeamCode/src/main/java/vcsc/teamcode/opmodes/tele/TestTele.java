@@ -86,17 +86,17 @@ public class TestTele extends BaseOpMode {
         gw1.bindButton(GamepadButton.LEFT_TRIGGER, preGrabPoseWall);
         gw1.bindRunnable(GamepadButton.LEFT_TRIGGER, () -> {
 //            lowerBasketPose.cancel();
-            telemetry.addLine("Cancelling intake and neutral");
+//            telemetry.addLine("Cancelling intake and neutral");
         });
         gw1.bindButton(GamepadButton.RIGHT_BUMPER, specimenPose);
         gw1.bindRunnable(GamepadButton.LEFT_TRIGGER, () -> {
 //            lowerBasketPose.cancel();
-            telemetry.addLine("Cancelling intake and neutral");
+//            telemetry.addLine("Cancelling intake and neutral");
         });
         gw1.bindButton(GamepadButton.LEFT_BUMPER, intakePoseWall);
         gw1.bindRunnable(GamepadButton.LEFT_TRIGGER, () -> {
 //            lowerBasketPose.cancel();
-            telemetry.addLine("Cancelling intake and neutral");
+//            telemetry.addLine("Cancelling intake and neutral");
         });
         gw1.bindButton(GamepadButton.RIGHT_TRIGGER, wristSpecimenPose);
         gw1.bindRunnable(GamepadButton.RIGHT_TRIGGER, () -> {
@@ -106,7 +106,7 @@ public class TestTele extends BaseOpMode {
             basketPose.cancel();
 //            lowerBasketPose.cancel();
             neutralAction.cancel();
-            telemetry.addLine("Cancelling basket and neutral");
+//            telemetry.addLine("Cancelling basket and neutral");
         });
         // Cancel button
         gw1.bindButton(GamepadButton.B, cancel);
@@ -114,7 +114,7 @@ public class TestTele extends BaseOpMode {
             basketPose.cancel();
 //            lowerBasketPose.cancel();
             intakePose.cancel();
-            telemetry.addLine("Cancelling basket and intake");
+//            telemetry.addLine("Cancelling basket and intake");
         });
     }
 

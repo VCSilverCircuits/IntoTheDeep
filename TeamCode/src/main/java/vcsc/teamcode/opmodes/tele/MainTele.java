@@ -14,10 +14,14 @@ import vcsc.teamcode.actions.basket.DownFromBasket;
 import vcsc.teamcode.actions.basket.LowerBasketPose;
 import vcsc.teamcode.actions.hang.PreHang;
 import vcsc.teamcode.actions.intake.Grab;
+import vcsc.teamcode.actions.intake.GrabGround;
 import vcsc.teamcode.actions.intake.GrabWall;
+import vcsc.teamcode.actions.intake.GroundActions;
 import vcsc.teamcode.actions.intake.IntakePose;
+import vcsc.teamcode.actions.intake.IntakePoseSpecimenGround;
 import vcsc.teamcode.actions.intake.IntakePoseWall;
 import vcsc.teamcode.actions.intake.PreGrabPose;
+import vcsc.teamcode.actions.intake.PreGrabPoseSpecimenGround;
 import vcsc.teamcode.actions.intake.PreGrabPoseWall;
 import vcsc.teamcode.actions.intake.WallActions;
 import vcsc.teamcode.actions.specimen.ScoreSpecimen;
@@ -53,8 +57,12 @@ public class MainTele extends BaseOpMode {
     ScoreSpecimen scoreSpecimen;
     SpecimenActions specimenActions;
     IntakePoseWall intakePoseWall;
+    GrabGround grabGround;
+    IntakePoseSpecimenGround intakePoseSpecimenGround;
+    PreGrabPoseSpecimenGround preGrabPoseSpecimenGround;
     GrabWall grabWall;
     WallActions wallActions;
+    GroundActions groundActions;
     Cancel cancel;
     Grab grab;
     double wristRotateSpeed = 0.03;
@@ -82,8 +90,13 @@ public class MainTele extends BaseOpMode {
         scoreSpecimen = new ScoreSpecimen(extState, clawState, neutralActionSpecimen);
         specimenActions = new SpecimenActions(extState, clawState, specimenPose, scoreSpecimen);
         intakePoseWall = new IntakePoseWall(rotState, extState, clawState, new PreGrabPoseWall(elbowState, wristState, clawState));
+        grabGround = new GrabGround(elbowState, wristState, clawState);
+        preGrabPoseSpecimenGround = new PreGrabPoseSpecimenGround(elbowState, wristState, clawState);
+        intakePoseSpecimenGround = new IntakePoseSpecimenGround(rotState, extState, clawState, preGrabPoseSpecimenGround);
         grabWall = new GrabWall(elbowState, wristState, clawState);
+
         wallActions = new WallActions(elbowState, clawState, intakePoseWall, grabWall);
+        groundActions = new GroundActions(elbowState, clawState, intakePoseSpecimenGround, grabGround);
 
         distanceSensors = new DistanceSensors(hardwareMap);
 
@@ -100,7 +113,7 @@ public class MainTele extends BaseOpMode {
             cancel.cancel();
             specimenActions.cancel();
             wallActions.cancel();
-            telem.addLine("Cancelling intake and neutral");
+//            telem.addLine("Cancelling intake and neutral");
         });
         // Lower Basket Pose
         /*gw1.bindButton(GamepadButton.LEFT_BUMPER, lowerBasketPose);
@@ -121,7 +134,7 @@ public class MainTele extends BaseOpMode {
             cancel.cancel();
             specimenActions.cancel();
             wallActions.cancel();
-            telem.addLine("Cancelling basket and neutral");
+//            telem.addLine("Cancelling basket and neutral");
         });
         // Cancel button
         gw1.bindButton(GamepadButton.B, cancel);
@@ -131,7 +144,7 @@ public class MainTele extends BaseOpMode {
             intakePose.cancel();
             specimenActions.cancel();
             wallActions.cancel();
-            telem.addLine("Cancelling basket and intake");
+//            telem.addLine("Cancelling basket and intake");
         });
 
         // Specimens
@@ -152,13 +165,13 @@ public class MainTele extends BaseOpMode {
             telem.addLine("Cancelling basket and intake");
         });*/
 
-        gw1.bindButton(GamepadButton.RIGHT_BUMPER, wallActions);
+        gw1.bindButton(GamepadButton.RIGHT_BUMPER, groundActions);
         gw1.bindRunnable(GamepadButton.RIGHT_BUMPER, () -> {
             basketPose.cancel();
             intakePose.cancel();
             cancel.cancel();
             specimenActions.cancel();
-            telem.addLine("Cancelling basket and intake");
+//            telem.addLine("Cancelling basket and intake");
         });
 
         gw1.bindButton(GamepadButton.LEFT_BUMPER, specimenActions);
@@ -166,8 +179,8 @@ public class MainTele extends BaseOpMode {
             basketPose.cancel();
             intakePose.cancel();
             cancel.cancel();
-            wallActions.cancel();
-            telem.addLine("Cancelling basket and intake");
+            groundActions.cancel();
+//            telem.addLine("Cancelling basket and intake");
         });
         /*gw1.bindButton(GamepadButton.RIGHT_BUMPER, scoreSpecimen);
         gw1.bindRunnable(GamepadButton.RIGHT_BUMPER, () -> {
@@ -208,12 +221,12 @@ public class MainTele extends BaseOpMode {
         super.loop();
         extState.setSpeed(DebugConstants.extSpeed);
         rotState.setSpeed(DebugConstants.rotSpeed);
-        telem.addData("ElbowRot", elbowState.getPosition());
-        telem.addData("WristRot", wristState.getRot());
-        telem.addData("WristPivot", wristState.getPivot());
-        telem.addData("LeftHook", hookState.getPositionLeft());
-        telem.addData("RightHook", hookState.getPositionRight());
-        telem.addData("extention", extState.getRealPosition());
+//        telem.addData("ElbowRot", elbowState.getPosition());
+//        telem.addData("WristRot", wristState.getRot());
+//        telem.addData("WristPivot", wristState.getPivot());
+//        telem.addData("LeftHook", hookState.getPositionLeft());
+//        telem.addData("RightHook", hookState.getPositionRight());
+//        telem.addData("extention", extState.getRealPosition());
 
         /*  ============
             Controller 1
@@ -277,11 +290,11 @@ public class MainTele extends BaseOpMode {
                 rotState.setPower(0);
             }
 
-            telem.addData("Current", extState.getCurrent());
-            telem.addData("Distance Sensor Average", distanceSensors.getAverageDistance());
-            telem.addData("Distance Sensor Left", distanceSensors.getLeftDistance());
-            telem.addData("Distance Sensor Right", distanceSensors.getRightDistance());
-            telem.addData("Distance Sensor Angle", distanceSensors.getAngle());
+//            telem.addData("Current", extState.getCurrent());
+//            telem.addData("Distance Sensor Average", distanceSensors.getAverageDistance());
+//            telem.addData("Distance Sensor Left", distanceSensors.getLeftDistance());
+//            telem.addData("Distance Sensor Right", distanceSensors.getRightDistance());
+//            telem.addData("Distance Sensor Angle", distanceSensors.getAngle());
 
 
 

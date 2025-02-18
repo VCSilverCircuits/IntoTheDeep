@@ -29,7 +29,7 @@ public class ClawState extends State {
     }
 
     public void close() {
-        setPosition(ClawPose.CLOSED);
+        setPosition(ClawPose.MOSTLY_CLOSED);
     }
 
     public void setPose(ClawPose pose) {

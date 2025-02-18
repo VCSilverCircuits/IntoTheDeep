@@ -35,7 +35,7 @@ public class LowerBasketPose implements Action {
     @Override
     public void start() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
-        telemetry.addLine("Going to basket pose.");
+//        telemetry.addLine("Going to basket pose.");
 
         seq = new ActionBuilder();
 

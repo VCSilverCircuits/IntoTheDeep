@@ -55,7 +55,7 @@ public class BasketPose implements Action {
     @Override
     public void start() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
-        telemetry.addLine("Going to basket pose.");
+//        telemetry.addLine("Going to basket pose.");
         wristPoseChanged = false;
 
         seq = new ActionBuilder();
@@ -79,7 +79,7 @@ public class BasketPose implements Action {
     public void loop() {
         seq.loop();
         MultipleTelemetry telem = GlobalTelemetry.getInstance();
-        telem.addData("CURRENT EXTENSION LENGTH", extState.getRealExtensionLength());
+//        telem.addData("CURRENT EXTENSION LENGTH", extState.getRealExtensionLength());
         if (!wristPoseChanged && (extState.getRealExtensionLength() > (ArmExtPose.BASKET.getLength() - 15) || overrideTimer.time() > 3000)) {
             wristElbowBasketPose.start();
             wristPoseChanged = true;

@@ -10,7 +10,7 @@
         parentModuleAddress="173"
         serialNumber="(embedded)">
         <LynxModule
-            name="Expansion Hub 2"
+            name="Expansion Hub"
             port="2">
             <RevRoboticsUltraplanetaryHDHexMotor
                 name="extension1"
@@ -62,13 +62,21 @@
                 name="imu"
                 bus="0"
                 port="0" />
-            <RevColorSensorV3
+            <REV_VL53L0X_RANGE_SENSOR
                 name="leftSensor"
+                bus="0"
+                port="1" />
+            <REV_VL53L0X_RANGE_SENSOR
+                name="rightSensor"
                 bus="1"
                 port="0" />
             <RevColorSensorV3
-                name="rightSensor"
+                name="clawSensor"
                 bus="2"
+                port="0" />
+            <RevTouchSensor
+                name="slideLimitSensor"
+                bus="3"
                 port="0" />
         </LynxModule>
     </LynxUsbDevice>

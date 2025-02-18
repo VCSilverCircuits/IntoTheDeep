@@ -33,7 +33,7 @@ public class ArmExtActuator extends PoweredPIDFActuator {
         super(coefficients);
         DcMotorEx extension1 = hardwareMap.get(DcMotorEx.class, "extension1");
         DcMotorEx extension2 = hardwareMap.get(DcMotorEx.class, "extension2");
-//        touchSensor = hardwareMap.get(TouchSensor.class, "touchSensor");
+        touchSensor = hardwareMap.get(TouchSensor.class, "slideLimitSensor");
         extension2.setDirection(DcMotorSimple.Direction.REVERSE);
         motors = new DcMotorGroup(extension1, extension2);
         motors.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -70,10 +70,10 @@ public class ArmExtActuator extends PoweredPIDFActuator {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
         // NOTE: Encoders for extension run backwards
         double outputPower = controller.calculate(getPosition());
-        telemetry.addData("Run Position", controller.getSetPoint());
-        telemetry.addData("At Position", controller.atSetPoint());
-        telemetry.addData("Output Power", outputPower);
-        telemetry.addData("Current position", getPosition());
+//        telemetry.addData("Run Position", controller.getSetPoint());
+//        telemetry.addData("At Position", controller.atSetPoint());
+//        telemetry.addData("Output Power", outputPower);
+//        telemetry.addData("Current position", getPosition());
         motors.setPower(Math.min(Math.abs(outputPower), MAX_EXTENSION_POWER) * Math.signum(outputPower));
     }
 

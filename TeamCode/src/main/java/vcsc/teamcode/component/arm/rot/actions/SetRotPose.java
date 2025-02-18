@@ -26,7 +26,7 @@ public class SetRotPose implements Action {
     @Override
     public void start() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
-        telemetry.addData("Rotating slides to position", targetPose.getAngle());
+//        telemetry.addData("Rotating slides to position", targetPose.getAngle());
         if (targetPose.getAngle() > rotState.getRealPosition()) {
             direction = DIRECTION.UP;
         } else {

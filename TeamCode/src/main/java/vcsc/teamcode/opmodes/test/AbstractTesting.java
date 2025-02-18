@@ -1,7 +1,6 @@
 package vcsc.teamcode.opmodes.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import vcsc.teamcode.component.arm.rot.ArmRotState;
 import vcsc.teamcode.component.claw.ClawActuator;
@@ -16,7 +15,7 @@ public class AbstractTesting extends OpMode {
     @Override
     public void init() {
         clawState = new ClawState();
-        ClawActuator clawAct = new ClawActuator(hardwareMap.get(ServoImplEx.class, "claw"));
+        ClawActuator clawAct = new ClawActuator(hardwareMap);
         clawState.registerActuator(clawAct);
 
         openClaw = new OpenClawAction(clawState);
