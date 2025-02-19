@@ -8,12 +8,12 @@ import vcsc.core.abstracts.action.ActionBuilder;
 import vcsc.teamcode.actions.NeutralActionSpecimen;
 import vcsc.teamcode.component.arm.ext.ArmExtPose;
 import vcsc.teamcode.component.arm.ext.ArmExtState;
-import vcsc.teamcode.component.arm.ext.actions.SetExtPose;
+import vcsc.teamcode.component.arm.ext.actions.SetExtPosePower;
 import vcsc.teamcode.component.claw.ClawState;
 import vcsc.teamcode.component.claw.actions.OpenClawAction;
 
 public class ScoreSpecimen implements Action {
-    SetExtPose extSlides;
+    SetExtPosePower extSlides;
     ArmExtState extState;
     ActionBuilder seq;
     OpenClawAction openClawAction;
@@ -21,7 +21,7 @@ public class ScoreSpecimen implements Action {
 
     public ScoreSpecimen(ArmExtState extState, ClawState clawState, NeutralActionSpecimen neutralAction) {
         this.extState = extState;
-        extSlides = new SetExtPose(extState, ArmExtPose.SPECIMEN_SCORE);
+        extSlides = new SetExtPosePower(extState, ArmExtPose.SPECIMEN_SCORE, 1);
         openClawAction = new OpenClawAction(clawState);
         this.neutralAction = neutralAction;
         seq = new ActionBuilder();
@@ -39,7 +39,7 @@ public class ScoreSpecimen implements Action {
     @Override
     public void loop() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
-//        telemetry.addLine("[ACTION] Score specimen is running.");
+        telemetry.addLine("[ACTION] Score specimen is running.");
         seq.loop();
     }
 

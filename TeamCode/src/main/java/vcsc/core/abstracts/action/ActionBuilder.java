@@ -1,14 +1,19 @@
 package vcsc.core.abstracts.action;
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.pedropathing.follower.Follower;
+import com.pedropathing.pathgen.PathChain;
 
 import java.util.ArrayDeque;
+import java.util.function.Supplier;
 
 import vcsc.core.GlobalTelemetry;
 
 public class ActionBuilder implements Action {
     // TODO: Change this to a list
     ArrayDeque<Action> actionQueue = new ArrayDeque<>();
+
+    Follower follower;
 
     public ActionBuilder() {
 
@@ -26,6 +31,30 @@ public class ActionBuilder implements Action {
     public ActionBuilder then(Action... actions) {
         ParallelAction parallelAction = new ParallelAction(actions);
         actionQueue.add(parallelAction);
+        return this;
+    }
+
+    public void setFollower(Follower follower) {
+        this.follower = follower;
+    }
+
+    public ActionBuilder thenFollowPath(PathChain path, boolean holdEnd, Supplier<Boolean> endCondition) {
+        actionQueue.add(new PathAction(this.follower, path, holdEnd, endCondition));
+        return this;
+    }
+
+    public ActionBuilder thenFollowPath(PathChain path, Supplier<Boolean> endCondition) {
+        actionQueue.add(new PathAction(this.follower, path, endCondition));
+        return this;
+    }
+
+    public ActionBuilder thenFollowPath(PathChain path, boolean holdEnd) {
+        actionQueue.add(new PathAction(this.follower, path, holdEnd));
+        return this;
+    }
+
+    public ActionBuilder thenFollowPath(PathChain path) {
+        actionQueue.add(new PathAction(this.follower, path));
         return this;
     }
 

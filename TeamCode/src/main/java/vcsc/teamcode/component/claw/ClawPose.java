@@ -2,7 +2,7 @@ package vcsc.teamcode.component.claw;
 
 public enum ClawPose {
     OPEN(1),
-    MOSTLY_CLOSED(0.1),
+    MOSTLY_CLOSED(0.07),
     CLOSED(0.05);
 
     public static final double MIN = 0.05;

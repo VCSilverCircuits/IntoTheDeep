@@ -90,7 +90,7 @@ public class MainTele extends BaseOpMode {
         scoreSpecimen = new ScoreSpecimen(extState, clawState, neutralActionSpecimen);
         specimenActions = new SpecimenActions(extState, clawState, specimenPose, scoreSpecimen);
         intakePoseWall = new IntakePoseWall(rotState, extState, clawState, new PreGrabPoseWall(elbowState, wristState, clawState));
-        grabGround = new GrabGround(elbowState, wristState, clawState);
+        grabGround = new GrabGround(elbowState, wristState, clawState, neutralAction);
         preGrabPoseSpecimenGround = new PreGrabPoseSpecimenGround(elbowState, wristState, clawState);
         intakePoseSpecimenGround = new IntakePoseSpecimenGround(rotState, extState, clawState, preGrabPoseSpecimenGround);
         grabWall = new GrabWall(elbowState, wristState, clawState);

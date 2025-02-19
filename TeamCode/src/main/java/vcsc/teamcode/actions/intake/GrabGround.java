@@ -4,6 +4,7 @@ package vcsc.teamcode.actions.intake;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import vcsc.core.abstracts.action.Action;
+import vcsc.teamcode.actions.NeutralAction;
 import vcsc.teamcode.component.arm.elbow.ElbowPose;
 import vcsc.teamcode.component.arm.elbow.ElbowState;
 import vcsc.teamcode.component.claw.ClawPose;
@@ -16,14 +17,16 @@ public class GrabGround implements Action {
     WristState wristState;
     ClawState clawState;
     ElapsedTime timer;
+    NeutralAction neutralAction;
     boolean finished = true;
     int stage = -1;
 
-    public GrabGround(ElbowState elbowState, WristState wristState, ClawState clawState) {
+    public GrabGround(ElbowState elbowState, WristState wristState, ClawState clawState, NeutralAction neutralAction) {
         super();
         this.elbowState = elbowState;
         this.wristState = wristState;
         this.clawState = clawState;
+        this.neutralAction = neutralAction;
         timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     }
 
@@ -53,8 +56,15 @@ public class GrabGround implements Action {
         }
         if (stage == 2 && timer.time() > 200) {
             wristState.setRotPose(WristRotPose.STOW);
-            finished = true;
-            stage = -1;
+            neutralAction.start();
+            stage = 3;
+        }
+        if (stage == 3) {
+            neutralAction.loop();
+            if (neutralAction.isFinished()) {
+                finished = true;
+                stage = -1;
+            }
         }
     }
 
@@ -66,6 +76,7 @@ public class GrabGround implements Action {
     @Override
     public void cancel() {
         stage = -1;
+        neutralAction.cancel();
         finished = true;
     }
 }

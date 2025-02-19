@@ -8,44 +8,59 @@ import vcsc.core.abstracts.action.Action;
 import vcsc.teamcode.component.arm.ext.ArmExtPose;
 import vcsc.teamcode.component.arm.ext.ArmExtState;
 
-public class SetExtPose implements Action {
+public class SetExtPosePower implements Action {
     ArmExtState extState;
     ArmExtPose targetPose;
 
     boolean finished = true;
+    double power = 1;
 
     DIRECTION direction;
 
-    public SetExtPose(ArmExtState extState, ArmExtPose targetPose) {
+    public SetExtPosePower(ArmExtState extState, ArmExtPose targetPose, double power) {
         super();
         this.extState = extState;
         this.targetPose = targetPose;
+        this.power = power;
     }
 
     @Override
     public void start() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
 //        telemetry.addData("Extending slides to position", targetPose.getLength());
+        extState.setPose(targetPose);
         if (targetPose.getLength() > extState.getRealExtensionLength()) {
             direction = DIRECTION.UP;
+            extState.setPower(power);
         } else {
             direction = DIRECTION.DOWN;
+            extState.setPower(-power);
         }
         finished = false;
-        extState.setPose(targetPose);
+        telemetry.addLine("Started slide extension with power");
     }
 
     @Override
     public void loop() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
-//        telemetry.addLine("[ACTION] SetExtPose is running.");
+        telemetry.addLine("[ACTION] SetExtPosePower is running.");
+        telemetry.addData("current ext power", extState.getPower());
+        telemetry.addData("Extension length", extState.getRealExtensionLength());
+        telemetry.addData("Target Extension length", targetPose.getLength());
         if (direction == DIRECTION.UP && extState.getRealExtensionLength() >= targetPose.getLength()) {
             finished = true;
+            extState.setPower(0);
+            extState.setPose(targetPose);
+            telemetry.addLine("Above setpoint, stopping");
         }
         if (direction == DIRECTION.DOWN && extState.getRealExtensionLength() <= targetPose.getLength()) {
             finished = true;
+            extState.setPower(0);
+            extState.setPose(targetPose);
+            telemetry.addLine("Below setpoint, stopping");
         }
         if (!extState.actuatorsInAction()) {
+            telemetry.addLine("Actuators not in action, stopping");
             finished = true;
         }
     }

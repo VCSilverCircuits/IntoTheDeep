@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import vcsc.core.GlobalTelemetry;
 import vcsc.core.util.GamepadWrapper;
 import vcsc.teamcode.DebugConstants;
+import vcsc.teamcode.component.DistanceSensors;
 import vcsc.teamcode.component.arm.elbow.ElbowActuator;
 import vcsc.teamcode.component.arm.elbow.ElbowPose;
 import vcsc.teamcode.component.arm.elbow.ElbowState;
@@ -37,6 +38,7 @@ public class BaseOpModeAuto extends OpMode {
     protected HookState hookState;
     protected Camera camera;
     protected MultipleTelemetry telem;
+    protected DistanceSensors distanceSensors;
     ArmRotActuator rotActuator;
     ArmExtActuator extActuator;
     ClawActuator clawActuator;
@@ -81,6 +83,8 @@ public class BaseOpModeAuto extends OpMode {
         gw2 = new GamepadWrapper();
 
         matchTimer = new ElapsedTime();
+
+        distanceSensors = new DistanceSensors(hardwareMap);
     }
 
     @Override

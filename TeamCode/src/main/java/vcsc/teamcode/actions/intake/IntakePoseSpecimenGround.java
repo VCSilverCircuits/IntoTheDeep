@@ -33,7 +33,7 @@ public class IntakePoseSpecimenGround implements Action {
         this.preGrabPose = preGrabPose;
 
         slidesIn = new SetExtPose(extState, ArmExtPose.RETRACT);
-//        slidesOut = new SetExtPose(extState, ArmExtPose.INTAKE);
+        slidesOut = new SetExtPose(extState, ArmExtPose.INTAKE);
         rotateDown = new SetRotPose(rotState, ArmRotPose.INTAKE);
 
         /*seq = new ActionBuilder(slidesIn)
@@ -57,7 +57,8 @@ public class IntakePoseSpecimenGround implements Action {
         }
 
         seq.then(rotateDown)
-                .then(preGrabPose);
+                .then(preGrabPose)
+                .then(slidesOut);
         seq.start();
     }
 

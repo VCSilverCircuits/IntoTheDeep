@@ -1,11 +1,13 @@
 package vcsc.teamcode.actions;
 
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.pedropathing.follower.Follower;
 
 import java.util.ArrayList;
 import java.util.OptionalDouble;
 
+import vcsc.core.GlobalTelemetry;
 import vcsc.core.abstracts.action.Action;
 import vcsc.teamcode.abstracts.Block;
 import vcsc.teamcode.component.camera.Camera;
@@ -26,6 +28,7 @@ public class LockOn implements Action {
     boolean failure = false;
     double start_heading = 0;
     NeutralAction neutralAction;
+    MultipleTelemetry telem;
 
 
     public LockOn(Camera camera, Follower follower, WristState wristState, NeutralAction neutralAction) {
@@ -36,6 +39,7 @@ public class LockOn implements Action {
         yController = new PIDController(0.002, 0, 0);
         angleList = new ArrayList<>();
         this.neutralAction = neutralAction;
+        telem = GlobalTelemetry.getInstance();
     }
 
     @Override
@@ -76,12 +80,12 @@ public class LockOn implements Action {
             x_offset = block.getX() - 160;
             y_offset = 80 - block.getY();
 
-//            telem.addData("Block", block.getColor());
-//            telem.addData("X", block.getX());
-//            telem.addData("Y", block.getY());
-//            telem.addData("X Offset", x_offset);
-//            telem.addData("Y Offset", y_offset);
-//            telem.addData("Angle", block.getAngle());
+            telem.addData("Block", block.getColor());
+            telem.addData("X", block.getX());
+            telem.addData("Y", block.getY());
+            telem.addData("X Offset", x_offset);
+            telem.addData("Y Offset", y_offset);
+            telem.addData("Angle", block.getAngle());
 
             OptionalDouble angleAverage = angleList.stream().mapToDouble(a -> a).average();
 
@@ -110,7 +114,7 @@ public class LockOn implements Action {
                 angleList.remove(0);
             }
         } else {
-//            telem.addLine("No blocks detected.");
+            telem.addLine("No blocks detected.");
             follower.setTeleOpMovementVectors(0, 0, 0.15);
             angleList.clear();
         }

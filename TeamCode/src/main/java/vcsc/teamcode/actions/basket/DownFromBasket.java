@@ -43,7 +43,7 @@ public class DownFromBasket implements Action {
         slidesIn = new SetExtPose(extState, ArmExtPose.RETRACT);
         rotateDown = new SetRotPose(rotState, ArmRotPose.INTAKE);
         elbowDown = new SetElbowPose(elbowState, ElbowPose.STOW);
-        elbowUp = new SetElbowPose(elbowState, ElbowPose.STRAIGHT);
+        elbowUp = new SetElbowPose(elbowState, ElbowPose.OUT_OF_WAY);
         wristDown = new SetWristPose(wristState, WristPose.STOW);
 
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();

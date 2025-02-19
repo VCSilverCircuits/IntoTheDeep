@@ -15,15 +15,14 @@ public class ClawSensor extends Actuator {
     ColorRangeSensor colorRangeSensor;
 
     public ClawSensor(HardwareMap hardwareMap) {
-        colorRangeSensor = hardwareMap.get(ColorRangeSensor.class, "clawSensor");
-        colorRangeSensor.close();
+//        colorRangeSensor = hardwareMap.get(ColorRangeSensor.class, "clawSensor");
     }
 
     @Override
     public void init() {
         super.init();
-        colorRangeSensor.enableLed(false);
-        colorRangeSensor.setGain(50);
+//        colorRangeSensor.enableLed(false);
+//        colorRangeSensor.setGain(50);
     }
 
     public double getDistance() {
