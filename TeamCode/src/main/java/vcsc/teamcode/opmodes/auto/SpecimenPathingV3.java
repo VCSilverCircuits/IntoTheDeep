@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 import vcsc.core.abstracts.action.ActionBuilder;
+import vcsc.teamcode.GolfingSample1;
 import vcsc.teamcode.actions.NeutralAction;
 import vcsc.teamcode.actions.NeutralActionSpecimen;
 import vcsc.teamcode.actions.intake.GrabGround;
@@ -41,6 +42,7 @@ public class SpecimenPathingV3 extends BaseOpModeAuto {
     private final Pose P_INTAKE = new Pose(20, 30, Math.toRadians(235));
     // >>> Sample Grabbing
     private final Pose P_SAMPLE_GRAB = new Pose(25, 15, Math.toRadians(0));
+    private final double Observation_Zone_Heading = Math.toRadians(245);
     private final double SAMPLE_GRAB_HEADING_1 = Math.toRadians(25);
     private final double SAMPLE_GRAB_HEADING_2 = Math.toRadians(0);
     private final double SAMPLE_GRAB_HEADING_3 = Math.toRadians(-25);
@@ -67,6 +69,7 @@ public class SpecimenPathingV3 extends BaseOpModeAuto {
     PreGrabPoseSpecimenGround preGrabPoseSpecimenGround;
     GrabGround grabGround;
     NeutralAction neutralAction;
+    GolfingSample1 golfingSample1;
 
     // Timers
     private ElapsedTime pathTimer;
@@ -145,6 +148,7 @@ public class SpecimenPathingV3 extends BaseOpModeAuto {
         neutralAction = new NeutralAction(rotState, extState, elbowState, wristState);
         preGrabPoseSpecimenGround = new PreGrabPoseSpecimenGround(elbowState, wristState, clawState);
         intakePoseSpecimenGround = new IntakePoseSpecimenGround(rotState, extState, clawState, preGrabPoseSpecimenGround);
+        golfingSample1 = new GolfingSample1(rotState, extState, clawState, preGrabPoseSpecimenGround);
         grabGround = new GrabGround(elbowState, wristState, clawState, neutralAction);
 
         pathTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
@@ -174,28 +178,58 @@ public class SpecimenPathingV3 extends BaseOpModeAuto {
                     cleanupScore();
                     follower.setMaxPower(1);
                     follower.followPath(score1ToSampleGrab, true);
-                }
-                break;
-            case 4:
-                if (!follower.isBusy()) {
-                    follower.followPath(sampleGrabToIntake);
                     pathSegment++;
                 }
                 break;
             case 5:
                 if (!follower.isBusy()) {
-                    intakePoseSpecimenGround.start();
+                    follower.followPath(sampleGrabToIntake);
                     pathSegment++;
                 }
                 break;
             case 6:
+                follower.turnToDegrees(SAMPLE_GRAB_HEADING_1);
+                pathSegment++;
+                break;
+            case 7:
+                preGrabPoseSpecimenGround.start();
+                pathSegment++;
+                break;
+            case 8:
+                grabGround.start();
+                pathSegment++;
+                break;
+            case 9:
+                if (grabGround.isFinished()) {
+                    follower.turnToDegrees(Observation_Zone_Heading);
+                    pathSegment++;
+                    break;
+                }
+            case 10:
+                if (!follower.isBusy())
+                clawState.open();
+                break;
+            case 11:
+                if (clawState.open())
+                follower.turnToDegrees(SAMPLE_GRAB_HEADING_2);
+                break;
+
+           /* case 6:
+                if (!follower.isBusy()) {
+                    intakePoseSpecimenGround.start();
+                    pathSegment++;
+                }
+                break;
+            case 7:
                 if (intakePoseSpecimenGround.isFinished()) {
                     grabGround.start();
                     pathSegment++;
-                }
+                }*/
         }
     }
-
+    public void golfingSample1(){
+        clawState.open();
+    }
     public void cleanupScore() {
         scoreSpecimen.cancel();
         clawState.open();
@@ -211,6 +245,7 @@ public class SpecimenPathingV3 extends BaseOpModeAuto {
         neutralActionSpecimen.loop();
         intakePoseSpecimenGround.loop();
         grabGround.loop();
+        golfingSample1.loop();
     }
 
     public void scoreSpecimen() {

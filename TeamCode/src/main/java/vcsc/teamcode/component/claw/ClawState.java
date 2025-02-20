@@ -24,8 +24,9 @@ public class ClawState extends State {
         notifyActuators();
     }
 
-    public void open() {
+    public boolean open() {
         setPosition(ClawPose.OPEN);
+        return false;
     }
 
     public void close() {
