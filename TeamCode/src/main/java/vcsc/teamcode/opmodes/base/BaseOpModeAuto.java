@@ -10,7 +10,6 @@ import vcsc.core.util.GamepadWrapper;
 import vcsc.teamcode.DebugConstants;
 import vcsc.teamcode.component.DistanceSensors;
 import vcsc.teamcode.component.arm.elbow.ElbowActuator;
-import vcsc.teamcode.component.arm.elbow.ElbowPose;
 import vcsc.teamcode.component.arm.elbow.ElbowState;
 import vcsc.teamcode.component.arm.ext.ArmExtActuator;
 import vcsc.teamcode.component.arm.ext.ArmExtState;
@@ -22,7 +21,6 @@ import vcsc.teamcode.component.claw.ClawState;
 import vcsc.teamcode.component.hooks.HookActuator;
 import vcsc.teamcode.component.hooks.HookState;
 import vcsc.teamcode.component.wrist.WristActuator;
-import vcsc.teamcode.component.wrist.WristPose;
 import vcsc.teamcode.component.wrist.WristState;
 
 public class BaseOpModeAuto extends OpMode {
@@ -90,8 +88,8 @@ public class BaseOpModeAuto extends OpMode {
     @Override
     public void start() {
         matchTimer.reset();
-        wristState.setPose(WristPose.STOW);
-        elbowState.setPose(ElbowPose.STOW);
+//        wristState.setPose(WristPose.STOW);
+//        elbowState.setPose(ElbowPose.STOW);
         rotActuator.setMaxSpeed(0.6);
         clawState.close();
     }

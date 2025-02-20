@@ -147,7 +147,7 @@ public class SubmersibleGrab extends BaseOpMode {
             }
         } else {
             telem.addLine("No blocks detected.");
-            follower.setTeleOpMovementVectors(0, 0, 0.15);
+            follower.setTeleOpMovementVectors(0, 0, 0.01);
             angleList.clear();
         }
 

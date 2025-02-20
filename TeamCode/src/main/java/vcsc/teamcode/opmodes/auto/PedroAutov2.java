@@ -15,8 +15,8 @@ import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 import vcsc.teamcode.actions.LockOn;
 import vcsc.teamcode.actions.NeutralAction;
-import vcsc.teamcode.actions.ToggleBasket;
-import vcsc.teamcode.actions.basket.BasketPose;
+import vcsc.teamcode.actions.ToggleBasketAuto;
+import vcsc.teamcode.actions.basket.BasketPoseAuto;
 import vcsc.teamcode.actions.basket.DownFromBasket;
 import vcsc.teamcode.actions.intake.GrabAuto;
 import vcsc.teamcode.actions.intake.GrabAutoWall;
@@ -24,6 +24,7 @@ import vcsc.teamcode.actions.intake.IntakePoseAuto;
 import vcsc.teamcode.actions.intake.PreGrabPose;
 import vcsc.teamcode.actions.intake.PreGrabPoseAuto;
 import vcsc.teamcode.component.arm.elbow.ElbowPose;
+import vcsc.teamcode.component.wrist.WristPose;
 import vcsc.teamcode.opmodes.base.BaseOpModeAuto;
 
 @Autonomous(name = "SAMPLE (Basket) Auto", group = "Testing", preselectTeleOp = "Tele")
@@ -35,11 +36,11 @@ public class PedroAutov2 extends BaseOpModeAuto {
     private final Pose pickup2Pose = new Pose(24.5, 131.5, Math.toRadians(0)); // Second sample pickup
     private final Pose pickup3Pose = new Pose(26, 132.3, Math.toRadians(29)); // Third sample pickup
 
-    private final Pose parkPose = new Pose(60, 105, Math.toRadians(270));    // Parking position
-    private final Pose parkControlPose = new Pose(65, 125, Math.toRadians(90)); // Control point for curved path
-    BasketPose basketPose;
+    private final Pose parkPose = new Pose(60, 100, Math.toRadians(270));    // Parking position
+    private final Pose parkControlPose = new Pose(65, 130, Math.toRadians(90)); // Control point for curved path
+    BasketPoseAuto basketPose;
     DownFromBasket downFromBasket;
-    ToggleBasket toggleBasket;
+    ToggleBasketAuto toggleBasket;
     PreGrabPose preGrabPose;
     IntakePoseAuto intakePoseAuto;
     GrabAuto grab;
@@ -115,161 +116,167 @@ public class PedroAutov2 extends BaseOpModeAuto {
                 setPathState(1);
                 break;
             case 1: // Wait until the robot is near the scoring position
-                if (follower.getPose().getX() > (scorePose.getX() - 1) && follower.getPose().getY() > (scorePose.getY() - 1) && pathTimer.getElapsedTime() > 800 && !follower.isBusy()) {
+                if (follower.getPose().getX() > (scorePose.getX() - 8) && follower.getPose().getY() > (scorePose.getY() - 8)) {
                     toggleBasket.start();
                     pathTimer.resetTimer();
                     setPathState(2);
                 }
                 break;
-            case 2:
-                if (toggleBasket.isFinished() && pathTimer.getElapsedTime() > basketDelayDown + 1500) {
-                    toggleBasket.start();
-                    follower.followPath(grabPickup1, true);
+            case 2: // Wait until the robot is near the scoring position
+                if (follower.getPose().getX() > (scorePose.getX() - 1) && follower.getPose().getY() > (scorePose.getY() - 1) && !follower.isBusy()) {
+                    pathTimer.resetTimer();
                     setPathState(3);
                 }
                 break;
-//
-            case 3: // Wait until the robot is near the first sample pickup position
-                if (follower.getPose().getX() > (pickup1Pose.getX() - 1) && follower.getPose().getY() < (pickup1Pose.getY() + 1)) {
-                    intakePoseAuto.start();
+            case 3:
+                if (toggleBasket.isFinished() && pathTimer.getElapsedTime() > basketDelayDown + 500) {
+                    toggleBasket.start();
+                    follower.followPath(grabPickup1, true);
                     setPathState(4);
                 }
                 break;
-            case 4: // Grab
-                if (intakePoseAuto.isFinished() && pathTimer.getElapsedTime() > grabDelay) {
-                    grab.start();
+//
+            case 4: // Wait until the robot is near the first sample pickup position
+                if (follower.getPose().getX() > (pickup1Pose.getX() - 1) && follower.getPose().getY() < (pickup1Pose.getY() + 1)) {
+                    intakePoseAuto.start();
                     setPathState(5);
                 }
                 break;
-            case 5: // Neutral
-                if (grab.isFinished() && pathTimer.getElapsedTime() > neutralDelay) {
-                    neutralAction.start();
+            case 5: // Grab
+                if (intakePoseAuto.isFinished() && pathTimer.getElapsedTime() > grabDelay) {
+                    grab.start();
                     setPathState(6);
                 }
                 break;
-            case 6: // Score
-                if (neutralAction.isFinished() && pathTimer.getElapsedTime() > scoreDelay) {
-                    toggleBasket.start();
-                    follower.followPath(scorePickup1, true);
+            case 6: // Neutral
+                if (grab.isFinished() && pathTimer.getElapsedTime() > neutralDelay) {
+                    neutralAction.start();
                     setPathState(7);
                 }
                 break;
-            case 7: // Wait until the robot is near the scoring position
-                if (follower.getPose().getX() < (scorePose.getX() + 1) && follower.getPose().getY() > (scorePose.getY() - 1) && pathTimer.getElapsedTime() > basketDelayUp && !follower.isBusy()) {
+            case 7: // Score
+                if (neutralAction.isFinished() && pathTimer.getElapsedTime() > scoreDelay) {
+                    toggleBasket.start();
+                    follower.followPath(scorePickup1, true);
                     setPathState(8);
                 }
                 break;
-            case 8:
-                if (toggleBasket.isFinished() && pathTimer.getElapsedTime() > basketDelayDown) {
-                    toggleBasket.start();
-                    follower.followPath(grabPickup2, true);
+            case 8: // Wait until the robot is near the scoring position
+                if (follower.getPose().getX() < (scorePose.getX() + 1) && follower.getPose().getY() > (scorePose.getY() - 1) && pathTimer.getElapsedTime() > basketDelayUp && !follower.isBusy()) {
                     setPathState(9);
                 }
                 break;
-            case 9: // Wait until the robot is near the second sample pickup position
-                if (follower.getPose().getX() > (pickup2Pose.getX() - 1) && follower.getPose().getY() > (pickup2Pose.getY() - 1)) {
-                    intakePoseAuto.start();
+            case 9:
+                if (toggleBasket.isFinished() && pathTimer.getElapsedTime() > basketDelayDown) {
+                    toggleBasket.start();
+                    follower.followPath(grabPickup2, true);
                     setPathState(10);
                 }
                 break;
-            case 10:
-                if (intakePoseAuto.isFinished() && pathTimer.getElapsedTime() > grabDelay) {
-                    grab.start();
+            case 10: // Wait until the robot is near the second sample pickup position
+                if (follower.getPose().getX() > (pickup2Pose.getX() - 1) && follower.getPose().getY() > (pickup2Pose.getY() - 1)) {
+                    intakePoseAuto.start();
                     setPathState(11);
                 }
                 break;
             case 11:
-                if (grab.isFinished() && pathTimer.getElapsedTime() > neutralDelay) {
-                    neutralAction.start();
+                if (intakePoseAuto.isFinished() && pathTimer.getElapsedTime() > grabDelay) {
+                    grab.start();
                     setPathState(12);
                 }
                 break;
             case 12:
-                if (neutralAction.isFinished() && pathTimer.getElapsedTime() > scoreDelay) {
-                    toggleBasket.start();
-                    follower.followPath(scorePickup2, true);
+                if (grab.isFinished() && pathTimer.getElapsedTime() > neutralDelay) {
+                    neutralAction.start();
                     setPathState(13);
                 }
                 break;
-            case 13: // Wait until the robot is near the scoring position
-                if (follower.getPose().getX() < (scorePose.getX() + 1) && follower.getPose().getY() < (scorePose.getY() + 1) && pathTimer.getElapsedTime() > basketDelayUp && !follower.isBusy()) {
+            case 13:
+                if (neutralAction.isFinished() && pathTimer.getElapsedTime() > scoreDelay) {
+                    toggleBasket.start();
+                    follower.followPath(scorePickup2, true);
                     setPathState(14);
                 }
                 break;
-            case 14:
-                if (toggleBasket.isFinished() && pathTimer.getElapsedTime() > basketDelayDown) {
-                    toggleBasket.start();
-                    follower.followPath(grabPickup3, true);
+            case 14: // Wait until the robot is near the scoring position
+                if (follower.getPose().getX() < (scorePose.getX() + 1) && follower.getPose().getY() < (scorePose.getY() + 1) && pathTimer.getElapsedTime() > basketDelayUp && !follower.isBusy()) {
                     setPathState(15);
                 }
                 break;
-            case 15: // Wait until the robot is near the third sample pickup position
-                if (follower.getPose().getX() > (pickup3Pose.getX() - 1) && follower.getPose().getY() > (pickup3Pose.getY() - 1)) {
-                    intakePoseAuto.start();
+            case 15:
+                if (toggleBasket.isFinished() && pathTimer.getElapsedTime() > basketDelayDown) {
+                    toggleBasket.start();
+                    follower.followPath(grabPickup3, true);
                     setPathState(16);
                 }
                 break;
-            case 16:
-                if (intakePoseAuto.isFinished() && pathTimer.getElapsedTime() > grabDelay) {
-                    grabWall.start();
+            case 16: // Wait until the robot is near the third sample pickup position
+                if (follower.getPose().getX() > (pickup3Pose.getX() - 1) && follower.getPose().getY() > (pickup3Pose.getY() - 1)) {
+                    intakePoseAuto.start();
                     setPathState(17);
                 }
                 break;
             case 17:
-                if (grabWall.isFinished() && pathTimer.getElapsedTime() > neutralDelay) {
-                    neutralAction.start();
+                if (intakePoseAuto.isFinished() && pathTimer.getElapsedTime() > grabDelay) {
+                    grabWall.start();
                     setPathState(18);
                 }
                 break;
             case 18:
-                if (neutralAction.isFinished() && pathTimer.getElapsedTime() > scoreDelay) {
-                    toggleBasket.start();
-                    follower.followPath(scorePickup3, true);
+                if (grabWall.isFinished() && pathTimer.getElapsedTime() > neutralDelay) {
+                    neutralAction.start();
                     setPathState(19);
                 }
                 break;
-            case 19: // Wait until the robot is near the scoring position
-                if (follower.getPose().getX() < (scorePose.getX() + 1) && follower.getPose().getY() < (scorePose.getY() + 1) && pathTimer.getElapsedTime() > basketDelayUp && !follower.isBusy()) {
+            case 19:
+                if (neutralAction.isFinished() && pathTimer.getElapsedTime() > scoreDelay) {
+                    toggleBasket.start();
+                    follower.followPath(scorePickup3, true);
                     setPathState(20);
                 }
                 break;
-            case 20:
-                if (toggleBasket.isFinished() && pathTimer.getElapsedTime() > basketDelayDown) {
-                    toggleBasket.start();
-                    follower.followPath(park, true);
+            case 20: // Wait until the robot is near the scoring position
+                if (follower.getPose().getX() < (scorePose.getX() + 1) && follower.getPose().getY() < (scorePose.getY() + 1) && pathTimer.getElapsedTime() > basketDelayUp && !follower.isBusy()) {
                     setPathState(21);
                 }
                 break;
             case 21:
-                if (follower.getPose().getX() > (parkPose.getX() - 5) && follower.getPose().getY() < (parkPose.getY() + 5)) {
-                    toggleBasket.cancel();
-                    intakePoseAuto.start();
-                    pathTimer.resetTimer();
+                if (toggleBasket.isFinished() && pathTimer.getElapsedTime() > basketDelayDown) {
+                    toggleBasket.start();
+                    follower.followPath(park, true);
                     setPathState(22);
                 }
                 break;
             case 22:
-                if (intakePoseAuto.isFinished() && pathTimer.getElapsedTime() > 500) {
-                    lockOn.start();
+                if (follower.getPose().getX() > (parkPose.getX() - 5) && follower.getPose().getY() < (parkPose.getY() + 5)) {
+                    toggleBasket.cancel();
+                    intakePoseAuto.start();
+                    pathTimer.resetTimer();
                     setPathState(23);
                 }
                 break;
             case 23:
+                if (intakePoseAuto.isFinished() && pathTimer.getElapsedTime() > 500) {
+                    lockOn.start();
+                    setPathState(24);
+                }
+                break;
+            case 24:
                 if (lockOn.isFinished()) {
                     if (lockOn.failed()) {
                         pathTimer.resetTimer();
                         follower.followPath(park, true);
-                        setPathState(29);
+                        setPathState(30);
                     } else {
                         pathTimer.resetTimer();
-                        setPathState(24);
+                        setPathState(25);
                     }
                 }
                 break;
-            case 24:
+            case 25:
                 if (pathTimer.getElapsedTime() > 500) {
                     grab.start();
-                    setPathState(25);
+                    setPathState(26);
 
                     scoreSubmersible = follower.pathBuilder()
                             .addPath(new BezierLine(new Point(follower.getPose()), new Point(scorePose)))
@@ -278,29 +285,29 @@ public class PedroAutov2 extends BaseOpModeAuto {
                             .build();
                 }
                 break;
-            case 25:
+            case 26:
                 if (grabWall.isFinished() && pathTimer.getElapsedTime() > neutralDelay) {
                     neutralAction.start();
-                    setPathState(26);
-                }
-                break;
-            case 26:
-                if (neutralAction.isFinished() && pathTimer.getElapsedTime() > scoreDelay) {
-                    toggleBasket.start();
-                    follower.followPath(scoreSubmersible, true);
                     setPathState(27);
                 }
                 break;
-            case 27: // Wait until the robot is near the scoring position
-                if (follower.getPose().getX() < (scorePose.getX() + 1) && follower.getPose().getY() > (scorePose.getY() - 1) && pathTimer.getElapsedTime() > basketDelayUp && !follower.isBusy()) {
+            case 27:
+                if (neutralAction.isFinished() && pathTimer.getElapsedTime() > scoreDelay) {
+                    toggleBasket.start();
+                    follower.followPath(scoreSubmersible, true);
                     setPathState(28);
                 }
                 break;
-            case 28:
+            case 28: // Wait until the robot is near the scoring position
+                if (follower.getPose().getX() < (scorePose.getX() + 1) && follower.getPose().getY() > (scorePose.getY() - 1) && pathTimer.getElapsedTime() > basketDelayUp && !follower.isBusy()) {
+                    setPathState(29);
+                }
+                break;
+            case 29:
                 if (toggleBasket.isFinished() && pathTimer.getElapsedTime() > basketDelayDown) {
                     toggleBasket.start();
                     follower.followPath(park, true);
-                    setPathState(29);
+                    setPathState(30);
                 }
                 break;
 //
@@ -399,9 +406,9 @@ public class PedroAutov2 extends BaseOpModeAuto {
         follower.setStartingPose(startPose);
         buildPaths();
 
-        basketPose = new BasketPose(rotState, extState, elbowState, wristState);
+        basketPose = new BasketPoseAuto(rotState, extState, elbowState, wristState);
         downFromBasket = new DownFromBasket(rotState, extState, elbowState, wristState);
-        toggleBasket = new ToggleBasket(extState, clawState, basketPose, downFromBasket);
+        toggleBasket = new ToggleBasketAuto(extState, clawState, basketPose, downFromBasket);
         preGrabPose = new PreGrabPoseAuto(elbowState, wristState, clawState);
         intakePoseAuto = new IntakePoseAuto(rotState, extState, clawState, preGrabPose);
         grab = new GrabAuto(elbowState, wristState, clawState);
@@ -425,6 +432,8 @@ public class PedroAutov2 extends BaseOpModeAuto {
     @Override
     public void start() {
         super.start();
+        wristState.setPose(WristPose.STOW);
+        elbowState.setPose(ElbowPose.STOW);
         opmodeTimer.resetTimer();
         setPathState(0);
     }

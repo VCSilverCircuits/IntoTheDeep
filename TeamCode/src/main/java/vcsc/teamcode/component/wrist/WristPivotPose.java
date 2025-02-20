@@ -8,6 +8,7 @@ public enum WristPivotPose {
     TILT(0.42),
     AUTO_WALL(0.7),
     REVERSE(0.5), // TODO: Fully deprecate reversal
+    AUTO_GOLF(0.3),
     MIN(0),
     MAX(1);
 

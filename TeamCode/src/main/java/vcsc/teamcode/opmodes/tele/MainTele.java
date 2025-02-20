@@ -236,12 +236,17 @@ public class MainTele extends BaseOpMode {
         // ----- Drivetrain -----
 
         // Slow down driving if the slides are extended
-        if (extState.getTargetPosition() > 10 && extState.getPose() != ArmExtPose.SPECIMEN_PRE_SCORE || elbowState.getPose() == ElbowPose.WALL) {
+        if (extState.getTargetPosition() > 10 && extState.getPose() != ArmExtPose.SPECIMEN_PRE_SCORE) {
             driveSpeed = 0.25;
             turnSpeed = 0.25;
         } else {
             driveSpeed = DEFAULT_DRIVE_SPEED;
             turnSpeed = DEFAULT_TURN_SPEED;
+        }
+
+        if (elbowState.getPose() == ElbowPose.SPECIMEN_GROUND_PREGRAB) {
+            driveSpeed = 0.25;
+            turnSpeed = 0.2;
         }
 
         if (extState.getPose() == ArmExtPose.SPECIMEN_PRE_SCORE) {

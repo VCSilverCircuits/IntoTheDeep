@@ -35,8 +35,8 @@ public class LockOn implements Action {
         this.camera = camera;
         this.follower = follower;
         this.wristState = wristState;
-        xController = new PIDController(0.002, 0, 0);
-        yController = new PIDController(0.002, 0, 0);
+        xController = new PIDController(0.004, 0, 0);
+        yController = new PIDController(0.004, 0, 0);
         angleList = new ArrayList<>();
         this.neutralAction = neutralAction;
         telem = GlobalTelemetry.getInstance();

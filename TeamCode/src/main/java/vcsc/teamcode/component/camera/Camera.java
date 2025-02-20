@@ -28,6 +28,7 @@ public class Camera extends Actuator {
         LLResult result = limelight.getLatestResult();
         double[] block_data = result.getPythonOutput();
         MultipleTelemetry telem = GlobalTelemetry.getInstance();
+        telem.addData("Block data", block_data);
         double color = block_data[0];
         double x = block_data[1];
         double y = block_data[2];
