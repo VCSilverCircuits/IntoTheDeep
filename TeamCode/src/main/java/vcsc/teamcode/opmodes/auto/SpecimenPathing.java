@@ -9,6 +9,7 @@ import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.pathgen.Point;
 import com.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import pedroPathing.constants.FConstants;
@@ -21,6 +22,7 @@ import vcsc.teamcode.actions.specimen.ScoreSpecimen;
 import vcsc.teamcode.actions.specimen.SpecimenPose;
 import vcsc.teamcode.opmodes.base.BaseOpModeAuto;
 
+@Disabled
 @Autonomous(name = "SPECIMEN (Hook) Auto", group = "Testing", preselectTeleOp = "Tele")
 public class SpecimenPathing extends BaseOpModeAuto {
     // X position for specimen scoring location

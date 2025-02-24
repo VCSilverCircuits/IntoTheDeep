@@ -29,15 +29,18 @@ import vcsc.teamcode.actions.specimen.ScoreSpecimen;
 import vcsc.teamcode.actions.specimen.SpecimenPose;
 import vcsc.teamcode.opmodes.base.BaseOpModeAuto;
 
-@Autonomous(name = "SPECIMENV4 (Hook) Auto", group = "Testing", preselectTeleOp = "Tele")
+@Autonomous(name = "SPECIMEN (Hook) Auto", group = "Testing", preselectTeleOp = "Tele")
 public class SpecimenPathingV4 extends BaseOpModeAuto {
     // ===== CONSTANTS =====
     // >>> Positions
-    private final double SCORE_X = 40; // X position for scoring specimens
+    private final double SCORE_X = 38.5; // X position for scoring specimens
     private final double SCORE_X_BUFFER = 3;
+    private final double GRAB_WALL_X = 13.000;
+    private final double GRAB_WALL_BUFFER = 2;
     private final double INITIAL_SCORE_Y = 78; // Y position for scoring first specimen
     private final double SCORE_SPACING = -3.5; // Y spacing between specimens
     private final double INTAKE_FORWARD_DISTANCE = 9.25; // inches forward between intake start and finish
+    private final double PRESCORE_EMERGENCY_TIMER = 2000;
     private final double Y_INTAKE_BUFFER = 2; // INTAKE
     // ===== POSES =====
     // >>> Start
@@ -122,7 +125,12 @@ public class SpecimenPathingV4 extends BaseOpModeAuto {
         startToScore1 = linearInterpolateLine(P_START, P_SCORE_1);
 
         // Intake to Score 2
-        intakeToScore2 = linearInterpolateLine(P_INTAKE_FINISH, P_SCORE_2);
+        intakeToScore2 = new PathBuilder().addBezierCurve(
+                new Point(GRAB_WALL_X, 8.000, Point.CARTESIAN),
+                new Point(24.936585365853656, 57.07317073170732, Point.CARTESIAN),
+                new Point(P_SCORE_2)
+        ).setConstantHeadingInterpolation(Math.toRadians(180)).build();
+//                linearInterpolateLine(P_INTAKE_FINISH, P_SCORE_2);
 
         // Score 2 to Intake
         score2ToIntake = linearInterpolateLine(P_SCORE_2, P_INTAKE_START);
@@ -167,7 +175,9 @@ public class SpecimenPathingV4 extends BaseOpModeAuto {
                         // Line 1
                         new BezierCurve(
                                 new Point(P_SCORE_1),
-                                new Point(17.737, 18.088, Point.CARTESIAN),
+//                                new Point(17.737, 18.088, Point.CARTESIAN),
+                                new Point(17.736585365853657, 5.795121951219517, Point.CARTESIAN),
+//                                new Point(63.220, 49.698, Point.CARTESIAN),
                                 new Point(63.220, 49.698, Point.CARTESIAN),
                                 new Point(60.000, 23.000, Point.CARTESIAN)
                         )
@@ -211,7 +221,7 @@ public class SpecimenPathingV4 extends BaseOpModeAuto {
                         // Line 6
                         new BezierLine(
                                 new Point(60.000, 8.000, Point.CARTESIAN),
-                                new Point(15.000, 8.000, Point.CARTESIAN)
+                                new Point(GRAB_WALL_X, 8.000, Point.CARTESIAN)
                         )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(180)).build();
@@ -267,7 +277,7 @@ public class SpecimenPathingV4 extends BaseOpModeAuto {
     public void pathLoop() {
         switch (pathSegment) {
             case 0: // Start driving to bar
-                follower.setMaxPower(0.65);
+                follower.setMaxPower(0.62);
                 follower.followPath(startToScore1, true);
                 pathSegment++;
                 pathTimer.reset();
@@ -276,10 +286,11 @@ public class SpecimenPathingV4 extends BaseOpModeAuto {
                 if (pathTimer.time() > PRE_LIFT_DELAY) {
                     specimenPose.start();
                     pathSegment++;
+                    pathTimer.reset();
                 }
                 break;
             case 2: // Score
-                if ((!follower.isBusy() || follower.isRobotStuck()) && specimenPose.isFinished()) {
+                if (((!follower.isBusy() || follower.isRobotStuck()) && specimenPose.isFinished()) || pathTimer.time() > PRESCORE_EMERGENCY_TIMER) {
                     scoreSpecimen();
                 }
                 break;
@@ -299,7 +310,7 @@ public class SpecimenPathingV4 extends BaseOpModeAuto {
                 }
                 break;
             case 5:
-                if (!follower.isBusy() || follower.getPose().getX() < (15.000 + 1.5)) {
+                if (!follower.isBusy() || follower.getPose().getX() < (GRAB_WALL_X + GRAB_WALL_BUFFER)) {
                     grabWall.start();
                     pathTimer.reset();
                     pathSegment++;
@@ -310,10 +321,11 @@ public class SpecimenPathingV4 extends BaseOpModeAuto {
                     follower.followPath(grabWallToScore, true);
                     specimenPose.start();
                     pathSegment++;
+                    pathTimer.reset();
                 }
                 break;
             case 7: // Score
-                if ((!follower.isBusy() || follower.isRobotStuck()) && specimenPose.isFinished()) {
+                if (((!follower.isBusy() || follower.isRobotStuck()) && specimenPose.isFinished()) || pathTimer.time() > PRESCORE_EMERGENCY_TIMER) {
                     scoreSpecimen();
                     pathTimer.reset();
                 }
@@ -347,10 +359,11 @@ public class SpecimenPathingV4 extends BaseOpModeAuto {
                     specimenPose.start();
                     follower.followPath(intakeToScore3, true);
                     pathSegment++;
+                    pathTimer.reset();
                 }
                 break;
             case 13: // Score
-                if ((!follower.isBusy() || follower.isRobotStuck()) && specimenPose.isFinished()) {
+                if (((!follower.isBusy() || follower.isRobotStuck()) && specimenPose.isFinished()) || pathTimer.time() > PRESCORE_EMERGENCY_TIMER) {
                     scoreSpecimen();
                 }
                 break;
@@ -383,10 +396,11 @@ public class SpecimenPathingV4 extends BaseOpModeAuto {
                     specimenPose.start();
                     follower.followPath(intakeToScore4, true);
                     pathSegment++;
+                    pathTimer.reset();
                 }
                 break;
             case 19: // Score
-                if ((!follower.isBusy() || follower.isRobotStuck()) && specimenPose.isFinished()) {
+                if (((!follower.isBusy() || follower.isRobotStuck()) && specimenPose.isFinished()) || pathTimer.time() > PRESCORE_EMERGENCY_TIMER) {
                     scoreSpecimen();
                 }
                 break;

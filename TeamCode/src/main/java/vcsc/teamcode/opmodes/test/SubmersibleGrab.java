@@ -89,8 +89,8 @@ public class SubmersibleGrab extends BaseOpMode {
         intakePoseWall = new IntakePoseWall(rotState, extState, clawState, new PreGrabPoseWall(elbowState, wristState, clawState));
         grabWall = new GrabWall(elbowState, wristState, clawState);
         wallActions = new WallActions(elbowState, clawState, intakePoseWall, grabWall);
-        xController = new PIDController(0.01, 0, 0);
-        yController = new PIDController(0.01, 0, 0);
+        xController = new PIDController(0.002, 0, 0);
+        yController = new PIDController(0.002, 0, 0);
         follower.setStartingPose(new Pose(0, 0, 0));
     }
 
@@ -100,8 +100,8 @@ public class SubmersibleGrab extends BaseOpMode {
         intakePose.start();
         xController.setSetPoint(0);
         yController.setSetPoint(0);
-        xController.setTolerance(10);
-        yController.setTolerance(10);
+        xController.setTolerance(15);
+        yController.setTolerance(15);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class SubmersibleGrab extends BaseOpMode {
         Block block = camera.getBlock();
         if (block != null) {
             x_offset = block.getX() - 160;
-            y_offset = 80 - block.getY();
+            y_offset = 100 - block.getY();
 
             telem.addData("Block", block.getColor());
             telem.addData("X", block.getX());

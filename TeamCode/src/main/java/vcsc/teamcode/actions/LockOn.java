@@ -35,8 +35,8 @@ public class LockOn implements Action {
         this.camera = camera;
         this.follower = follower;
         this.wristState = wristState;
-        xController = new PIDController(0.004, 0, 0);
-        yController = new PIDController(0.004, 0, 0);
+        xController = new PIDController(0.0022, 0, 0);
+        yController = new PIDController(0.0022, 0, 0);
         angleList = new ArrayList<>();
         this.neutralAction = neutralAction;
         telem = GlobalTelemetry.getInstance();
@@ -49,8 +49,8 @@ public class LockOn implements Action {
         start_heading = follower.getPose().getHeading();
         xController.setSetPoint(0);
         yController.setSetPoint(0);
-        xController.setTolerance(15);
-        yController.setTolerance(15);
+        xController.setTolerance(10);
+        yController.setTolerance(10);
         follower.startTeleopDrive();
         angleList.clear();
     }
@@ -77,7 +77,7 @@ public class LockOn implements Action {
 
         Block block = camera.getBlock();
         if (block != null) {
-            x_offset = block.getX() - 160;
+            x_offset = block.getX() - 170;
             y_offset = 80 - block.getY();
 
             telem.addData("Block", block.getColor());

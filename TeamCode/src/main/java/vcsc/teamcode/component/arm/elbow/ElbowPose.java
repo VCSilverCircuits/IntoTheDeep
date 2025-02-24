@@ -5,7 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public enum ElbowPose {
     BASKET(0.63), // 0.5
-    PREGRAB(0.63),
+    PREGRAB(0.595),
     PREGRAB_AUTO(0.55),
     STRAIGHT(0.61),
     OUT_OF_WAY(0.7),

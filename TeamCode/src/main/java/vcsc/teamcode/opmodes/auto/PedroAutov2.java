@@ -20,6 +20,7 @@ import vcsc.teamcode.actions.basket.BasketPoseAuto;
 import vcsc.teamcode.actions.basket.DownFromBasket;
 import vcsc.teamcode.actions.intake.GrabAuto;
 import vcsc.teamcode.actions.intake.GrabAutoWall;
+import vcsc.teamcode.actions.intake.GrabSubmersible;
 import vcsc.teamcode.actions.intake.IntakePoseAuto;
 import vcsc.teamcode.actions.intake.PreGrabPose;
 import vcsc.teamcode.actions.intake.PreGrabPoseAuto;
@@ -34,9 +35,9 @@ public class PedroAutov2 extends BaseOpModeAuto {
 
     private final Pose pickup1Pose = new Pose(24.5, 122.8, Math.toRadians(0)); // First sample pickup
     private final Pose pickup2Pose = new Pose(24.5, 131.5, Math.toRadians(0)); // Second sample pickup
-    private final Pose pickup3Pose = new Pose(26, 132.3, Math.toRadians(29)); // Third sample pickup
+    private final Pose pickup3Pose = new Pose(26, 132.3, Math.toRadians(26)); // Third sample pickup
 
-    private final Pose parkPose = new Pose(60, 100, Math.toRadians(270));    // Parking position
+    private final Pose parkPose = new Pose(60, 102, Math.toRadians(260));    // Parking position
     private final Pose parkControlPose = new Pose(65, 130, Math.toRadians(90)); // Control point for curved path
     BasketPoseAuto basketPose;
     DownFromBasket downFromBasket;
@@ -44,6 +45,7 @@ public class PedroAutov2 extends BaseOpModeAuto {
     PreGrabPose preGrabPose;
     IntakePoseAuto intakePoseAuto;
     GrabAuto grab;
+    GrabSubmersible grabSub;
     GrabAutoWall grabWall;
     NeutralAction neutralAction;
     LockOn lockOn;
@@ -108,6 +110,7 @@ public class PedroAutov2 extends BaseOpModeAuto {
         double scoreDelay = 300;
         double basketDelayUp = 0;//2800;
         double basketDelayDown = 800;
+        double lockOnFailsafe = 4000;
         switch (pathState) {
             case 0: // Move from start to scoring position
                 elbowState.setPose(ElbowPose.STOW);
@@ -271,11 +274,16 @@ public class PedroAutov2 extends BaseOpModeAuto {
                         pathTimer.resetTimer();
                         setPathState(25);
                     }
+                } else if (pathTimer.getElapsedTime() > lockOnFailsafe) {
+                    pathTimer.resetTimer();
+                    follower.followPath(park, true);
+                    setPathState(30);
                 }
                 break;
             case 25:
                 if (pathTimer.getElapsedTime() > 500) {
-                    grab.start();
+                    camera.takeSnapshot("submersible");
+                    grabSub.start();
                     setPathState(26);
 
                     scoreSubmersible = follower.pathBuilder()
@@ -286,7 +294,7 @@ public class PedroAutov2 extends BaseOpModeAuto {
                 }
                 break;
             case 26:
-                if (grabWall.isFinished() && pathTimer.getElapsedTime() > neutralDelay) {
+                if (grabSub.isFinished() && pathTimer.getElapsedTime() > neutralDelay) {
                     neutralAction.start();
                     setPathState(27);
                 }
@@ -304,7 +312,7 @@ public class PedroAutov2 extends BaseOpModeAuto {
                 }
                 break;
             case 29:
-                if (toggleBasket.isFinished() && pathTimer.getElapsedTime() > basketDelayDown) {
+                if (toggleBasket.isFinished() && pathTimer.getElapsedTime() > 100) {
                     toggleBasket.start();
                     follower.followPath(park, true);
                     setPathState(30);
@@ -375,6 +383,7 @@ public class PedroAutov2 extends BaseOpModeAuto {
         intakePoseAuto.loop();
         toggleBasket.loop();
         grab.loop();
+        grabSub.loop();
         grabWall.loop();
         neutralAction.loop();
         lockOn.loop();
@@ -413,6 +422,7 @@ public class PedroAutov2 extends BaseOpModeAuto {
         intakePoseAuto = new IntakePoseAuto(rotState, extState, clawState, preGrabPose);
         grab = new GrabAuto(elbowState, wristState, clawState);
         grabWall = new GrabAutoWall(elbowState, wristState, clawState);
+        grabSub = new GrabSubmersible(elbowState, wristState, clawState);
         neutralAction = new NeutralAction(rotState, extState, elbowState, wristState);
         lockOn = new LockOn(camera, follower, wristState, neutralAction);
     }

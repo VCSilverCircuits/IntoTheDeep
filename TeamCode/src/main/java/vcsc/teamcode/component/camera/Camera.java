@@ -24,6 +24,10 @@ public class Camera extends Actuator {
 
     }
 
+    public void takeSnapshot(String name) {
+        limelight.captureSnapshot(name);
+    }
+
     public Block getBlock() {
         LLResult result = limelight.getLatestResult();
         double[] block_data = result.getPythonOutput();

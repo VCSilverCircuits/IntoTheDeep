@@ -9,6 +9,7 @@ import vcsc.teamcode.actions.Cancel;
 import vcsc.teamcode.actions.NeutralAction;
 import vcsc.teamcode.actions.NeutralActionSpecimen;
 import vcsc.teamcode.actions.ToggleBasket;
+import vcsc.teamcode.actions.ToggleLowerBasket;
 import vcsc.teamcode.actions.basket.BasketPose;
 import vcsc.teamcode.actions.basket.DownFromBasket;
 import vcsc.teamcode.actions.basket.LowerBasketPose;
@@ -43,6 +44,7 @@ public class MainTele extends BaseOpMode {
     boolean rumbledEndGame = false, rumbledMatchEnd = false;
     BasketPose basketPose;
     LowerBasketPose lowerBasketPose;
+    ToggleLowerBasket toggleLowerBasket;
     IntakePose intakePose;
     NeutralAction neutralAction;
     NeutralActionSpecimen neutralActionSpecimen;
@@ -76,8 +78,10 @@ public class MainTele extends BaseOpMode {
         // ===== Actions =====
         preGrabPose = new PreGrabPose(elbowState, wristState, clawState);
         basketPose = new BasketPose(rotState, extState, elbowState, wristState);
+        lowerBasketPose = new LowerBasketPose(rotState, extState, elbowState, wristState);
         downFromBasket = new DownFromBasket(rotState, extState, elbowState, wristState);
         toggleBasket = new ToggleBasket(extState, clawState, basketPose, downFromBasket);
+        toggleLowerBasket = new ToggleLowerBasket(extState, clawState, lowerBasketPose, downFromBasket);
         intakePose = new IntakePose(rotState, extState, clawState, preGrabPose);
         neutralAction = new NeutralAction(rotState, extState, elbowState, wristState);
         toggleHooks = new ToggleHooks(hookState);
@@ -110,9 +114,20 @@ public class MainTele extends BaseOpMode {
         gw1.bindRunnable(GamepadButton.LEFT_TRIGGER, () -> {
 //            lowerBasketPose.cancel();
             intakePose.cancel();
+            lowerBasketPose.cancel();
             cancel.cancel();
             specimenActions.cancel();
-            wallActions.cancel();
+            groundActions.cancel();
+//            telem.addLine("Cancelling intake and neutral");
+        });
+        gw1.bindButton(GamepadButton.Y, toggleLowerBasket);
+        gw1.bindRunnable(GamepadButton.Y, () -> {
+//            lowerBasketPose.cancel();
+            intakePose.cancel();
+            toggleBasket.cancel();
+            cancel.cancel();
+            specimenActions.cancel();
+            groundActions.cancel();
 //            telem.addLine("Cancelling intake and neutral");
         });
         // Lower Basket Pose
@@ -130,20 +145,20 @@ public class MainTele extends BaseOpMode {
                 return;
             }
             basketPose.cancel();
-//            lowerBasketPose.cancel();
+            lowerBasketPose.cancel();
             cancel.cancel();
             specimenActions.cancel();
-            wallActions.cancel();
+            groundActions.cancel();
 //            telem.addLine("Cancelling basket and neutral");
         });
         // Cancel button
         gw1.bindButton(GamepadButton.B, cancel);
         gw1.bindRunnable(GamepadButton.B, () -> {
             basketPose.cancel();
-//            lowerBasketPose.cancel();
+            lowerBasketPose.cancel();
             intakePose.cancel();
             specimenActions.cancel();
-            wallActions.cancel();
+            groundActions.cancel();
 //            telem.addLine("Cancelling basket and intake");
         });
 
@@ -169,6 +184,7 @@ public class MainTele extends BaseOpMode {
         gw1.bindRunnable(GamepadButton.RIGHT_BUMPER, () -> {
             basketPose.cancel();
             intakePose.cancel();
+            lowerBasketPose.cancel();
             cancel.cancel();
             specimenActions.cancel();
 //            telem.addLine("Cancelling basket and intake");
@@ -177,6 +193,8 @@ public class MainTele extends BaseOpMode {
         gw1.bindButton(GamepadButton.LEFT_BUMPER, specimenActions);
         gw1.bindRunnable(GamepadButton.LEFT_BUMPER, () -> {
             basketPose.cancel();
+            toggleLowerBasket.cancel();
+            lowerBasketPose.cancel();
             intakePose.cancel();
             cancel.cancel();
             groundActions.cancel();
