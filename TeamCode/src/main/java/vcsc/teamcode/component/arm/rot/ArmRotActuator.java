@@ -22,7 +22,6 @@ public class ArmRotActuator extends PoweredPIDFActuator {
     public static final double DRIVE_GEAR_RATIO = 52.0 / 24.0;
     public static final double DEGREES_PER_TICK = 360.0 / (TPR * MOTOR_GEAR_RATIO * DRIVE_GEAR_RATIO);
     DcMotorGroup motors;
-    private double maxSpeed = 0.75;
 
     public ArmRotActuator(HardwareMap hardwareMap, PIDFCoefficients coefficients) {
         super(coefficients);
@@ -33,14 +32,6 @@ public class ArmRotActuator extends PoweredPIDFActuator {
         motors.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motors.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motors.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
-
-    public double getMaxSpeed() {
-        return maxSpeed;
-    }
-
-    public void setMaxSpeed(double spd) {
-        maxSpeed = spd;
     }
 
     @Override
@@ -77,11 +68,15 @@ public class ArmRotActuator extends PoweredPIDFActuator {
     @Override
     protected void loopPID() {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
-        double outputPower = controller.calculate(getPosition());
-//        telemetry.addData("Run Position", controller.getSetPoint());
-//        telemetry.addData("At Position", controller.atSetPoint());
-//        telemetry.addData("Output Power", outputPower);
-//        telemetry.addData("Current position", getPosition());
-        motors.setPower(Math.min(Math.abs(outputPower), maxSpeed) * Math.signum(outputPower));
+        double error = controller.getSetPoint() - getPosition();
+        double baseOutput = controller.calculate(getPosition());
+        double expFactor = Math.exp(-Math.pow(error / 50.0, 2)); // Gaussian-like scaling
+        double outputPower = baseOutput * (1 - expFactor);
+        outputPower = Math.min(Math.abs(outputPower), 0.75) * Math.signum(outputPower);
+        telemetry.addData("Run Position", controller.getSetPoint());
+        telemetry.addData("At Position", controller.atSetPoint());
+        telemetry.addData("Output Power", outputPower);
+        telemetry.addData("Current position", getPosition());
+        motors.setPower(outputPower);
     }
 }
