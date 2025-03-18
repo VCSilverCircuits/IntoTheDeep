@@ -1,6 +1,7 @@
 package vcsc.teamcode.opmodes.base;
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -22,7 +23,7 @@ import vcsc.teamcode.component.hooks.HookActuator;
 import vcsc.teamcode.component.hooks.HookState;
 import vcsc.teamcode.component.wrist.WristActuator;
 import vcsc.teamcode.component.wrist.WristState;
-
+@Disabled
 public class BaseOpModeAuto extends OpMode {
     protected ArmRotState rotState;
     protected ArmExtState extState;
@@ -90,7 +91,7 @@ public class BaseOpModeAuto extends OpMode {
         matchTimer.reset();
 //        wristState.setPose(WristPose.STOW);
 //        elbowState.setPose(ElbowPose.STOW);
-        rotActuator.setMaxSpeed(0.6);
+  //      rotActuator.setMaxSpeed(0.6);
         clawState.close();
     }
 

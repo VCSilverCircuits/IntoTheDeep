@@ -108,7 +108,7 @@ public class BaseOpMode extends OpMode {
         wristState.setPose(WristPose.STOW);
         elbowState.setPose(ElbowPose.STOW);
         clawState.close();
-        rotActuator.setMaxSpeed(0.8);
+    //    rotActuator.setMaxSpeed(0.8);
         follower.startTeleopDrive();
     }
 

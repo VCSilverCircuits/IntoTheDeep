@@ -70,7 +70,7 @@ public class ArmRotActuator extends PoweredPIDFActuator {
         MultipleTelemetry telemetry = GlobalTelemetry.getInstance();
         double error = controller.getSetPoint() - getPosition();
         double baseOutput = controller.calculate(getPosition());
-        double expFactor = Math.exp(-Math.pow(error / 50.0, 2)); // Gaussian-like scaling
+        double expFactor = Math.exp(-Math.pow(error / 100.0, 2)); // Gaussian-like scaling
         double outputPower = baseOutput * (1 - expFactor);
         outputPower = Math.min(Math.abs(outputPower), 0.75) * Math.signum(outputPower);
         telemetry.addData("Run Position", controller.getSetPoint());
