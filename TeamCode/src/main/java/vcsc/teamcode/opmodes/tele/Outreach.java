@@ -5,10 +5,16 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+
+@Config
 @TeleOp(name = "OutreachTele", group = "Outreach")
 public class Outreach extends OpMode {
+
     private DcMotor frontLeft, frontRight, backLeft, backRight;
-    double driveSpeed = 0.50;  // 50% power for safe driving
+
+    public static double driveSpeed = 0.50; // we can change this via dash
 
     @Override
     public void init() {
@@ -19,13 +25,13 @@ public class Outreach extends OpMode {
         telemetry.addLine("");
         telemetry.update();
 
-        // Initialize motors
+        // Init those REV motors
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
 
-        // Set motor directions
+        // Set motor directions for now
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -33,15 +39,16 @@ public class Outreach extends OpMode {
 
         telemetry.addLine("✅ Initialization complete! Click start to begin driving.");
         telemetry.update();
+
     }
 
     @Override
     public void loop() {
-        double y = gamepad1.left_stick_y * driveSpeed;  // forward/backward
-        double x = -gamepad1.left_stick_x * driveSpeed; // strafe
-        double rx = -gamepad1.right_stick_x * driveSpeed; // rotate
+        double y = gamepad1.left_stick_y * driveSpeed;     // forward/backward
+        double x = -gamepad1.left_stick_x * driveSpeed;    // strafe
+        double rx = -gamepad1.right_stick_x * driveSpeed;  // rotate
 
-        // Mecanum drive calculations
+        // Calculate Mecanum Drive values for existance
         double fl = y + x + rx;
         double bl = y - x + rx;
         double fr = y - x - rx;
