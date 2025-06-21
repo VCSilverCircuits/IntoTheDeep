@@ -1,40 +1,73 @@
 package vcsc.teamcode.opmodes.tele;
 
-//Drive-only opmode for outreach events, Undertow V1
-
-import com.pedropathing.localization.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import vcsc.teamcode.opmodes.base.BaseOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@TeleOp(name = "OutreachTele", group = "Main")
-public class Outreach extends BaseOpMode {
-    final double DEFAULT_TURN_SPEED = 0.5;
-    final double DEFAULT_DRIVE_SPEED = 1;
-    double driveSpeed = DEFAULT_DRIVE_SPEED;
-    double turnSpeed = DEFAULT_TURN_SPEED;
+@TeleOp(name = "OutreachTele", group = "Outreach")
+public class Outreach extends OpMode {
+    private DcMotor frontLeft, frontRight, backLeft, backRight;
+    double driveSpeed = 0.50;  // 50% power for safe driving
 
     @Override
     public void init() {
-        super.init();
-        follower.setStartingPose(new Pose(0, 0, 0));
-    }
+        telemetry.addLine("Hello user, thank you for taking the time to try our robot!");
+        telemetry.addLine("Use the left stick to move the bot (forward/backward/move sideways).");
+        telemetry.addLine("Use the right stick to rotate the bot.");
+        telemetry.addLine("Robot is initializing...");
+        telemetry.addLine("");
+        telemetry.update();
 
-    @Override
-    public void start() {
-        super.start();
+        // Initialize motors
+        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
+        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
+        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
+        backRight = hardwareMap.get(DcMotor.class, "backRight");
+
+        // Set motor directions
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        backRight.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        telemetry.addLine("✅ Initialization complete! Click start to begin driving.");
+        telemetry.update();
     }
 
     @Override
     public void loop() {
-        super.loop();
+        // Read joystick input and apply speed scaling
+        double y = gamepad1.left_stick_y * driveSpeed;  // forward/backward
+        double x = -gamepad1.left_stick_x * driveSpeed; // strafe
+        double rx = -gamepad1.right_stick_x * driveSpeed; // rotate
 
-        follower.setTeleOpMovementVectors(-gamepad1.left_stick_y * driveSpeed, -gamepad1.left_stick_x * driveSpeed, -gamepad1.right_stick_x * turnSpeed, true);
-//        drive.setDrivePowers(new PoseVelocity2d(
-//                new Vector2d(
-//                        -gamepad1.left_stick_y * driveSpeed,
-//                        -gamepad1.left_stick_x * driveSpeed
-//                ),
-//                -gamepad1.right_stick_x * turnSpeed
-//        ));
+        // Mecanum drive calculations
+        double fl = y + x + rx;
+        double bl = y - x + rx;
+        double fr = y - x - rx;
+        double br = y + x - rx;
+
+        // Normalize if needed
+        double max = Math.max(Math.abs(fl), Math.max(Math.abs(bl), Math.max(Math.abs(fr), Math.abs(br))));
+        if (max > 1.0) {
+            fl /= max;
+            bl /= max;
+            fr /= max;
+            br /= max;
         }
+
+        // Set power to motors
+        frontLeft.setPower(fl);
+        backLeft.setPower(bl);
+        frontRight.setPower(fr);
+        backRight.setPower(br);
+
+        // Telemetry display
+        telemetry.addLine("Hello user, thank you for taking the time to try our robot!");
+        telemetry.addLine("Use the left stick to move the bot (forward/backward/move sideways).");
+        telemetry.addLine("Use the right stick to rotate the bot.");
+        telemetry.addData("Your speed for safety is limited to", "%.0f%%", driveSpeed * 100);
+        telemetry.update();
     }
+}
