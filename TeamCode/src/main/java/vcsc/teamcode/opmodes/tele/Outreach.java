@@ -37,7 +37,6 @@ public class Outreach extends OpMode {
 
     @Override
     public void loop() {
-        // Read joystick input and apply speed scaling
         double y = gamepad1.left_stick_y * driveSpeed;  // forward/backward
         double x = -gamepad1.left_stick_x * driveSpeed; // strafe
         double rx = -gamepad1.right_stick_x * driveSpeed; // rotate
@@ -48,7 +47,6 @@ public class Outreach extends OpMode {
         double fr = y - x - rx;
         double br = y + x - rx;
 
-        // Normalize if needed
         double max = Math.max(Math.abs(fl), Math.max(Math.abs(bl), Math.max(Math.abs(fr), Math.abs(br))));
         if (max > 1.0) {
             fl /= max;
@@ -57,13 +55,11 @@ public class Outreach extends OpMode {
             br /= max;
         }
 
-        // Set power to motors
         frontLeft.setPower(fl);
         backLeft.setPower(bl);
         frontRight.setPower(fr);
         backRight.setPower(br);
 
-        // Telemetry display
         telemetry.addLine("Hello user, thank you for taking the time to try our robot!");
         telemetry.addLine("Use the left stick to move the bot (forward/backward/move sideways).");
         telemetry.addLine("Use the right stick to rotate the bot.");
