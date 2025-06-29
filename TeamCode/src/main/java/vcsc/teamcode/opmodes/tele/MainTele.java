@@ -37,7 +37,7 @@ import vcsc.teamcode.component.arm.rot.actions.SetRotPose;
 import vcsc.teamcode.component.hooks.actions.ToggleHooks;
 import vcsc.teamcode.component.wrist.WristPivotPose;
 import vcsc.teamcode.opmodes.base.BaseOpMode;
-@Disabled
+
 @TeleOp(name = "Tele", group = "Main")
 public class MainTele extends BaseOpMode {
     final double DEFAULT_TURN_SPEED = 0.5;
