@@ -1,6 +1,7 @@
 package vcsc.teamcode.opmodes.tele;
 
 import com.pedropathing.localization.Pose;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import vcsc.core.util.GamepadButton;
